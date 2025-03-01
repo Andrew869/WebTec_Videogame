@@ -20,6 +20,12 @@ export class MyScene extends Scene {
         this.angle = 0;
 
         this.isAttacking = false;
+        this.isOnGround = false;
+        this.isLanding = false;
+        this.isJumping = false;
+
+        this.isOnAir = true;
+        this.prevOnAirState = false;
 
         this.background;
 
@@ -141,9 +147,9 @@ export class MyScene extends Scene {
 
         this.anims.create({
             key: 'landing',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 25, end: 29 }),
-            frameRate: 10,
-            repeat: -1
+            frames: this.anims.generateFrameNumbers('rogue', { start: 27, end: 29 }),
+            frameRate: 20,
+            repeat: 0
         });
 
         this.anims.create({
@@ -221,6 +227,13 @@ export class MyScene extends Scene {
             return;
         }
 
+        let velX = this.player.body.velocity.x;
+        let velY = this.player.body.velocity.y;
+
+        this.isOnGround = this.player.body.touching.down;
+
+        this.prevOnAirState = this.isOnAir;
+        this.isOnAir = velY !== 0 && !this.isOnGround;
         // this.background.tilePositionX += 1;
 
         if ((this.cursors.left.isDown || this.keyObjects.left.isDown) && !this.isAttacking) {
@@ -239,10 +252,14 @@ export class MyScene extends Scene {
             // this.player.anims.play('idle', true);
         }
 
-        if (this.player.body.touching.down) {
+        if (this.isOnGround) {
             if ((this.cursors.up.isDown || this.keyObjects.up.isDown)) {
-                // this.player.anims.play('jump', true);
-                this.player.setVelocityY(-330);
+                this.player.setVelocityY(-300);
+                this.isJumping = true;
+                this.player.anims.play('jump', true);
+                this.player.on('animationcomplete', (animation, frame) => {
+                    this.isJumping = false;
+                });
             }
             else if (this.keyObjects.attack_1.isDown && !this.isAttacking) {
                 this.isAttacking = true;
@@ -258,14 +275,17 @@ export class MyScene extends Scene {
                     this.isAttacking = false;
                 });
             }
+            else if(this.prevOnAirState !== this.isOnAir) {
+                this.isLanding = true;
+                this.player.anims.play('landing', true);
+                this.player.on('animationcomplete', (animation, frame) => {
+                    this.isLanding = false;
+                });
+            }
         }
 
-        let velX = this.player.body.velocity.x;
-        let velY = this.player.body.velocity.y;
-
-        if (!this.isAttacking) {
+        if (!this.isAttacking && !this.isJumping && !this.isLanding) {
             if (!velY) {
-                console.log("zero");
                 if (!velX)
                     this.player.anims.play('idle', true);
                 else
