@@ -10,15 +10,15 @@ import { MyScene } from './scenes/MyScene';
 const config = {
     type: Phaser.AUTO,
     pixelArt: true,
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     parent: 'game-container',
-    backgroundColor: '#028af8',
+    // backgroundColor: '#7693B3',
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 1000 },
-            debug: true
+            gravity: { y: 800 },
+            debug: false
         }
     },
     scale: {
