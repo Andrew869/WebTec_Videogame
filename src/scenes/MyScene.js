@@ -33,6 +33,15 @@ export class MyScene extends Scene {
         this.mapSizeY = 793;
 
         this.diffHeight = 720 - this.mapSizeY
+
+        this.isPaused = false;
+        this.pauseBtn;
+        this.continueBtn;
+        this.muteBtn;
+        this.unmuteBtn;
+        this.restartBtn;
+        this.exitBtn;
+        this.isMusicMuted = false;
     }
 
     init() {
@@ -55,6 +64,32 @@ export class MyScene extends Scene {
         this.load.spritesheet('rogue', 'rogue.png',
             { frameWidth: 50, frameHeight: 37 }
         )
+        // Cargar sprite sheets de los botones
+        this.load.spritesheet('pauseBtn', 'assets/pauseBtn.png', {
+            frameWidth: 100, 
+            frameHeight: 50  
+        });
+        this.load.spritesheet('continueBtn', 'assets/continueBtn.png', {
+            frameWidth: 100,
+            frameHeight: 50
+        });
+        this.load.spritesheet('muteBtn', 'assets/muteBtn.png', {
+            frameWidth: 100,
+            frameHeight: 50
+        });
+        this.load.spritesheet('unmuteBtn', 'assets/unmuteBtn.png', {
+            frameWidth: 100,
+            frameHeight: 50
+        });
+        this.load.spritesheet('restartBtn', 'assets/restartBtn.png', {
+            frameWidth: 100,
+            frameHeight: 50
+        });
+        this.load.spritesheet('exitBtn', 'assets/exitBtn.png', {
+            frameWidth: 100,
+            frameHeight: 50
+        });
+        this.load.audio('backgroundMusic', 'music.mp3');
     }
 
     create() {
@@ -220,10 +255,195 @@ export class MyScene extends Scene {
         this.mainCamera.setZoom(1.8);
         this.mainCamera.startFollow(this.player);
         this.mainCamera.setBounds(0, 0, this.scale.width * 2, this.scale.height);
+
+        // Música
+        this.backgroundMusic = this.sound.add('backgroundMusic', { loop: true });
+        this.backgroundMusic.play();
+
+        // Pruebas de pause y continue
+        // Botón de pausa
+        this.pauseBtn = this.add.sprite(this.cameras.main.width - 50, 50, 'pauseBtn')
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(1000)
+        .on('pointerdown', () => {
+            this.pauseBtn.setFrame(1); 
+            this.pauseGame();
+        })
+        .on('pointerup', () => {
+            this.pauseBtn.setFrame(0); 
+        })
+        .on('pointerover', () => {
+            this.pauseBtn.setFrame(2); 
+        })
+        .on('pointerout', () => {
+            this.pauseBtn.setFrame(0); 
+        });
+
+        // Botón de continuar
+        this.continueBtn = this.add.sprite(this.cameras.main.width - 50, 50, 'continueBtn')
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(1000)
+        .on('pointerdown', () => {
+            this.continueBtn.setFrame(1);
+            this.continueGame();
+        })
+        .on('pointerup', () => {
+            this.continueBtn.setFrame(0); 
+        })
+        .on('pointerover', () => {
+            this.continueBtn.setFrame(2);
+        })
+        .on('pointerout', () => {
+            this.continueBtn.setFrame(0);
+        })
+        .setVisible(false);
+
+        //const centerX = this.scale.width / 2;
+        //const centerY = this.scale.height / 2;
+
+        // Botón de mutear música
+        this.muteBtn = this.add.sprite(this.cameras.main.centerX - 100, this.cameras.main.centerY, 'muteBtn')
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(1000)
+        .on('pointerdown', () => {
+            this.muteBtn.setFrame(1);
+            this.toggleMusic();
+        })
+        .on('pointerup', () => {
+            this.muteBtn.setFrame(0);
+        })
+        .on('pointerover', () => {
+            this.muteBtn.setFrame(2);
+        })
+        .on('pointerout', () => {
+            this.muteBtn.setFrame(0);
+        })
+        .setVisible(false);
+
+        this.isMusicMuted = localStorage.getItem('isMusicMuted') === 'true';
+        if (this.isMusicMuted) {
+            this.sound.setVolume(0);
+            this.muteBtn.setVisible(false);
+            this.unmuteBtn.setVisible(true);
+        }
+
+        // Botón de desmutear música
+        this.unmuteBtn = this.add.sprite(this.cameras.main.centerX - 100, this.cameras.main.centerY, 'unmuteBtn')
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(1000)
+        .on('pointerdown', () => {
+            this.unmuteBtn.setFrame(1);
+            this.toggleMusic();
+        })
+        .on('pointerup', () => {
+            this.unmuteBtn.setFrame(0);
+        })
+        .on('pointerover', () => {
+            this.unmuteBtn.setFrame(2);
+        })
+        .on('pointerout', () => {
+            this.unmuteBtn.setFrame(0);
+        })
+        .setVisible(false);
+
+        // Botón de reiniciar
+        this.restartBtn = this.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY, 'restartBtn')
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(1000)
+        .on('pointerdown', () => {
+            this.restartBtn.setFrame(1);
+            this.restartGame();
+        })
+        .on('pointerup', () => {
+            this.restartBtn.setFrame(0);
+        })
+        .on('pointerover', () => {
+            this.restartBtn.setFrame(2);
+        })
+        .on('pointerout', () => {
+            this.restartBtn.setFrame(0);
+        })
+        .setVisible(false);
+
+        // Botón de salir
+        this.exitBtn = this.add.sprite(this.cameras.main.centerX + 100, this.cameras.main.centerY, 'exitBtn')
+        .setInteractive()
+        .setScrollFactor(0)
+        .setDepth(1000)
+        .on('pointerdown', () => {
+            this.exitBtn.setFrame(1);
+            this.exitGame();
+        })
+        .on('pointerup', () => {
+            this.exitBtn.setFrame(0);
+        })
+        .on('pointerover', () => {
+            this.exitBtn.setFrame(2);
+        })
+        .on('pointerout', () => {
+            this.exitBtn.setFrame(0);
+        })
+        .setVisible(false);
+    }
+
+    //botones pause continue
+    pauseGame() {
+        if (this.gameOver) return;
+        
+        this.isPaused = true;
+        this.physics.pause(); 
+        this.anims.pauseAll(); 
+        this.pauseBtn.setVisible(false);
+        this.continueBtn.setVisible(true);
+        this.muteBtn.setVisible(!this.isMusicMuted);
+        this.unmuteBtn.setVisible(this.isMusicMuted);
+        this.restartBtn.setVisible(true);
+        this.exitBtn.setVisible(true);
+    }
+    
+    continueGame() {
+        this.isPaused = false;
+        this.physics.resume(); 
+        this.anims.resumeAll(); 
+        this.pauseBtn.setVisible(true);
+        this.continueBtn.setVisible(false);
+        this.muteBtn.setVisible(false);
+        this.unmuteBtn.setVisible(false);
+        this.restartBtn.setVisible(false);
+        this.exitBtn.setVisible(false);
+    }
+
+    toggleMusic() {
+        this.isMusicMuted = !this.isMusicMuted;
+        localStorage.setItem('isMusicMuted', this.isMusicMuted);
+    
+        if (this.isMusicMuted) {
+            this.sound.setVolume(0);
+            this.muteBtn.setVisible(false);
+            this.unmuteBtn.setVisible(true);
+        } else {
+            this.sound.setVolume(1);
+            this.muteBtn.setVisible(true);
+            this.unmuteBtn.setVisible(false);
+        }
+    }
+
+    restartGame() {
+        this.scene.restart();
+    }
+
+    exitGame() {
+        // Redirige al menu
+        window.location.href = '/';
     }
 
     update() {
-        if (this.gameOver) {
+        if (this.gameOver || this.isPaused) {
             return;
         }
 
