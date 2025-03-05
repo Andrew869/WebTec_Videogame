@@ -44,21 +44,6 @@ export class MyScene extends Scene {
     }
 
     preload() {
-        this.load.setPath('assets');
-        this.load.image('layer0', 'bg_layers/Layer_0011_0.png');
-        this.load.image('layer1', 'bg_layers/Layer_0010_1.png');
-        this.load.image('layer2', 'bg_layers/Layer_0009_2.png');
-        this.load.image('layer3', 'bg_layers/Layer_0008_3.png');
-        this.load.image('layer4', 'bg_layers/Layer_0007_Lights.png');
-        this.load.image('layer5', 'bg_layers/Layer_0006_4.png');
-        this.load.image('layer6', 'bg_layers/Layer_0005_5.png');
-        this.load.image('layer7', 'bg_layers/Layer_0004_Lights.png');
-        this.load.image('layer8', 'bg_layers/Layer_0003_6.png');
-        this.load.image('layer9', 'bg_layers/Layer_0002_7.png');
-        this.load.image('layer10', 'bg_layers/Layer_0001_8.png');
-        this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
-        this.load.spritesheet('rogue', 'Characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
-        this.load.spritesheet("archer", "Characters/archer.png", { frameWidth: 64, frameHeight: 64 });
     }
 
     create() {

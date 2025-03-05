@@ -27,6 +27,7 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [
+        Preloader,
         MyScene,
         UI
     ]

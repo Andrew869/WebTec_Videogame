@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 
 export class UI extends Scene {
     constructor() {
-        super({ key: 'UI', active: true });
+        super({ key: 'UI' });
     }
 
     create() {
