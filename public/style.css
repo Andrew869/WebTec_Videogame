@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Alagard;
+    src: url("./assets/alagard.ttf") format("truetype");
+}
+
 body {
     margin: 0;
     padding: 0;
