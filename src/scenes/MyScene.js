@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { characters } from '../characters';
+import { enemies } from '../enemies';
 
 export class MyScene extends Scene {
     constructor() {
@@ -36,11 +37,10 @@ export class MyScene extends Scene {
 
         this.diffHeight = 720 - this.mapSizeY
 
-<<<<<<<<< Temporary merge branch 1
         this.groundPosY = 0;
 
         this.currChar = characters.rogue;
-=========
+
         this.isPaused = false;
         this.pauseBtn;
         this.continueBtn;
@@ -55,98 +55,12 @@ export class MyScene extends Scene {
     }
 
     preload() {
-        this.load.setPath('assets');
-        this.load.image('layer0', 'bg_layers/Layer_0011_0.png');
-        this.load.image('layer1', 'bg_layers/Layer_0010_1.png');
-        this.load.image('layer2', 'bg_layers/Layer_0009_2.png');
-        this.load.image('layer3', 'bg_layers/Layer_0008_3.png');
-        this.load.image('layer4', 'bg_layers/Layer_0007_Lights.png');
-        this.load.image('layer5', 'bg_layers/Layer_0006_4.png');
-        this.load.image('layer6', 'bg_layers/Layer_0005_5.png');
-        this.load.image('layer7', 'bg_layers/Layer_0004_Lights.png');
-        this.load.image('layer8', 'bg_layers/Layer_0003_6.png');
-        this.load.image('layer9', 'bg_layers/Layer_0002_7.png');
-        this.load.image('layer10', 'bg_layers/Layer_0001_8.png');
-        this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
-        this.load.spritesheet('rogue', 'rogue.png',
-            { frameWidth: 50, frameHeight: 37 }
-        );
-        this.load.spritesheet('eye_flight', 'Enemies/eye/Flight.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('eye_death', 'Enemies/eye/Death.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('eye_attack', 'Enemies/eye/Attack.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('eye_take_hit', 'Enemies/eye/Take Hit.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-
-        this.load.spritesheet('skeleton_idle', 'Enemies/skeleton/Idle.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('skeleton_walk', 'Enemies/skeleton/Walk.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('skeleton_death', 'Enemies/skeleton/Death.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('skeleton_attack', 'Enemies/skeleton/Attack.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('skeleton_take_hit', 'Enemies/skeleton/Take Hit.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-
-        this.load.spritesheet('goblin_idle', 'Enemies/goblin/Idle.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('goblin_run', 'Enemies/goblin/Run.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('goblin_death', 'Enemies/goblin/Death.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('goblin_attack', 'Enemies/goblin/Attack.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-        this.load.spritesheet('goblin_take_hit', 'Enemies/goblin/Take Hit.png',
-            { frameWidth: 32, frameHeight: 32 }
-        );
-
-        this.load.spritesheet('sickle','Enemies/sickle.png')
-
-        // Cargar sprite sheets de los botones
-        this.load.spritesheet('pauseBtn', 'assets/pauseBtn.png', {
-            frameWidth: 100, 
-            frameHeight: 50  
-        });
-        this.load.spritesheet('continueBtn', 'assets/continueBtn.png', {
-            frameWidth: 100,
-            frameHeight: 50
-        });
-        this.load.spritesheet('muteBtn', 'assets/muteBtn.png', {
-            frameWidth: 100,
-            frameHeight: 50
-        });
-        this.load.spritesheet('unmuteBtn', 'assets/unmuteBtn.png', {
-            frameWidth: 100,
-            frameHeight: 50
-        });
-        this.load.spritesheet('restartBtn', 'assets/restartBtn.png', {
-            frameWidth: 100,
-            frameHeight: 50
-        });
-        this.load.spritesheet('exitBtn', 'assets/exitBtn.png', {
-            frameWidth: 100,
-            frameHeight: 50
-        });
-        this.load.audio('backgroundMusic', 'music.mp3');
+        
     }
 
     create() {
+        this.groundPosY = this.scale.height - 58;
+
         this.physics.world.setBounds(0, 0, this.mapSizeX, this.mapSizeY);
         // platforms
         // this.add.image(400, 300, 'layer1');
@@ -173,99 +87,55 @@ export class MyScene extends Scene {
 
         // player
         this.player = this.physics.add.sprite(600, 450, 'rogue');
-        this.add.tileSprite(-100, this.diffHeight, this.mapSizeX * 1.2, this.mapSizeY, 'layer11').setOrigin(0, 0).setScrollFactor(1.2, 1);
+        this.player.setDepth(1);
+        
 
         // this.player.setBounce(0.2);
+        this.player.setSize(this.currChar.size.width, this.currChar.size.height);
+        this.player.setOffset(this.currChar.offset.x, this.currChar.offset.y);
         this.player.setCollideWorldBounds(true);
-        this.player.setSize(10, 24, true);
-        this.player.setOffset(20, 11);
 
-        // this.anims.create({
-        //     key: 'left',
-        //     frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-        //     frameRate: 10,
-        //     repeat: -1
-        // });
-
-        // this.anims.create({
-        //     key: 'turn',
-        //     frames: [{ key: 'dude', frame: 4 }],
-        //     frameRate: 20
-        // });
-
-        // this.anims.create({
-        //     key: 'right',
-        //     frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-        //     frameRate: 10,
-        //     repeat: -1
-        // });
-
-        this.anims.create({
-            key: 'idle',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 0, end: 3 }),
-            frameRate: 6,
-            repeat: -1
+        Object.values(characters).forEach(character => {
+            Object.values(character.anims).forEach(anim => {
+                this.anims.create(anim);
+            });
         });
 
-        this.anims.create({
-            key: 'run',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 10, end: 15 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'jump',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 20, end: 24 }),
-            frameRate: 10,
-            repeat: 0
-        });
-
-        this.anims.create({
-            key: 'ascending',
-            frames: [{ key: 'rogue', frame: 24 }],
-            frameRate: 20,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'descending',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 25, end: 27 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'landing',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 27, end: 29 }),
-            frameRate: 20,
-            repeat: 0
-        });
-
-        this.anims.create({
-            key: 'attack_1',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 40, end: 49 }),
-            frameRate: 12,
-            repeat: 0
-        });
-
-        this.anims.create({
-            key: 'attack_2',
-            frames: this.anims.generateFrameNumbers('rogue', { start: 50, end: 59 }),
-            frameRate: 18,
-            repeat: 0
-        });
-
-        // this.anims.create({
-        //     key: 'left',
-        //     frames: this.anims.generateFrameNumbers('death', { start: 10, end: 17 }),
-        //     frameRate: 10,
-        //     repeat: -1,
-        // });
-
+        // this.player.body.setGravityY(300);
+        // this.player.body.setGravityX(300);
         this.physics.add.collider(this.player, this.ground);
 
         this.cursors = this.input.keyboard.createCursorKeys();
+
+        this.stars = this.physics.add.sprite(500, this.groundPosY - 100, 'archer').setOrigin(0, 0);
+        this.physics.add.collider(this.stars, this.ground);
+
+        Object.values(enemies).forEach(enemy => {
+            Object.values(enemy.anims).forEach(anim => {
+                this.anims.create({
+                    key: anim.key,
+                    frames: this.anims.generateFrameNumbers(anim.defaultKey, { frames: anim.frames.map(f => f.frame) }),
+                    frameRate: anim.frameRate,
+                    repeat: anim.repeat
+                });
+            });
+        });
+    
+        this.eye = this.physics.add.sprite(200, this.groundPosY - 50, 'eye');
+        this.skeleton = this.physics.add.sprite(400, this.groundPosY - 50, 'skeleton');
+        this.goblin = this.physics.add.sprite(600, this.groundPosY - 50, 'goblin');
+        this.sickle = this.physics.add.sprite(800, this.groundPosY - 50, 'sickle');
+    
+        [this.eye, this.skeleton, this.goblin, this.sickle].forEach(enemy => {
+            enemy.setCollideWorldBounds(true);
+            enemy.setBounce(0.2);
+            this.physics.add.collider(enemy, this.ground);
+        });
+    
+        this.eye.anims.play('eye_flight');
+        this.skeleton.anims.play('skeleton_idle');
+        this.goblin.anims.play('goblin_idle');
+        this.sickle.anims.play('sickle_idle');
 
         // this.stars = this.physics.add.group({
         //     key: 'star',
@@ -295,24 +165,23 @@ export class MyScene extends Scene {
         // this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
 
         this.keyObjects = this.input.keyboard.addKeys({
-            up: "W",
+            up: "SPACE",
             down: "S",
             left: "A",
             right: "D",
-            attack_1: "Q",
-            attack_2: "E"
+            hability_1: "ONE",
+            hability_2: "TWO",
+            hability_3: "THREE",
         }); // keyObjects.up, keyObjects.down, keyObjects.left, keyObjects.right
 
         this.mainCamera = this.cameras.main;
 
-        this.mainCamera.setZoom(1.8);
+        this.mainCamera.setZoom(2);
         this.mainCamera.startFollow(this.player);
-<<<<<<<<< Temporary merge branch 1
         this.mainCamera.setBounds(0, 0, this.mapSizeX, this.scale.height);
 
         // this.stars.anims.play('death', true);
-=========
-        this.mainCamera.setBounds(0, 0, this.scale.width * 2, this.scale.height);
+
 
         // Música
         this.backgroundMusic = this.sound.add('backgroundMusic', { loop: true });
@@ -501,6 +370,11 @@ export class MyScene extends Scene {
             return;
         }
 
+        this.physics.moveToObject(this.eye, this.player, 50);
+        this.physics.moveToObject(this.skeleton, this.player, 50);
+        this.physics.moveToObject(this.goblin, this.player, 50);
+        this.physics.moveToObject(this.sickle, this.player, 50);
+
         let velX = this.player.body.velocity.x;
         let velY = this.player.body.velocity.y;
 
@@ -530,14 +404,14 @@ export class MyScene extends Scene {
             if ((this.cursors.up.isDown || this.keyObjects.up.isDown)) {
                 this.player.setVelocityY(-300);
                 this.isJumping = true;
-                this.player.anims.play('jump', true);
+                this.player.anims.play(this.currChar.charName + '_' + 'jump', true);
                 this.player.on('animationcomplete', (animation, frame) => {
                     this.isJumping = false;
                 });
             }
-            else if (this.keyObjects.attack_1.isDown && !this.isAttacking) {
+            else if (this.keyObjects.hability_1.isDown && !this.isAttacking) {
                 this.isAttacking = true;
-                this.player.anims.play('attack_1', true);
+                this.player.anims.play(this.currChar.charName + '_' + 'attack', true);
                 this.player.on('animationcomplete', (animation, frame) => {
                     this.isAttacking = false;
                 });
@@ -553,24 +427,31 @@ export class MyScene extends Scene {
                 this.isLanding = true;
                 this.player.anims.play(this.currChar.charName + '_' + 'landing', true);
                 this.player.on('animationcomplete', (animation, frame) => {
-                    this.isAttacking = false;
+                    this.isLanding = false;
+                });
+            }
+            else if(this.prevOnAirState !== this.isOnAir) {
+                this.isLanding = true;
+                this.player.anims.play('landing', true);
+                this.player.on('animationcomplete', (animation, frame) => {
+                    this.isLanding = false;
                 });
             }
         }
 
         if (!this.isAttacking && !this.isJumping && !this.isLanding) {
-            if (!velY) {
+            if (!this.isOnAir ) {
                 if (!velX)
-                    this.player.anims.play('idle', true);
+                    this.player.anims.play(this.currChar.charName + '_' + 'idle', true);
                 else
-                    this.player.anims.play('run', true);
+                    this.player.anims.play(this.currChar.charName + '_' + 'run', true);
             }
             else {
                 // console.log("not zero");
                 if (velY < 0)
-                    this.player.anims.play('ascending', true);
+                    this.player.anims.play(this.currChar.charName + '_' + 'rising', true);
                 else
-                    this.player.anims.play('descending', true);
+                    this.player.anims.play(this.currChar.charName + '_' + 'falling', true);
             }
         }
 
