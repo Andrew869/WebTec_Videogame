@@ -43,6 +43,12 @@ export class Preloader extends Scene
         this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
         this.load.spritesheet('rogue', 'Characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
         this.load.spritesheet("archer", "Characters/archer.png", { frameWidth: 64, frameHeight: 64 });
+        // Cargar los botones
+        this.load.image('muteBtn', 'Mute.png');
+        this.load.image('unmuteBtn', 'Unmute.png');
+        this.load.image('restartBtn', 'Restart.png');
+        this.load.image('exitBtn', 'Exit.png');
+        this.load.audio('backgroundMusic', 'music.mp3');
     }
 
     create ()
