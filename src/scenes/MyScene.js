@@ -53,13 +53,6 @@ export class MyScene extends Scene {
     }
 
     preload() {
-        this.load.setPath('assets');
-        // Cargar imagenes de los botones
-        this.load.image('muteBtn', 'assets/Mute.png');
-        this.load.image('unmuteBtn', 'assets/Unmute.png');
-        this.load.image('restartBtn', 'assets/Restart.png');
-        this.load.image('exitBtn', 'assets/Exit.png');
-        this.load.audio('backgroundMusic', 'music.mp3');
     }
 
     create() {
@@ -167,7 +160,7 @@ export class MyScene extends Scene {
         const screenHeight = this.sys.game.config.height;
         const zoom = this.mainCamera.zoom;*/
 
-        // ESC para pausar y continuar
+        // Configura la tecla ESC
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.escKey.on('down', () => {
             if (this.gameOver) return;
@@ -190,7 +183,7 @@ export class MyScene extends Scene {
             .setInteractive()
             .setScrollFactor(0)
             .setDepth(1000)
-            .setScale(1 / zoom)
+            .setScale(1)
             .setVisible(false)
             .on('pointerdown', () => this.toggleMusic())
             .on('pointerover', () => this.muteBtn.setAlpha(0.8))
@@ -201,7 +194,7 @@ export class MyScene extends Scene {
             .setInteractive()
             .setScrollFactor(0)
             .setDepth(1000)
-            .setScale(1 / zoom)
+            .setScale(1)
             .setVisible(false)
             .on('pointerdown', () => this.toggleMusic())
             .on('pointerover', () => this.unmuteBtn.setAlpha(0.8))
@@ -212,7 +205,7 @@ export class MyScene extends Scene {
             .setInteractive()
             .setScrollFactor(0)
             .setDepth(1000)
-            .setScale(1 / zoom)
+            .setScale(1)
             .setVisible(false)
             .on('pointerdown', () => this.restartGame())
             .on('pointerover', () => this.restartBtn.setAlpha(0.8))
@@ -223,7 +216,7 @@ export class MyScene extends Scene {
             .setInteractive()
             .setScrollFactor(0)
             .setDepth(1000)
-            .setScale(1 / zoom)
+            .setScale(1)
             .setVisible(false)
             .on('pointerdown', () => this.exitGame())
             .on('pointerover', () => this.exitBtn.setAlpha(0.8))
@@ -271,6 +264,12 @@ export class MyScene extends Scene {
     }
 
     restartGame() {
+        if (this.backgroundMusic && this.backgroundMusic.isPlaying) {
+            this.backgroundMusic.stop();
+        }
+
+        this.isPaused = false;
+
         this.scene.restart();
     }
 
