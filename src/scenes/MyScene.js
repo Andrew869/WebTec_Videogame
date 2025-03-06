@@ -36,11 +36,9 @@ export class MyScene extends Scene {
 
         this.diffHeight = 720 - this.mapSizeY
 
-<<<<<<<<< Temporary merge branch 1
         this.groundPosY = 0;
 
         this.currChar = characters.rogue;
-=========
         this.isPaused = false;
         this.pauseBtn;
         this.continueBtn;
@@ -307,11 +305,9 @@ export class MyScene extends Scene {
 
         this.mainCamera.setZoom(1.8);
         this.mainCamera.startFollow(this.player);
-<<<<<<<<< Temporary merge branch 1
         this.mainCamera.setBounds(0, 0, this.mapSizeX, this.scale.height);
 
         // this.stars.anims.play('death', true);
-=========
         this.mainCamera.setBounds(0, 0, this.scale.width * 2, this.scale.height);
 
         // Música
