@@ -54,7 +54,7 @@ export class MyScene extends Scene {
 
     preload() {
         this.load.setPath('assets');
-        // Cargar sprite sheets de los botones
+        // Cargar imagenes de los botones
         this.load.image('muteBtn', 'assets/Mute.png');
         this.load.image('unmuteBtn', 'assets/Unmute.png');
         this.load.image('restartBtn', 'assets/Restart.png');
@@ -167,7 +167,7 @@ export class MyScene extends Scene {
         const screenHeight = this.sys.game.config.height;
         const zoom = this.mainCamera.zoom;*/
 
-        // Configura la tecla ESC
+        // ESC para pausar y continuar
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.escKey.on('down', () => {
             if (this.gameOver) return;
