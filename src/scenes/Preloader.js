@@ -43,6 +43,79 @@ export class Preloader extends Scene
         this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
         this.load.spritesheet('rogue', 'Characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
         this.load.spritesheet("archer", "Characters/archer.png", { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('eye_flight', 'Enemies/eye/Flight.png' 
+            ,{ frameWidth: 200, frameHeight: 150 }
+        );
+        this.load.spritesheet('eye_death', 'Enemies/eye/Death.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+        this.load.spritesheet('eye_attack', 'Enemies/eye/Attack.png'
+            ,{ frameWidth: 200, frameHeight: 150 }
+        );
+        this.load.spritesheet('eye_take_hit', 'Enemies/eye/Take Hit.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+
+        this.load.spritesheet('skeleton_idle', 'Enemies/skeleton/Idle.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+        this.load.spritesheet('skeleton_walk', 'Enemies/skeleton/Walk.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+        this.load.spritesheet('skeleton_death', 'Enemies/skeleton/Death.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+        this.load.spritesheet('skeleton_attack', 'Enemies/skeleton/Attack.png'
+            ,{ frameWidth: 200, frameHeight: 150 }
+        );
+        this.load.spritesheet('skeleton_take_hit', 'Enemies/skeleton/Take Hit.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+
+        this.load.spritesheet('goblin_idle', 'Enemies/goblin/Idle.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+        this.load.spritesheet('goblin_run', 'Enemies/goblin/Run.png'
+            ,{ frameWidth: 200, frameHeight: 150 }
+        );
+        this.load.spritesheet('goblin_death', 'Enemies/goblin/Death.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+        this.load.spritesheet('goblin_attack', 'Enemies/goblin/Attack.png'
+            ,{ frameWidth: 200, frameHeight: 150 }
+        );
+        this.load.spritesheet('goblin_take_hit', 'Enemies/goblin/Take Hit.png'
+            ,{ frameWidth: 150, frameHeight: 150 }
+        );
+
+        this.load.spritesheet('sickle','Enemies/sickle.png')
+
+        // Cargar sprite sheets de los botones
+        this.load.spritesheet('pauseBtn', 'pauseBtn.png', {
+            frameWidth: 94, 
+            frameHeight: 32  
+        });
+        this.load.spritesheet('continueBtn', 'continueBtn.png', {
+            frameWidth: 94,
+            frameHeight: 35
+        });
+        this.load.spritesheet('muteBtn', 'muteBtn.png', {
+            frameWidth: 96,
+            frameHeight: 34
+        });
+        this.load.spritesheet('unmuteBtn', 'unmuteBtn.png', {
+            frameWidth: 96,
+            frameHeight: 32
+        });
+        this.load.spritesheet('restartBtn', 'restartBtn.png', {
+            frameWidth: 98,
+            frameHeight: 33
+        });
+        this.load.spritesheet('exitBtn', 'exitBtn.png', {
+            frameWidth: 96,
+            frameHeight: 33
+        });
+        this.load.audio('backgroundMusic', 'music.mp3');
     }
 
     create ()
