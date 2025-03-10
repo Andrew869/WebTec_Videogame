@@ -4,6 +4,7 @@ import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
 import { MyScene } from './scenes/MyScene';
+import { MyScene2 } from './scenes/MyScene2';
 import { UI } from './scenes/UI';
 
 //  Find out more information about the Game Config at:
@@ -29,6 +30,7 @@ const config = {
     scene: [
         Preloader,
         MyScene,
+        MyScene2,
         UI
     ]
 };

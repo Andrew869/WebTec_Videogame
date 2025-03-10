@@ -41,6 +41,19 @@ export class Preloader extends Scene
         this.load.image('layer9', 'bg_layers/Layer_0002_7.png');
         this.load.image('layer10', 'bg_layers/Layer_0001_8.png');
         this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
+        this.load.image('platform','Platform.png');
+
+        this.load.image('layer12','LV2/Hills Layer 01.png');
+        this.load.image('layer13','LV2/Hills Layer 02.png');
+        this.load.image('layer14','LV2/Hills Layer 03.png');
+        this.load.image('layer15','LV2/Hills Layer 04.png');
+        this.load.image('layer16','LV2/Hills Layer 05.png');
+        this.load.image('layer17','LV2/Hills Layer 06.png');
+
+        this.load.image('coin','CoinPoints.png');
+        this.load.image('bonus','BonusItem.png');
+
+        this.load.spritesheet('portal','Dimensional-Portal.png', {frameWidth: 32, frameHeight: 32});
         this.load.spritesheet('rogue', 'Characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
         this.load.spritesheet("archer", "Characters/archer.png", { frameWidth: 64, frameHeight: 64 });
         // Cargar los botones
@@ -48,7 +61,9 @@ export class Preloader extends Scene
         this.load.image('unmuteBtn', 'Unmute.png');
         this.load.image('restartBtn', 'Restart.png');
         this.load.image('exitBtn', 'Exit.png');
-        this.load.audio('backgroundMusic', 'music.mp3');
+
+        this.load.audio('backgroundMusic', 'FX/music.mp3');
+        this.load.audio('backgroundMusic2', 'FX/music2.mp3');
     }
 
     create ()
@@ -57,7 +72,8 @@ export class Preloader extends Scene
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MyScene');
         this.scene.start('UI');
+        this.scene.start('MyScene');
+        
     }
 }
