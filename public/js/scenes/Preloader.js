@@ -1,19 +1,17 @@
-import { Scene } from 'phaser';
+import { socket } from '../socket.js';
+import { characters } from '../characters.js';
 
-export class Preloader extends Scene
-{
-    constructor ()
-    {
+export default class Preloader extends Phaser.Scene {
+    constructor() {
         super('Preloader');
     }
 
-    init ()
-    {
+    init() {
         //  A simple progress bar. This is the outline of the bar.
         this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
 
         //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512-230, 384, 4, 28, 0xff0000);
+        const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xff0000);
 
         //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
         this.load.on('progress', (progress) => {
@@ -24,10 +22,9 @@ export class Preloader extends Scene
         });
     }
 
-    preload ()
-    {
+    preload() {
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath('assets');
+        this.load.setPath('../../assets/');
 
         this.load.image('layer0', 'bg_layers/Layer_0011_0.png');
         this.load.image('layer1', 'bg_layers/Layer_0010_1.png');
@@ -43,15 +40,25 @@ export class Preloader extends Scene
         this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
         this.load.spritesheet('rogue', 'Characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
         this.load.spritesheet("archer", "Characters/archer.png", { frameWidth: 64, frameHeight: 64 });
+        this.load.font('Alagard', 'fonts/alagard.ttf', "truetype");
+
+        
+
+        socket.emit("assetsLoaded");
     }
 
-    create ()
-    {
+    create() {
+
+        Object.values(characters).forEach(character => {
+            Object.values(character.anims).forEach(anim => {
+                this.anims.create(anim);
+            });
+        });
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MyScene');
+        this.scene.start('Game');
         this.scene.start('UI');
     }
 }
