@@ -2,6 +2,11 @@ import { Boot } from './scenes/Boot';
 import { Game } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
+import { Inicio } from './scenes/Inicio';
+import { Personaje } from './scenes/Personaje';
+import { Nivel } from './scenes/Nivel';
+import { Instrucciones } from './scenes/Instrucciones';
+import { Credits } from './scenes/Credits';
 import { Preloader } from './scenes/Preloader';
 import { MyScene } from './scenes/MyScene';
 import { UI } from './scenes/UI';
@@ -28,6 +33,12 @@ const config = {
     },
     scene: [
         Preloader,
+        MainMenu,
+        Inicio,
+        Instrucciones,
+        Personaje,
+        Nivel,
+        Credits,
         MyScene,
         UI
     ]

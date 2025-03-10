@@ -41,23 +41,31 @@ export class Preloader extends Scene
         this.load.image('layer9', 'bg_layers/Layer_0002_7.png');
         this.load.image('layer10', 'bg_layers/Layer_0001_8.png');
         this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
+       
+        this.load.image('roguesolo', 'Characters/rogue.png');
+        this.load.image('archersolo', 'Characters/archer.png');
         this.load.spritesheet('rogue', 'Characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
         this.load.spritesheet("archer", "Characters/archer.png", { frameWidth: 64, frameHeight: 64 });
         // Cargar los botones
+        
         this.load.image('muteBtn', 'Mute.png');
         this.load.image('unmuteBtn', 'Unmute.png');
         this.load.image('restartBtn', 'Restart.png');
         this.load.image('exitBtn', 'Exit.png');
         this.load.audio('backgroundMusic', 'music.mp3');
+        this.load.audio('menMusic', 'musicamenu.mp3');
+        this.load.image('pergamino', 'GUI/creditoslargo.png');
+        this.load.image('imageVale', 'Gandalf.png');
     }
 
     create ()
     {
-        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
+        //  When all the assets have loaded, it's ofoten worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('MyScene');
-        this.scene.start('UI');
+        this.scene.start('MainMenu');
+        //this.scene.start('MyScene');
+        //this.scene.start('UI');
     }
 }

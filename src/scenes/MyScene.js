@@ -153,6 +153,7 @@ export class MyScene extends Scene {
         // this.stars.anims.play('death', true);
 
         // Música
+        
         this.backgroundMusic = this.sound.add('backgroundMusic', { loop: true });
         this.backgroundMusic.play();
 
@@ -404,4 +405,5 @@ export class MyScene extends Scene {
 
         // this.gameOver = true;
     }
+    
 }
