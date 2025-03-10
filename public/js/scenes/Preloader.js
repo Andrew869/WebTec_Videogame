@@ -44,7 +44,7 @@ export default class Preloader extends Phaser.Scene {
 
         
 
-        socket.emit("assetsLoaded");
+        
     }
 
     create() {
@@ -58,7 +58,9 @@ export default class Preloader extends Phaser.Scene {
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        this.scene.start('Game');
-        this.scene.start('UI');
+        // socket.emit("assetsLoaded");
+        // this.scene.start('Game');
+        // this.scene.start('UI');
+        this.scene.start('MainMenu');
     }
 }

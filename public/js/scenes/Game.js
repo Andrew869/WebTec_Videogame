@@ -5,14 +5,11 @@ import { characters } from '../characters.js';
 export default class Game extends Phaser.Scene {
     constructor() {
         super({ key: "Game" });
-        this.stars;
-        this.bombs;
         this.ground;
         this.platforms;
-        this.cursors;
         this.score = 0;
-        this.gameOver = false;
         this.scoreText;
+        this.gameOver = false;
 
         this.keyObjects;
         this.mainCamera;
@@ -74,7 +71,7 @@ export default class Game extends Phaser.Scene {
             hability_3: "THREE",
         }); // keyObjects.up, keyObjects.down, keyObjects.left, keyObjects.right
 
-        this.cursors = this.input.keyboard.createCursorKeys();
+        socket.emit("readyToPlay");
     }
 
     update() {
@@ -84,6 +81,8 @@ export default class Game extends Phaser.Scene {
 
         this.velX = GlobalData.player.body.velocity.x;
         this.velY = GlobalData.player.body.velocity.y;
+
+        if(GlobalData.player.y > 900) GlobalData.player.y = 100;
 
         this.prevOnGround = this.isOnGround;
         this.isOnGround = GlobalData.player.body.touching.down;
@@ -172,22 +171,6 @@ export default class Game extends Phaser.Scene {
             playerStates.prevOnGround = playerStates.isOnGround;  
             playerStates.isOnGround = player.body.touching.down;
 
-            
-            // if (playerStates.isJumping) {
-            //     player.setVelocityY(-300);
-            //     player.anims.play(GlobalData.currChar.charName + '_' + 'jump', true);
-            //     player.on('animationcomplete', (animation, frame) => {
-            //         playerStates.isJumping = false;
-            //     });
-            // }
-            // else if (playerStates.attack) {
-            //     player.anims.play(GlobalData.currChar.charName + '_' + 'attack', true);
-            //     playerStates.isAttacking = true;
-            //     player.on('animationcomplete', (animation, frame) => {
-            //         playerStates.isAttacking = false;
-            //     });
-            // }
-            // else 
             if (playerStates.prevOnGround !== playerStates.isOnGround) {
                 playerStates.isLanding = true;
                 player.anims.play(GlobalData.currChar.charName + '_' + 'landing', true);

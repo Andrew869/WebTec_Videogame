@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
         y: 450,
     };
 
-    socket.on("assetsLoaded", () => {
+    socket.on("readyToPlay", () => {
         // Sending list of current players to client
         socket.emit("currentPlayers", players);
         // Sendig new player to other clients

@@ -49,7 +49,9 @@ function createPlayer(playerId, position, isItMine = true) {
     player.setSize(GlobalData.currChar.size.width, GlobalData.currChar.size.height);
     player.setOffset(GlobalData.currChar.offset.x, GlobalData.currChar.offset.y);
     player.setCollideWorldBounds(true);
+    
     game.scene.scenes[1].physics.add.collider(player, GlobalData.ground);
+    
     // game.scene.scenes[1].players[playerId] = player;
     GlobalData.players[playerId] = player;
 

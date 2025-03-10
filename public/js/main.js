@@ -1,4 +1,5 @@
 import Preloader from './scenes/Preloader.js';
+import MainMenu from './scenes/MainMenu.js';
 import Game from './scenes/Game.js';
 import UI from './scenes/UI.js';
 import { socket } from './socket.js';
@@ -32,6 +33,7 @@ const config = {
     scene: [
         Preloader,
         Game,
+        MainMenu,
         UI
     ]
 };
