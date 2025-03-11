@@ -7,11 +7,12 @@ export default class Preloader extends Phaser.Scene {
     }
 
     init() {
+        const { width, height } = this.scale;
         //  A simple progress bar. This is the outline of the bar.
-        this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
+        this.add.rectangle(width / 2, height / 2, 468, 32).setStrokeStyle(1, 0xffffff);
 
         //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xff0000);
+        const bar = this.add.rectangle(width / 2 - (460 / 2), height / 2, 4, 28, 0xff0000);
 
         //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
         this.load.on('progress', (progress) => {
@@ -26,24 +27,30 @@ export default class Preloader extends Phaser.Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('../../assets/');
 
-        this.load.image('layer0', 'bg_layers/Layer_0011_0.png');
-        this.load.image('layer1', 'bg_layers/Layer_0010_1.png');
-        this.load.image('layer2', 'bg_layers/Layer_0009_2.png');
-        this.load.image('layer3', 'bg_layers/Layer_0008_3.png');
-        this.load.image('layer4', 'bg_layers/Layer_0007_Lights.png');
-        this.load.image('layer5', 'bg_layers/Layer_0006_4.png');
-        this.load.image('layer6', 'bg_layers/Layer_0005_5.png');
-        this.load.image('layer7', 'bg_layers/Layer_0004_Lights.png');
-        this.load.image('layer8', 'bg_layers/Layer_0003_6.png');
-        this.load.image('layer9', 'bg_layers/Layer_0002_7.png');
-        this.load.image('layer10', 'bg_layers/Layer_0001_8.png');
-        this.load.image('layer11', 'bg_layers/Layer_0000_9.png');
-        this.load.spritesheet('rogue', 'Characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
-        this.load.spritesheet("archer", "Characters/archer.png", { frameWidth: 64, frameHeight: 64 });
-        this.load.font('Alagard', 'fonts/alagard.ttf', "truetype");
+        this.load.image('layer0', 'images/backgrounds/level_1/Layer_0011_0.png');
+        this.load.image('layer1', 'images/backgrounds/level_1/Layer_0010_1.png');
+        this.load.image('layer2', 'images/backgrounds/level_1/Layer_0009_2.png');
+        this.load.image('layer3', 'images/backgrounds/level_1/Layer_0008_3.png');
+        this.load.image('layer4', 'images/backgrounds/level_1/Layer_0007_Lights.png');
+        this.load.image('layer5', 'images/backgrounds/level_1/Layer_0006_4.png');
+        this.load.image('layer6', 'images/backgrounds/level_1/Layer_0005_5.png');
+        this.load.image('layer7', 'images/backgrounds/level_1/Layer_0004_Lights.png');
+        this.load.image('layer8', 'images/backgrounds/level_1/Layer_0003_6.png');
+        this.load.image('layer9', 'images/backgrounds/level_1/Layer_0002_7.png');
+        this.load.image('layer10', 'images/backgrounds/level_1/Layer_0001_8.png');
+        this.load.image('layer11', 'images/backgrounds/level_1/Layer_0000_9.png');
 
+        this.load.spritesheet('rogue', 'images/characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
+        this.load.spritesheet("archer", "images/characters/archer.png", { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('portal','images/props/portal.png', {frameWidth: 32, frameHeight: 32});
         
+        this.load.spritesheet('items', 'images/props/items.png', {frameWidth: 16, frameHeight: 16});
 
+        this.load.spritesheet('buttons', 'images/ui/buttons.png', {frameWidth: 32, frameHeight: 32});
+
+        this.load.font('Alagard', 'fonts/alagard.ttf', "truetype");
+        
+        this.load.audio('bg_m_lvl_1', 'audio/music/level_1.mp3');
         
     }
 
@@ -53,6 +60,13 @@ export default class Preloader extends Phaser.Scene {
             Object.values(character.anims).forEach(anim => {
                 this.anims.create(anim);
             });
+        });
+
+        this.anims.create({
+            key: 'press',
+            frames: this.anims.generateFrameNumbers('buttons', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1
         });
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
