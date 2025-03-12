@@ -1,18 +1,48 @@
-import { socket  } from '../socket.js';
+import { createButton } from '../utilities.js';
+import { GlobalData } from '../main.js';
 
-export default class UI extends Phaser.Scene {
+export default class MainMenu extends Phaser.Scene {
     constructor() {
-        super({ key: 'MainMenu' });
+        super('MainMenu');
     }
 
     create() {
-        const { width, height } = this.scale;
-        this.add.text(0, 0, `Click to Play`, {fontFamily: 'Alagard', fontSize: '80px', fill: '#fff' })
-        .setPosition(width / 2, height / 2)
-        .setOrigin(0.5, 0.5);
-        this.input.once('pointerdown', () => {
-            this.scene.start('Game');
+        if (!this.backgroundMusic || !this.backgroundMusic.isPlaying) {
+            this.backgroundMusic = this.sound.add('bg_m_menu', { loop: true });
+            this.backgroundMusic.play();
+        }
+        
+        // Agregar la imagen de fondo (pergamino)
+        const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');
+        pergamino.setDepth(0);
+
+        const startGame = () => {
+            this.backgroundMusic.stop();
+            this.scene.start('MyScene');
             this.scene.start('UI');
-        });
+            this.scene.start('Game');
+        };
+
+        const Inicio = () => {
+            this.scene.start('NameSelection');
+        };
+        const Records=()=>{
+
+        }
+
+        const Instrucciones = () => {
+            this.scene.start('Help');
+        };
+
+        const verCreditos = () => {
+            this.scene.start('About');
+        };
+
+        // Crear los cuatro botones con estilo igual a los créditos
+        //this.createButton(512, 230, 'Jugar', startGame);
+        createButton(this, GlobalData.halfWidth, 230, 'Play', Inicio);
+        createButton(this, GlobalData.halfWidth, 330, 'Records', Records);
+        createButton(this, GlobalData.halfWidth, 430, 'Help', Instrucciones);
+        createButton(this, GlobalData.halfWidth, 530, 'About', verCreditos);
     }
 }

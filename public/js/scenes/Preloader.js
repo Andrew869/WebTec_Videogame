@@ -50,23 +50,17 @@ export default class Preloader extends Phaser.Scene {
 
         this.load.font('Alagard', 'fonts/alagard.ttf', "truetype");
         
+        this.load.audio('bg_m_menu', 'audio/music/menu.mp3');
         this.load.audio('bg_m_lvl_1', 'audio/music/level_1.mp3');
+        this.load.image('pergamino', 'images/backgrounds/menu.png');
         
     }
 
     create() {
-
         Object.values(characters).forEach(character => {
             Object.values(character.anims).forEach(anim => {
                 this.anims.create(anim);
             });
-        });
-
-        this.anims.create({
-            key: 'press',
-            frames: this.anims.generateFrameNumbers('buttons', { start: 0, end: 2 }),
-            frameRate: 10,
-            repeat: -1
         });
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.

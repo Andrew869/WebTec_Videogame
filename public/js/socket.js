@@ -1,6 +1,7 @@
 import { game, GlobalData } from './main.js';
+import { characters } from './characters.js';
 
-export const socket = io();
+export const socket = io({ autoConnect: false });
 
 socket.on('connect', () => {
     // console.log(socket.id); // an alphanumeric id...
@@ -17,7 +18,7 @@ socket.on("currentPlayers", (players) => {
 });
 
 socket.on("newPlayer", (data) => {
-    createPlayer(data.id, data.position, false);
+    createPlayer(data.id, data.playerData, false);
 });
 
 socket.on("updatePosition", (data) => {
@@ -43,26 +44,26 @@ socket.on("playerDisconnected", (playerId) => {
     removePlayer(playerId);
 });
 
-function createPlayer(playerId, position, isItMine = true) {
-    const player = game.scene.scenes[1].physics.add.sprite(position.x, position.y, "rogue");
+function createPlayer(playerId, playerData, isItMine = true) {
+    const charName = playerData.charName;
+    const player = GlobalData.currScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
     player.setName(playerId); // Asigna el id al sprite para identificarlo
-    player.setSize(GlobalData.currChar.size.width, GlobalData.currChar.size.height);
-    player.setOffset(GlobalData.currChar.offset.x, GlobalData.currChar.offset.y);
+    player.setSize(characters[charName].size.width, characters[charName].size.height);
+    player.setOffset(characters[charName].offset.x, characters[charName].offset.y);
     player.setCollideWorldBounds(true);
     
-    game.scene.scenes[1].physics.add.collider(player, GlobalData.ground);
+    GlobalData.currScene.physics.add.collider(player, GlobalData.ground);
     
-    // game.scene.scenes[1].players[playerId] = player;
     GlobalData.players[playerId] = player;
 
     if(isItMine){
         player.setDepth(2);
         GlobalData.player = player;
         // GlobalData.playerStastes = playerStastes;
-        GlobalData.mainCamera = game.scene.scenes[1].cameras.main;
+        GlobalData.mainCamera = GlobalData.currScene.cameras.main;
         GlobalData.mainCamera.setZoom(2);
         GlobalData.mainCamera.startFollow(GlobalData.player);
-        GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, game.scene.scenes[1].scale.height);
+        GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.currScene.scale.height);
     }
     else {
         const playerStastes = {
@@ -97,7 +98,7 @@ function updatePlayerAction(playerId, playerAction) {
             {
                 playerStates.isJumping = true;
                 player.setVelocityY(-300);
-                player.anims.play(GlobalData.currChar.charName + '_' + 'jump', true);
+                player.anims.play(player.texture.key + '_' + 'jump', true);
                 player.on('animationcomplete', (animation, frame) => {
                     playerStates.isJumping = false;
                 });
@@ -106,7 +107,7 @@ function updatePlayerAction(playerId, playerAction) {
         case 'attack':
             {
                 playerStates.isAttacking = true;
-                player.anims.play(GlobalData.currChar.charName + '_' + 'attack');
+                player.anims.play(player.texture.key + '_' + 'attack');
                 player.on('animationcomplete', (animation, frame) => {
                     playerStates.isAttacking = false;
                 });

@@ -24,20 +24,27 @@ app.get('/', (req, res) => {
 io.on("connection", (socket) => {
     console.log("New player connected:", socket.id);
 
-    players[socket.id] = {
-        x: Math.random() * 100,
-        y: 450,
-    };
+    
 
-    socket.on("readyToPlay", () => {
+    socket.on("readyToPlay", (data) => {
+
+        players[socket.id] = {
+            x: Math.random() * 100,
+            y: 450,
+            charName: data.charName
+        };
+
+        console.log(players);
+
         // Sending list of current players to client
         socket.emit("currentPlayers", players);
         // Sendig new player to other clients
-        socket.broadcast.emit("newPlayer", { id: socket.id, position: players[socket.id] });
+        socket.broadcast.emit("newPlayer", { id: socket.id, playerData: players[socket.id] });
     });
 
     socket.on("playerPosition", (data) => {
-        players[socket.id] = data;
+        players[socket.id].x = data.x;
+        players[socket.id].y = data.y;
         socket.broadcast.emit("updatePosition", { id: socket.id, position: data });
     });
 

@@ -2,12 +2,19 @@ import Preloader from './scenes/Preloader.js';
 import MainMenu from './scenes/MainMenu.js';
 import Game from './scenes/Game.js';
 import UI from './scenes/UI.js';
+import NameSelection from './scenes/NameSelection.js';
+import CharSelection from './scenes/CharSelection.js';
+import Help from './scenes/Help.js';
+import About from './scenes/About.js';
 import { socket } from './socket.js';
 
 export const GlobalData = {
     players: {},
     playersStates: {},
-    playersEvent: {},
+    width: 1280,
+    halfWidth: 1280 / 2,
+    height: 720,
+    halfHeight: 720 / 2,
     mapSizeX: 1280 * 2,
     mapSizeY: 793
 };
@@ -15,8 +22,8 @@ export const GlobalData = {
 const config = {
     type: Phaser.AUTO,
     pixelArt: true,
-    width: 1280,
-    height: 720,
+    width: GlobalData.width,
+    height: GlobalData.height,
     parent: 'game-container',
     // backgroundColor: '#7693B3',
     physics: {
@@ -34,7 +41,11 @@ const config = {
         Preloader,
         Game,
         MainMenu,
-        UI
+        UI,
+        NameSelection,
+        CharSelection,
+        Help,
+        About
     ]
 };
 
