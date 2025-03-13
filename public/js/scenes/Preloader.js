@@ -53,6 +53,8 @@ export default class Preloader extends Phaser.Scene {
         this.load.audio('bg_m_menu', 'audio/music/menu.mp3');
         this.load.audio('bg_m_lvl_1', 'audio/music/level_1.mp3');
         this.load.image('pergamino', 'images/backgrounds/menu.png');
+        this.load.image('platform', 'images/props/platform.png');
+        this.load.image('wall', 'images/props/wall.png');
         
     }
 

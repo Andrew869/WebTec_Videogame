@@ -9,14 +9,19 @@ import About from './scenes/About.js';
 import { socket } from './socket.js';
 
 export const GlobalData = {
+    player : null,
+    playerData : null,
     players: {},
-    playersStates: {},
+    playersData: {},
+    colliders: [],
     width: 1280,
     halfWidth: 1280 / 2,
     height: 720,
     halfHeight: 720 / 2,
     mapSizeX: 1280 * 2,
-    mapSizeY: 793
+    mapSizeY: 793,
+    speed : 160,
+    jumpForce : 400
 };
 
 const config = {
@@ -30,7 +35,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 800 },
-            debug: false
+            debug: true
         }
     },
     scale: {

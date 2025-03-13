@@ -47,34 +47,53 @@ socket.on("playerDisconnected", (playerId) => {
 function createPlayer(playerId, playerData, isItMine = true) {
     const charName = playerData.charName;
     const player = GlobalData.currScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
+    // player.id = playerId;
     player.setName(playerId); // Asigna el id al sprite para identificarlo
     player.setSize(characters[charName].size.width, characters[charName].size.height);
     player.setOffset(characters[charName].offset.x, characters[charName].offset.y);
     player.setCollideWorldBounds(true);
-    
+
+    const data = {
+        currentSpeed : GlobalData.speed,
+        currentJumpForce : GlobalData.jumpForce,
+        isAttacking : false,
+        isLanding : false,
+        isJumping : false,
+        isOnGround : false,
+        prevOnGround : true
+    }
+
+    GlobalData.playersData[playerId] = data;
+
     GlobalData.currScene.physics.add.collider(player, GlobalData.ground);
+    
+    GlobalData.colliders.forEach(collider => {
+        GlobalData.currScene.physics.add.collider(player, collider);
+    });
     
     GlobalData.players[playerId] = player;
 
     if(isItMine){
         player.setDepth(2);
         GlobalData.player = player;
+        GlobalData.playerData = data;
+
         // GlobalData.playerStastes = playerStastes;
         GlobalData.mainCamera = GlobalData.currScene.cameras.main;
         GlobalData.mainCamera.setZoom(2);
         GlobalData.mainCamera.startFollow(GlobalData.player);
         GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.currScene.scale.height);
     }
-    else {
-        const playerStastes = {
-            isAttacking : false,
-            isLanding : false,
-            isJumping : false,
-            isOnGround : false,
-            prevOnGround : true
-        }
-        GlobalData.playersStates[playerId] = playerStastes;
-    }
+    // else {
+    //     const playerStastes = {
+    //         isAttacking : false,
+    //         isLanding : false,
+    //         isJumping : false,
+    //         isOnGround : false,
+    //         prevOnGround : true
+    //     }
+    //     GlobalData.playersStates[playerId] = playerStastes;
+    // }
 }
 
 function updatePlayerVelX(playerId, playerVelX) {
@@ -91,25 +110,25 @@ function updatePlayerVelY(playerId, playerVelY) {
 
 function updatePlayerAction(playerId, playerAction) {
     const player = GlobalData.players[playerId];
-    const playerStates = GlobalData.playersStates[playerId];
+    const playerData = GlobalData.playersData[playerId];
 
     switch(playerAction) {
         case 'jump':
             {
-                playerStates.isJumping = true;
-                player.setVelocityY(-300);
+                playerData.isJumping = true;
+                player.setVelocityY(-playerData.currentJumpForce);
                 player.anims.play(player.texture.key + '_' + 'jump', true);
                 player.on('animationcomplete', (animation, frame) => {
-                    playerStates.isJumping = false;
+                    playerData.isJumping = false;
                 });
             }
             break;
         case 'attack':
             {
-                playerStates.isAttacking = true;
+                playerData.isAttacking = true;
                 player.anims.play(player.texture.key + '_' + 'attack');
                 player.on('animationcomplete', (animation, frame) => {
-                    playerStates.isAttacking = false;
+                    playerData.isAttacking = false;
                 });
             }
             break;
@@ -129,6 +148,6 @@ function removePlayer(playerId) {
     if (player) {
         player.destroy();
         delete GlobalData.players[playerId];
-        delete GlobalData.playersStates[playerId];
+        delete GlobalData.playersData[playerId];
     }
 }

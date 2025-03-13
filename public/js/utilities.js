@@ -71,8 +71,9 @@ export function toggleMusic(scene) {
 
 export function exitGame(scene) {
     // Redirige al menu
+    GlobalData.backgroundMusic.stop();
     scene.scene.start('MainMenu');
-    socket.disconnect()
+    socket.disconnect();
 }
 
 export function createFloatingPlatform(x, y) {
@@ -101,6 +102,10 @@ export function createFloatingPlatform(x, y) {
 //         this.backgroundMusic.stop();
 //     }
 // }
+
+export function translateY(y){
+    return GlobalData.ground.y - y;
+}
 
 export function collectCoin(player, coin) {
     coin.disableBody(true, true);
@@ -167,4 +172,16 @@ export function movePlatform(platform, startX, startY, range, speed) {
         }
     }
     platform.refreshBody();
+}
+
+export function CreatePlatform(scene, x, y, width){
+    scene.add.tileSprite(x, translateY(y), width, 17, 'platform').setOrigin(0, 0);
+    const collider = scene.physics.add.staticBody(x, translateY(y) + 3, width, 12);
+    GlobalData.colliders.push(collider);
+}
+
+export function CreateWall(scene, x, y, height){
+    scene.add.tileSprite(x, translateY(y), 16, height, 'wall').setOrigin(0, 1);
+    const collider = scene.physics.add.staticBody(x, translateY(y) - height , 16, height);
+    GlobalData.colliders.push(collider);
 }

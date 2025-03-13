@@ -119,7 +119,7 @@ export let characters = {
                     { frame: 0 },
                     { frame: 1 }
                 ],
-                frameRate: 3,
+                frameRate: 1,
                 repeat: -1
             },
             run: {

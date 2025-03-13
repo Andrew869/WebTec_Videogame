@@ -34,8 +34,6 @@ io.on("connection", (socket) => {
             charName: data.charName
         };
 
-        console.log(players);
-
         // Sending list of current players to client
         socket.emit("currentPlayers", players);
         // Sendig new player to other clients

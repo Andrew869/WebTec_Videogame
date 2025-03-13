@@ -29,6 +29,7 @@ export default class CharSelection extends Phaser.Scene {
 
         // Función para ir al juego
         const Game = (charName) => {
+            GlobalData.backgroundMusic.stop();
             GlobalData.charName = charName;
             this.scene.start('UI');
             this.scene.start('Game');

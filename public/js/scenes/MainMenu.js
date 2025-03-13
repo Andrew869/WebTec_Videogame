@@ -7,9 +7,9 @@ export default class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        if (!this.backgroundMusic || !this.backgroundMusic.isPlaying) {
-            this.backgroundMusic = this.sound.add('bg_m_menu', { loop: true });
-            this.backgroundMusic.play();
+        if (!GlobalData.backgroundMusic || !GlobalData.backgroundMusic.isPlaying) {
+            GlobalData.backgroundMusic = this.sound.add('bg_m_menu', { loop: true });
+            GlobalData.backgroundMusic.play();
         }
         
         // Agregar la imagen de fondo (pergamino)
@@ -17,7 +17,7 @@ export default class MainMenu extends Phaser.Scene {
         pergamino.setDepth(0);
 
         const startGame = () => {
-            this.backgroundMusic.stop();
+            GlobalData.backgroundMusic.stop();
             this.scene.start('MyScene');
             this.scene.start('UI');
             this.scene.start('Game');
