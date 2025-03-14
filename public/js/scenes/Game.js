@@ -28,7 +28,7 @@ export default class Game extends Phaser.Scene {
     }
 
     create() {
-        GlobalData.currScene = this;
+        GlobalData.currGameScene = this;
 
         switch (GlobalData.charName) {
             case "archer":
@@ -116,7 +116,7 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
-        if (this.gameOver || !GlobalData.player) {
+        if (!GlobalData.player) {
             return;
         }
 

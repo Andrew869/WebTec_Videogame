@@ -1,6 +1,29 @@
 import { game, GlobalData } from './main.js';
 import { socket } from './socket.js';
 
+export function getDefaultGlobalData() {
+    return {
+        currGameScene: null,
+        player: null,
+        playerData: null,
+        players: {},
+        playersData: {},
+        colliders: [],
+        width: 1280,
+        halfWidth: 1280 / 2,
+        height: 720,
+        halfHeight: 720 / 2,
+        mapSizeX: 1280 * 2,
+        mapSizeY: 793,
+        speed: 160,
+        jumpForce: 400
+    };
+}
+
+export function resetGlobalData() {
+    Object.assign(GlobalData, getDefaultGlobalData());
+}
+
 export function createButton(scene, x, y, text, callback) {
     let button = scene.add.text(x, y, text, {
         fontFamily: 'Alagard', fontSize: 38, color: '#000',
@@ -71,8 +94,14 @@ export function toggleMusic(scene) {
 
 export function exitGame(scene) {
     // Redirige al menu
+    // stoping scenes
     GlobalData.backgroundMusic.stop();
+    scene.scene.stop(GlobalData.currGameScene);
+    // reseting global vars
+    resetGlobalData();
+    // changing to main scene
     scene.scene.start('MainMenu');
+    // disconnecting from server
     socket.disconnect();
 }
 

@@ -7,22 +7,9 @@ import CharSelection from './scenes/CharSelection.js';
 import Help from './scenes/Help.js';
 import About from './scenes/About.js';
 import { socket } from './socket.js';
+import { getDefaultGlobalData } from './utilities.js';
 
-export const GlobalData = {
-    player : null,
-    playerData : null,
-    players: {},
-    playersData: {},
-    colliders: [],
-    width: 1280,
-    halfWidth: 1280 / 2,
-    height: 720,
-    halfHeight: 720 / 2,
-    mapSizeX: 1280 * 2,
-    mapSizeY: 793,
-    speed : 160,
-    jumpForce : 400
-};
+export const GlobalData = getDefaultGlobalData();
 
 const config = {
     type: Phaser.AUTO,

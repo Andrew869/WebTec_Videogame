@@ -7,7 +7,6 @@ socket.on('connect', () => {
     // console.log(socket.id); // an alphanumeric id...
 });
 
-// 
 socket.on("currentPlayers", (players) => {
     for (let playerId in players) {
         if(playerId === socket.id)
@@ -46,7 +45,7 @@ socket.on("playerDisconnected", (playerId) => {
 
 function createPlayer(playerId, playerData, isItMine = true) {
     const charName = playerData.charName;
-    const player = GlobalData.currScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
+    const player = GlobalData.currGameScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
     // player.id = playerId;
     player.setName(playerId); // Asigna el id al sprite para identificarlo
     player.setSize(characters[charName].size.width, characters[charName].size.height);
@@ -63,12 +62,10 @@ function createPlayer(playerId, playerData, isItMine = true) {
         prevOnGround : true
     }
 
-    GlobalData.playersData[playerId] = data;
-
-    GlobalData.currScene.physics.add.collider(player, GlobalData.ground);
+    GlobalData.currGameScene.physics.add.collider(player, GlobalData.ground);
     
     GlobalData.colliders.forEach(collider => {
-        GlobalData.currScene.physics.add.collider(player, collider);
+        GlobalData.currGameScene.physics.add.collider(player, collider);
     });
     
     GlobalData.players[playerId] = player;
@@ -79,21 +76,14 @@ function createPlayer(playerId, playerData, isItMine = true) {
         GlobalData.playerData = data;
 
         // GlobalData.playerStastes = playerStastes;
-        GlobalData.mainCamera = GlobalData.currScene.cameras.main;
+        GlobalData.mainCamera = GlobalData.currGameScene.cameras.main;
         GlobalData.mainCamera.setZoom(2);
         GlobalData.mainCamera.startFollow(GlobalData.player);
-        GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.currScene.scale.height);
+        GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.currGameScene.scale.height);
     }
-    // else {
-    //     const playerStastes = {
-    //         isAttacking : false,
-    //         isLanding : false,
-    //         isJumping : false,
-    //         isOnGround : false,
-    //         prevOnGround : true
-    //     }
-    //     GlobalData.playersStates[playerId] = playerStastes;
-    // }
+    else {
+        GlobalData.playersData[playerId] = data;
+    }
 }
 
 function updatePlayerVelX(playerId, playerVelX) {
