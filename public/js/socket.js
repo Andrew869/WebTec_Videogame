@@ -1,6 +1,6 @@
 import { game, GlobalData } from './main.js';
 import { characters } from './characters.js';
-import { exitGame, CreateTimer, removeTimer} from './utilities.js';
+import { exitGame, CreateTimer, removeTimer, removePlayer} from './utilities.js';
 
 export const socket = io({ autoConnect: false });
 
@@ -12,31 +12,36 @@ socket.on("currentPlayers", (players) => {
     for (let playerId in players) {
         if(playerId === socket.id)
             createPlayer(playerId, players[playerId]);
-        else 
-            createPlayer(playerId, players[playerId], false);
+        else {
+            console.log(players[playerId].lvl + " - " + GlobalData.currLvl);
+            if(players[playerId].lvl === GlobalData.currLvl) createPlayer(playerId, players[playerId], false);
+        }
     }
 });
 
 socket.on("newPlayer", (data) => {
-    createPlayer(data.id, data.playerData, false);
+    // console.log(data.playerData.lvl + " - " + GlobalData.currLvl);
+    if(data.playerData.lvl === GlobalData.currLvl)
+        createPlayer(data.id, data.playerData, false);
 });
 
 socket.on("updatePosition", (data) => {
-    updatePlayerPosition(data.id, data.position);
+    if(data.lvl === GlobalData.currLvl)
+        updatePlayerPosition(data.id, data.position);
 });
 
 socket.on("updateVelX", (data) => {
-    // console.log(`playerVelX - ${data.playerVelX}`);
-    updatePlayerVelX(data.id, data.playerVelX);
+    if(data.lvl === GlobalData.currLvl)
+        updatePlayerVelX(data.id, data.playerVelX);
 });
 
 socket.on("updateVelY", (data) => {
-    // console.log(`playerVelY - ${data.playerVelY}`);
+    if(data.lvl === GlobalData.currLvl)
     updatePlayerVelY(data.id, data.playerVelY);
 });
 
 socket.on("updateAction", (data) => {
-    // console.log(`${socket.id} - ${data.playerAction}`);
+    if(data.lvl === GlobalData.currLvl)
     updatePlayerAction(data.id, data.playerAction);
 });
 
@@ -62,7 +67,6 @@ socket.on("returnToMenu", () => {
 });
 
 function createPlayer(playerId, playerData, isItMine = true) {
-    GlobalData.isItMine = isItMine;
     const charName = playerData.charName;
     const player = GlobalData.currGameScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
     player.setOrigin(0.5);
@@ -73,6 +77,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
     // player.alpha = 0.5;
 
     const data = {
+
         playerReady: false,
         currentSpeed : GlobalData.speed,
         currentJumpForce : GlobalData.jumpForce,
@@ -95,7 +100,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
             case 'portal':
                 {
                     const targetScene = trigger.targetScene;
-                    GlobalData.currGameScene.physics.add.overlap(player, object, (player, object) => (isItMine? trigger.callback(targetScene) : () => {console.log("player has left to another lvl")}), null, GlobalData.currGameScene);
+                    GlobalData.currGameScene.physics.add.overlap(player, object, (player, object) => (isItMine? trigger.callback(targetScene) : removePlayer(player.name)), null, GlobalData.currGameScene);
                 }
                 break;
             case 'start_line':
@@ -169,15 +174,5 @@ function updatePlayerPosition(playerId, position) {
     const player = GlobalData.players[playerId];
     if (player) {
         player.setPosition(position.x, position.y);
-    }
-}
-
-// Remove offline player
-function removePlayer(playerId) {
-    const player = GlobalData.players[playerId];
-    if (player) {
-        player.destroy();
-        delete GlobalData.players[playerId];
-        delete GlobalData.playersData[playerId];
     }
 }

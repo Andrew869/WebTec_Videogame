@@ -7,6 +7,7 @@ import NameSelection from './scenes/NameSelection.js';
 import CharSelection from './scenes/CharSelection.js';
 import Help from './scenes/Help.js';
 import About from './scenes/About.js';
+import EndGame from './scenes/EndGame.js';
 import { socket } from './socket.js';
 import { getDefaultGlobalData } from './utilities.js';
 
@@ -23,7 +24,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 800 },
-            debug: true
+            debug: false
         }
     },
     scale: {
@@ -40,6 +41,7 @@ const config = {
         Game,
         Game2,
         UI,
+        EndGame
     ]
 };
 

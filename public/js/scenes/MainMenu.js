@@ -7,10 +7,10 @@ export default class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        if (!GlobalData.backgroundMusic || !GlobalData.backgroundMusic.isPlaying) {
+        // if (!GlobalData.backgroundMusic || !GlobalData.backgroundMusic.isPlaying) {
             GlobalData.backgroundMusic = this.sound.add('bg_m_menu', { loop: true });
             GlobalData.backgroundMusic.play();
-        }
+        // }
         
         // Agregar la imagen de fondo (pergamino)
         const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');

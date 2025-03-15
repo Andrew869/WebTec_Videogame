@@ -27,18 +27,33 @@ export default class Preloader extends Phaser.Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('../../assets/');
 
-        this.load.image('layer0', 'images/backgrounds/level_1/Layer_0011_0.png');
-        this.load.image('layer1', 'images/backgrounds/level_1/Layer_0010_1.png');
-        this.load.image('layer2', 'images/backgrounds/level_1/Layer_0009_2.png');
-        this.load.image('layer3', 'images/backgrounds/level_1/Layer_0008_3.png');
-        this.load.image('layer4', 'images/backgrounds/level_1/Layer_0007_Lights.png');
-        this.load.image('layer5', 'images/backgrounds/level_1/Layer_0006_4.png');
-        this.load.image('layer6', 'images/backgrounds/level_1/Layer_0005_5.png');
-        this.load.image('layer7', 'images/backgrounds/level_1/Layer_0004_Lights.png');
-        this.load.image('layer8', 'images/backgrounds/level_1/Layer_0003_6.png');
-        this.load.image('layer9', 'images/backgrounds/level_1/Layer_0002_7.png');
-        this.load.image('layer10', 'images/backgrounds/level_1/Layer_0001_8.png');
-        this.load.image('layer11', 'images/backgrounds/level_1/Layer_0000_9.png');
+        this.load.image('lvl_1_layer0', 'images/backgrounds/level_1/Layer_0011_0.png');
+        this.load.image('lvl_1_layer1', 'images/backgrounds/level_1/Layer_0010_1.png');
+        this.load.image('lvl_1_layer2', 'images/backgrounds/level_1/Layer_0009_2.png');
+        this.load.image('lvl_1_layer3', 'images/backgrounds/level_1/Layer_0008_3.png');
+        this.load.image('lvl_1_layer4', 'images/backgrounds/level_1/Layer_0007_Lights.png');
+        this.load.image('lvl_1_layer5', 'images/backgrounds/level_1/Layer_0006_4.png');
+        this.load.image('lvl_1_layer6', 'images/backgrounds/level_1/Layer_0005_5.png');
+        this.load.image('lvl_1_layer7', 'images/backgrounds/level_1/Layer_0004_Lights.png');
+        this.load.image('lvl_1_layer8', 'images/backgrounds/level_1/Layer_0003_6.png');
+        this.load.image('lvl_1_layer9', 'images/backgrounds/level_1/Layer_0002_7.png');
+        this.load.image('lvl_1_layer10', 'images/backgrounds/level_1/Layer_0001_8.png');
+        this.load.image('lvl_1_layer11', 'images/backgrounds/level_1/Layer_0000_9.png');
+
+        this.load.image('lvl_2_layer0', 'images/backgrounds/level_2/1.png');
+        this.load.image('lvl_2_layer1', 'images/backgrounds/level_2/2.png');
+        this.load.image('lvl_2_layer2', 'images/backgrounds/level_2/3.png');
+        this.load.image('lvl_2_layer3', 'images/backgrounds/level_2/4.png');
+        this.load.image('lvl_2_layer4', 'images/backgrounds/level_2/5.png');
+        this.load.image('lvl_2_layer5', 'images/backgrounds/level_2/6.png');
+        this.load.image('lvl_2_layer6', 'images/backgrounds/level_2/7.png');
+        this.load.image('lvl_2_layer7', 'images/backgrounds/level_2/8.png');
+        this.load.image('lvl_2_layer8', 'images/backgrounds/level_2/9.png');
+        this.load.image('lvl_2_layer9', 'images/backgrounds/level_2/10.png');
+        this.load.image('lvl_2_layer10', 'images/backgrounds/level_2/11.png');
+        this.load.image('lvl_2_layer11', 'images/backgrounds/level_2/12.png');
+        this.load.image('lvl_2_sky', 'images/backgrounds/level_2/sky.png');
+
 
         this.load.spritesheet('rogue', 'images/characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
         this.load.spritesheet("archer", "images/characters/archer.png", { frameWidth: 64, frameHeight: 64 });
@@ -52,6 +67,7 @@ export default class Preloader extends Phaser.Scene {
         
         this.load.audio('bg_m_menu', 'audio/music/menu.mp3');
         this.load.audio('bg_m_lvl_1', 'audio/music/level_1.mp3');
+        this.load.audio('bg_m_lvl_2', 'audio/music/level_2.mp3');
         this.load.image('pergamino', 'images/backgrounds/menu.png');
         this.load.image('platform', 'images/props/platform.png');
         this.load.image('wall', 'images/props/wall.png');

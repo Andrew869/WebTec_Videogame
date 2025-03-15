@@ -4,6 +4,7 @@ import { socket } from './socket.js';
 export function getDefaultGlobalData() {
     return {
         currGameScene: null,
+        currLvl: 0,
         currUIScene: null,
         start_line : null,
         player: null,
@@ -13,6 +14,7 @@ export function getDefaultGlobalData() {
         colliders: [],
         triggers: [],
         gameStarted: false,
+        levelStarted: false,
         width: 1280,
         halfWidth: 1280 / 2,
         height: 720,
@@ -23,7 +25,7 @@ export function getDefaultGlobalData() {
         jumpForce: 400,
         greatWall: null,
         timers: {},
-        chronometers: {},
+        timeElapsed: 0
     };
 }
 
@@ -233,7 +235,7 @@ export function CreatePortal(scene, targetScene, x, y, size, flipX = false) {
         .setSize(3, 28)
         .setOffset(flipX? 12 : 17 , 2)
         .setScale(size)
-        .setDepth(2)
+        // .setDepth(2)
         .setImmovable(true)
         .refreshBody();
 
@@ -256,15 +258,18 @@ export function CreatePortal(scene, targetScene, x, y, size, flipX = false) {
 // }
 
 export function warpPlayer(targetScene){
+    partialReset();
+    // console.log(GlobalData.timeElapsed);
+    GlobalData.backgroundMusic.stop();
     GlobalData.currGameScene.scene.start(targetScene);
 }
 
 export function CreateStartZone(scene, x, y, tilesX, tilesY) {
-
-    CreateWall(scene, x, y, tilesY * 16);
-
     const width = tilesX * 16;
     const height = tilesY * 16;
+    
+    CreatePlatform(scene, 0, height + 16, x + 16);
+    CreateWall(scene, x, y, height);
 
     const race_line =  scene.add.tileSprite(x, translateY(y), width, height, 'race_line').setOrigin(1);
     race_line.alpha = 0.5;
@@ -274,7 +279,7 @@ export function CreateStartZone(scene, x, y, tilesX, tilesY) {
 }
 
 export function SetplayerReady(){
-    if (!GlobalData.playerReady && !GlobalData.gameStarted) {
+    if (!GlobalData.playerReady && !GlobalData.levelStarted) {
         console.log(GlobalData.player.name, "is ready!");
         GlobalData.playerReady = true;
         socket.emit("playerReady", {isReady : true});
@@ -316,9 +321,26 @@ export function removeGreatWall() {
     GlobalData.greatWall.sprite.destroy();
     GlobalData.greatWall.collider.destroy();
     GlobalData.gameStarted = true;
+    GlobalData.levelStarted = true;
 }
 
-// export function OnGroundManager(){
-//     GlobalData.playerData.prevOnGround = GlobalData.playerData.isOnGround;
-//     GlobalData.playerData.isOnGround = GlobalData.player.body.touching.down;
-// }
+export function removePlayer(playerId) {
+    console.log(playerId);
+    const player = GlobalData.players[playerId];
+    if (player) {
+        player.destroy();
+        delete GlobalData.players[playerId];
+        delete GlobalData.playersData[playerId];
+    }
+}
+
+export function partialReset(){
+    GlobalData.svtart_line = null;
+    GlobalData.player = null;
+    GlobalData.playerData = null;
+    GlobalData.players = {};
+    GlobalData.playersData = {};
+    GlobalData.colliders = [];
+    GlobalData.triggers = [];
+    GlobalData.levelStarted = false;
+}

@@ -15,8 +15,7 @@ export default class UI extends Phaser.Scene {
         this.exitBtn;
         this.isMusicMuted = false;
 
-        this.timerText;
-        this.timeElapsed = 0;
+        this.chronoText;
 
         this.readyPlayersText;
     }
@@ -35,8 +34,8 @@ export default class UI extends Phaser.Scene {
             }
         });
 
-        // this.timerText = this.add.text(GlobalData.halfWidth, GlobalData.halfHeight, `${this.reminingTime - 1}`, {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
-        this.readyPlayersText = this.add.text(10, 10, "ready: 0/1", {fontFamily: 'Alagard' ,fontSize: '32px', fill: '#fff' });
+        this.chronoText = this.add.text(GlobalData.width - 100, 10, "0.00", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+        this.readyPlayersText = this.add.text(10, 10, "ready: 0/1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
 
         // this.timer = this.time.addEvent({
         //     delay: 1000,
@@ -74,7 +73,7 @@ export default class UI extends Phaser.Scene {
             .setInteractive()
             .setScrollFactor(0)
             .setDepth(1000)
-            .setScale(1)
+            .setScale(5)
             .setVisible(false)
             .on('pointerdown', () => toggleMusic(this))
             .on('pointerover', () => this.muteBtn.setAlpha(1))
@@ -85,7 +84,7 @@ export default class UI extends Phaser.Scene {
             .setInteractive()
             .setScrollFactor(0)
             .setDepth(1000)
-            .setScale(1)
+            .setScale(5)
             .setVisible(false)
             .on('pointerdown', () => toggleMusic(this))
             .on('pointerover', () => this.unmuteBtn.setAlpha(0.8))
@@ -107,7 +106,7 @@ export default class UI extends Phaser.Scene {
             .setInteractive()
             .setScrollFactor(0)
             .setDepth(1000)
-            .setScale(1)
+            .setScale(5)
             .setVisible(false)
             .on('pointerdown', () => exitGame(this))
             .on('pointerover', () => this.exitBtn.setAlpha(0.8))
@@ -115,7 +114,9 @@ export default class UI extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // this.timeElapsed += delta / 1000; // delta viene en milisegundos, lo convertimos a segundos
-        // this.timerText.setText('Tiempo: ' + delta); // Mostrar con 3 decimales (milisegundos)
+        if(GlobalData.levelStarted){
+            GlobalData.timeElapsed += delta / 1000;
+            this.chronoText.setText(GlobalData.timeElapsed.toFixed(2));
+        }
     }
 }

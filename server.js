@@ -33,6 +33,7 @@ io.on("connection", (socket) => {
     socket.on("LevelReady", (data) => {
 
         players[socket.id] = {
+            lvl: data.lvl,
             x: 80,
             y: 667 - 250,
             charName: data.charName,
@@ -75,28 +76,32 @@ io.on("connection", (socket) => {
     socket.on("playerPosition", (data) => {
         players[socket.id].x = data.x;
         players[socket.id].y = data.y;
-        socket.broadcast.emit("updatePosition", { id: socket.id, position: data });
+        socket.broadcast.emit("updatePosition", { id: socket.id, lvl: players[socket.id].lvl ,position: data });
     });
 
     socket.on("playerVelX", (data) => {
         // console.log(`${socket.id} - velX(${data.playerVelX})`);
-        socket.broadcast.emit("updateVelX", { id: socket.id, playerVelX: data.playerVelX});
+        socket.broadcast.emit("updateVelX", { id: socket.id, lvl: players[socket.id].lvl ,playerVelX: data.playerVelX});
     });
 
     socket.on("playerVelY", (data) => {
         // console.log(`${socket.id} - velY(${data.playerVelY})`);
-        socket.broadcast.emit("updateVelY", { id: socket.id, playerVelY: data.playerVelY});
+        socket.broadcast.emit("updateVelY", { id: socket.id, lvl: players[socket.id].lvl ,playerVelY: data.playerVelY});
     });
 
     socket.on("playerAction", (data) => {
         // console.log(`${socket.id} - ${data.playerAction}`);
-        socket.broadcast.emit("updateAction", { id: socket.id, playerAction: data.playerAction});
+        socket.broadcast.emit("updateAction", { id: socket.id, lvl: players[socket.id].lvl ,playerAction: data.playerAction});
     });
 
     // When a client disconnects
     socket.on("disconnect", () => {
         console.log("player disconnected:", socket.id);
         delete players[socket.id];
+        if(!Object.keys(players).length) {
+            gamestarted = false;
+        }
+
         // Notifing to online clients
         socket.broadcast.emit("playerDisconnected", socket.id);
     });
