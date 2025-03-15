@@ -1,6 +1,7 @@
 import Preloader from './scenes/Preloader.js';
 import MainMenu from './scenes/MainMenu.js';
 import Game from './scenes/Game.js';
+import Game2 from './scenes/Game2.js';
 import UI from './scenes/UI.js';
 import NameSelection from './scenes/NameSelection.js';
 import CharSelection from './scenes/CharSelection.js';
@@ -31,13 +32,14 @@ const config = {
     },
     scene: [
         Preloader,
-        Game,
         MainMenu,
-        UI,
         NameSelection,
         CharSelection,
         Help,
-        About
+        About,
+        Game,
+        Game2,
+        UI,
     ]
 };
 

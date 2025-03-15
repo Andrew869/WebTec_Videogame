@@ -31,8 +31,8 @@ export default class CharSelection extends Phaser.Scene {
         const Game = (charName) => {
             GlobalData.backgroundMusic.stop();
             GlobalData.charName = charName;
-            this.scene.start('UI');
             this.scene.start('Game');
+            this.scene.start('UI');
         };
 
         // Crear botones con las imágenes de los personajes (tomando solo un frame específico del spritesheet)

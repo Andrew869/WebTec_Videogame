@@ -1,25 +1,13 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, translateY, CreatePlatform, CreateWall } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal } from '../utilities.js';
 
 export default class Game extends Phaser.Scene {
     constructor() {
         super({ key: "Game" });
-        this.ground;
-        this.platforms;
-        this.score = 0;
-        this.scoreText;
-        this.gameOver = false;
 
         this.keyObjects;
-
-        // this.GlobalData.playerData.isAttacking = false;
-        // this.GlobalData.playerData.isLanding = false;
-        // this.GlobalData.playerData.isJumping = false;
-
-        // this.GlobalData.playerData.isOnGround = false;
-        // this.GlobalData.playerData.prevOnGround = true;
 
         this.diffHeight = 720 - GlobalData.mapSizeY
     }
@@ -56,10 +44,18 @@ export default class Game extends Phaser.Scene {
 
         GlobalData.ground = this.physics.add.staticBody(0, this.scale.height - 58, GlobalData.mapSizeX, 10);
 
+        // this.physics.add.staticBody(0, 0, 100, GlobalData.mapSizeY);
+        
+        CreateStartZone(this, 410, 0, 3, 20);
+        // CreateWall(this, 410, 0, 20 * 16);
+
+
         CreatePlatform(this, 60, 60, 300);
         CreatePlatform(this, 480, 80, 100);
 
-        CreateWall(this, 410, 0, 150);
+
+        CreatePortal(this, "", 80, 250, 8, true);
+        CreatePortal(this, "Level2", 500, 200, 8, false);
 
         // this.initialPortal = this.physics.add.sprite(300, translateY(0), 'portal')
         // .setOrigin(0.5, 1)
@@ -67,6 +63,7 @@ export default class Game extends Phaser.Scene {
         // .setOffset(18, 10)
         // .setScale(4)
         // .setDepth(2)
+        // .setImmovable(true)
         // .refreshBody();
 
         // this.finalPortal = this.physics.add.sprite(GlobalData.mapSizeX - 300, translateY(40), 'portal')
@@ -83,12 +80,7 @@ export default class Game extends Phaser.Scene {
         // this.physics.add.collider(this.initialPortal, this.ground);
         // this.physics.add.collider(this.finalPortal, this.ground);
 
-        // this.anims.create({
-        //     key: 'portal_anim',
-        //     frames: this.anims.generateFrameNumbers('portal', { start: 0, end: 5 }),
-        //     frameRate: 10,
-        //     repeat: -1
-        // });
+        
 
         // this.initialPortal.anims.play('portal_anim', true);
         // this.finalPortal.anims.play('portal_anim', true);
@@ -112,12 +104,17 @@ export default class Game extends Phaser.Scene {
         GlobalData.backgroundMusic.play();
 
         socket.connect();
-        socket.emit("readyToPlay", {charName: GlobalData.charName});
+        socket.emit("LevelReady", {charName: GlobalData.charName});
     }
 
     update() {
         if (!GlobalData.player) {
             return;
+        }
+
+        if (GlobalData.playerReady && !this.physics.world.overlap(GlobalData.player, GlobalData.start_line) && !GlobalData.gameStarted) {
+            GlobalData.playerReady = false;
+            socket.emit("playerReady", {isReady : false});
         }
 
         const playerData = GlobalData.playerData;

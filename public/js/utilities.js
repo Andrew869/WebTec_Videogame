@@ -4,11 +4,15 @@ import { socket } from './socket.js';
 export function getDefaultGlobalData() {
     return {
         currGameScene: null,
+        currUIScene: null,
+        start_line : null,
         player: null,
         playerData: null,
         players: {},
         playersData: {},
         colliders: [],
+        triggers: [],
+        gameStarted: false,
         width: 1280,
         halfWidth: 1280 / 2,
         height: 720,
@@ -16,7 +20,10 @@ export function getDefaultGlobalData() {
         mapSizeX: 1280 * 2,
         mapSizeY: 793,
         speed: 160,
-        jumpForce: 400
+        jumpForce: 400,
+        greatWall: null,
+        timers: {},
+        chronometers: {},
     };
 }
 
@@ -30,11 +37,11 @@ export function createButton(scene, x, y, text, callback) {
         stroke: '#6F4E37', strokeThickness: 8,
         align: 'center'
     }).setOrigin(0.5)
-      .setDepth(1)
-      .setInteractive()
-      .on('pointerdown', callback)
-      .on('pointerover', () => button.setStyle({ color: '#fff' }))
-      .on('pointerout', () => button.setStyle({ color: '#000' }));
+        .setDepth(1)
+        .setInteractive()
+        .on('pointerdown', callback)
+        .on('pointerover', () => button.setStyle({ color: '#fff' }))
+        .on('pointerout', () => button.setStyle({ color: '#000' }));
 }
 
 export function SendPos() {
@@ -44,11 +51,11 @@ export function SendPos() {
 //botones pause continue
 export function pauseGame(scene) {
     // if (this.gameOver) return;
-    
+
     scene.isPaused = true;
-    game.scene.scenes[1].physics.pause();
-    scene.anims.pauseAll();
-    
+    // GlobalData.currGameScene.physics.pause();
+    // scene.anims.pauseAll();
+
     scene.muteBtn.setVisible(!scene.isMusicMuted);
     scene.unmuteBtn.setVisible(scene.isMusicMuted);
     // scene.restartBtn.setVisible(true);
@@ -57,9 +64,9 @@ export function pauseGame(scene) {
 
 export function continueGame(scene) {
     scene.isPaused = false;
-    game.scene.scenes[1].physics.resume();
-    scene.anims.resumeAll();
-    
+    // GlobalData.currGameScene.physics.resume();
+    // scene.anims.resumeAll();
+
     scene.muteBtn.setVisible(false);
     scene.unmuteBtn.setVisible(false);
     // scene.restartBtn.setVisible(false);
@@ -96,6 +103,10 @@ export function exitGame(scene) {
     // Redirige al menu
     // stoping scenes
     GlobalData.backgroundMusic.stop();
+    scene.isPaused = false;
+    // GlobalData.currGameScene.physics.resume();
+    // scene.anims.resumeAll();
+
     scene.scene.stop(GlobalData.currGameScene);
     // reseting global vars
     resetGlobalData();
@@ -109,30 +120,30 @@ export function createFloatingPlatform(x, y) {
     const platform = this.platforms.create(x, y, 'platform');
     platform.setScale(0.35);
     platform.refreshBody();
-    
+
     platform.body.setSize(platform.width * 0.7 * 0.9, platform.height * 0.7 * 0.3);
     platform.body.setOffset(platform.width * 0.05, platform.height * 0.7);
 }
 
 // export function completeLevel() {
 //     if (this.isLevelCompleted) return;
-    
+
 //     this.isLevelCompleted = true;
 //     this.physics.pause();
-    
+
 //     this.cameras.main.fadeOut(1000, 0, 0, 0, (camera, progress) => {
 //         if (progress === 1) {
 //             if (this.backgroundMusic) this.backgroundMusic.stop();
 //             this.scene.start('MyScene2', { score: this.score });
 //         }
 //     });
-    
+
 //     if (this.backgroundMusic && this.backgroundMusic.isPlaying) {
 //         this.backgroundMusic.stop();
 //     }
 // }
 
-export function translateY(y){
+export function translateY(y) {
     return GlobalData.ground.y - y;
 }
 
@@ -159,14 +170,14 @@ export function collectBonus(player, bonus) {
 //     this.registry.set('multiplierActive', true);
 //     this.registry.set('multiplierTime', 20);
 //     this.events.emit('updateUI');
-    
+
 //     this.time.addEvent({
 //         delay: 1000,
 //         callback: () => {
 //             this.multiplierTime--;
 //             this.registry.set('multiplierTime', this.multiplierTime);
 //             this.events.emit('updateUI');
-            
+
 //             if(this.multiplierTime <= 0) {
 //                 this.multiplierActive = false;
 //                 this.registry.set('multiplierActive', false);
@@ -180,11 +191,11 @@ export function collectBonus(player, bonus) {
 
 export function updateScoreText() {
     let text = `Player: ${this.score}`;
-    
-    if(this.multiplierActive) {
+
+    if (this.multiplierActive) {
         text += `   X2   ${this.multiplierTime}s`;
     }
-    
+
     this.scoreText.setText(text);
 }
 
@@ -203,14 +214,111 @@ export function movePlatform(platform, startX, startY, range, speed) {
     platform.refreshBody();
 }
 
-export function CreatePlatform(scene, x, y, width){
+export function CreatePlatform(scene, x, y, width) {
     scene.add.tileSprite(x, translateY(y), width, 17, 'platform').setOrigin(0, 0);
     const collider = scene.physics.add.staticBody(x, translateY(y) + 3, width, 12);
     GlobalData.colliders.push(collider);
 }
 
-export function CreateWall(scene, x, y, height){
-    scene.add.tileSprite(x, translateY(y), 16, height, 'wall').setOrigin(0, 1);
-    const collider = scene.physics.add.staticBody(x, translateY(y) - height , 16, height);
+export function CreateWall(scene, x, y, height) {
+    const sprite = scene.add.tileSprite(x, translateY(y), 16, height, 'wall').setOrigin(0, 1);
+    const collider = scene.physics.add.staticBody(x, translateY(y) - height, 16, height);
+    GlobalData.greatWall = {sprite, collider};
     GlobalData.colliders.push(collider);
 }
+
+export function CreatePortal(scene, targetScene, x, y, size, flipX = false) {
+    const portal = scene.physics.add.sprite(x, translateY(y), 'portal')
+        .setOrigin(0.5)
+        .setSize(3, 28)
+        .setOffset(flipX? 12 : 17 , 2)
+        .setScale(size)
+        .setDepth(2)
+        .setImmovable(true)
+        .refreshBody();
+
+    // portal.setOffset(flipX? 12 : 17 , 2);
+    portal.setFlip(flipX);
+    
+    portal.body.allowGravity = false;
+
+    portal.anims.play('portal_anim', true);
+
+    if(targetScene) {
+        const trigger = {type: "portal" , object: portal, callback: warpPlayer, targetScene: targetScene}
+        GlobalData.triggers.push(trigger);
+    }
+}
+
+// export function teleportPlayer(coords){
+//     console.log(coords);
+//     GlobalData.player.setPosition(coords.x, coords.y);
+// }
+
+export function warpPlayer(targetScene){
+    GlobalData.currGameScene.scene.start(targetScene);
+}
+
+export function CreateStartZone(scene, x, y, tilesX, tilesY) {
+
+    CreateWall(scene, x, y, tilesY * 16);
+
+    const width = tilesX * 16;
+    const height = tilesY * 16;
+
+    const race_line =  scene.add.tileSprite(x, translateY(y), width, height, 'race_line').setOrigin(1);
+    race_line.alpha = 0.5;
+    const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
+    const trigger = {type: "start_line", object: object, callback: SetplayerReady}
+    GlobalData.triggers.push(trigger);
+}
+
+export function SetplayerReady(){
+    if (!GlobalData.playerReady && !GlobalData.gameStarted) {
+        console.log(GlobalData.player.name, "is ready!");
+        GlobalData.playerReady = true;
+        socket.emit("playerReady", {isReady : true});
+    }
+}
+
+export function CreateTimer (scene, key ,x, y, time, fontSize) {
+    let reminingTime = time - 1;
+
+    const timerText = scene.add.text(x, y, `${reminingTime}`, {fontFamily: 'Alagard', fontSize: `${fontSize}px`, fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+    const timerEvent = scene.time.addEvent({
+        delay: 1000,
+        callback: () => {
+            reminingTime--;
+            timerText.setText(`${reminingTime}`);
+            if (reminingTime < 0){
+                removeTimer(key);
+                removeGreatWall();
+            }
+        },
+        callbackScope: scene,
+        repeat: reminingTime
+    });
+
+    GlobalData.timers[key] = {timerEvent: timerEvent, timerText: timerText, time: time};
+}
+
+export function removeTimer(key){
+    const timer = GlobalData.timers[key]
+    if (timer){
+        timer.timerEvent.remove();
+        timer.timerText.destroy();
+    }
+}
+
+export function removeGreatWall() {
+    socket.emit("gamestarted", {started: true});
+    console.log("open the gates!");
+    GlobalData.greatWall.sprite.destroy();
+    GlobalData.greatWall.collider.destroy();
+    GlobalData.gameStarted = true;
+}
+
+// export function OnGroundManager(){
+//     GlobalData.playerData.prevOnGround = GlobalData.playerData.isOnGround;
+//     GlobalData.playerData.isOnGround = GlobalData.player.body.touching.down;
+// }

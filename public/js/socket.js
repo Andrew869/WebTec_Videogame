@@ -1,5 +1,6 @@
 import { game, GlobalData } from './main.js';
 import { characters } from './characters.js';
+import { exitGame, CreateTimer, removeTimer} from './utilities.js';
 
 export const socket = io({ autoConnect: false });
 
@@ -43,16 +44,36 @@ socket.on("playerDisconnected", (playerId) => {
     removePlayer(playerId);
 });
 
+socket.on("startTimer", () => {
+    console.log("start timer");
+    CreateTimer(GlobalData.currUIScene, "start_timer",GlobalData.halfWidth, GlobalData.halfHeight, 5, 100);
+});
+
+socket.on("removeTimer", () => {
+    removeTimer("start_timer");
+});
+
+socket.on("redrawReadyPlayersText", (data) => {
+    GlobalData.currUIScene.readyPlayersText.setText('Ready: ' + data.text);
+});
+
+socket.on("returnToMenu", () => {
+    exitGame(GlobalData.currGameScene);
+});
+
 function createPlayer(playerId, playerData, isItMine = true) {
+    GlobalData.isItMine = isItMine;
     const charName = playerData.charName;
     const player = GlobalData.currGameScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
-    // player.id = playerId;
+    player.setOrigin(0.5);
     player.setName(playerId); // Asigna el id al sprite para identificarlo
     player.setSize(characters[charName].size.width, characters[charName].size.height);
     player.setOffset(characters[charName].offset.x, characters[charName].offset.y);
     player.setCollideWorldBounds(true);
+    // player.alpha = 0.5;
 
     const data = {
+        playerReady: false,
         currentSpeed : GlobalData.speed,
         currentJumpForce : GlobalData.jumpForce,
         isAttacking : false,
@@ -68,6 +89,24 @@ function createPlayer(playerId, playerData, isItMine = true) {
         GlobalData.currGameScene.physics.add.collider(player, collider);
     });
     
+    GlobalData.triggers.forEach(trigger => {
+        const object = trigger.object;
+        switch (trigger.type) {
+            case 'portal':
+                {
+                    const targetScene = trigger.targetScene;
+                    GlobalData.currGameScene.physics.add.overlap(player, object, (player, object) => (isItMine? trigger.callback(targetScene) : () => {console.log("player has left to another lvl")}), null, GlobalData.currGameScene);
+                }
+                break;
+            case 'start_line':
+                {
+                    GlobalData.currGameScene.physics.add.overlap(player, object, isItMine? trigger.callback : () => {}, null, GlobalData.currGameScene);
+                    GlobalData.start_line = object;
+                }
+                break;
+        }
+    });
+
     GlobalData.players[playerId] = player;
 
     if(isItMine){
@@ -84,6 +123,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
     else {
         GlobalData.playersData[playerId] = data;
     }
+    socket.emit("UIReady");
 }
 
 function updatePlayerVelX(playerId, playerVelX) {

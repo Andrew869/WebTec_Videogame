@@ -55,6 +55,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('pergamino', 'images/backgrounds/menu.png');
         this.load.image('platform', 'images/props/platform.png');
         this.load.image('wall', 'images/props/wall.png');
+        this.load.image('race_line', 'images/backgrounds/race_line.png');
         
     }
 
@@ -63,6 +64,13 @@ export default class Preloader extends Phaser.Scene {
             Object.values(character.anims).forEach(anim => {
                 this.anims.create(anim);
             });
+        });
+
+        this.anims.create({
+            key: 'portal_anim',
+            frames: this.anims.generateFrameNumbers('portal', { start: 0, end: 5 }),
+            frameRate: 10,
+            repeat: -1
         });
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
