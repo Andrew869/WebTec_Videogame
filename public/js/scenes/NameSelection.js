@@ -12,7 +12,7 @@ export default class NameSelection extends Phaser.Scene {
         pergamino.setDepth(0); // Asegura que esté en la capa más baja
 
         // Agregar el texto sobre la imagen
-        const title = this.add.text(GlobalData.halfWidth, 200, 'Introduce tu nombre', {
+        const title = this.add.text(GlobalData.halfWidth, 200, 'Choose your alias', {
             fontFamily: 'Alagard', fontSize: 38, color: '#000',
             stroke: '#6F4E37', strokeThickness: 8, align: 'center'
         }).setOrigin(0.5);
@@ -22,10 +22,10 @@ export default class NameSelection extends Phaser.Scene {
         inputElement.setAttribute('type', 'text');
         inputElement.style.fontSize = '24px';
         inputElement.style.padding = '10px';
-        inputElement.style.borderRadius = '10px';
+        //inputElement.style.borderRadius = '10px';
         inputElement.style.border = '1px solid #000';
-        inputElement.style.color = '#000';
-        inputElement.style.backgroundColor = '#fff';
+        inputElement.style.color = '#fff';
+        inputElement.style.backgroundColor = '#6c3b2a';
         inputElement.style.position = 'absolute';
         inputElement.style.left = `${GlobalData.halfWidth - 150}px`;
         inputElement.style.top = '250px';
@@ -80,7 +80,7 @@ export default class NameSelection extends Phaser.Scene {
         };
 
         // Crear botón de "Aceptar" debajo del campo de texto
-        createButton(this, GlobalData.halfWidth, GlobalData.halfHeight+80, 'Aceptar', onAcceptButtonClick);
+        createButton(this, GlobalData.halfWidth, GlobalData.halfHeight+80, 'Accept', onAcceptButtonClick);
 
         // Crear botón de "Regresar" para volver al menú principal
         const MainMenu = () => {
