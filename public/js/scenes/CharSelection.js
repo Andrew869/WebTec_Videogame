@@ -10,24 +10,20 @@ export default class CharSelection extends Phaser.Scene {
     }
 
     create() {
-        // Agregar la imagen de fondo (pergamino)
         const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');
         pergamino.setDepth(0);
-        pergamino.setScale(1, 1); // Ajustar la escala del fondo
+        pergamino.setScale(1, 1);
 
-        // Título
         this.add.text(GlobalData.halfWidth, 160, 'Choose your character', {
             fontFamily: 'Alagard', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5).setDepth(1);
 
-        // Función para ir al menú principal
         const MainMenu = () => {
             this.scene.start('MainMenu');
         };
 
-        // Función para ir al juego
         const Game = (charName) => {
             GlobalData.backgroundMusic.stop();
             GlobalData.charName = charName;
@@ -35,30 +31,24 @@ export default class CharSelection extends Phaser.Scene {
             this.scene.start('Game');
         };
 
-        // Crear botones con las imágenes de los personajes (tomando solo un frame específico del spritesheet)
-        this.createCharacterButton(450, 400, 'archer', 0, () => Game("archer"));  // Botón con el primer frame del 'archer'
-        this.createCharacterButton(800, 400, 'rogue', 0, () => Game("rogue"));   // Botón con el primer frame del 'rogue'
+        this.createCharacterButton(GlobalData.halfWidth - 0.25 * GlobalData.halfWidth, GlobalData.halfHeight, 'archer', 0, () => Game("archer"));
+        this.createCharacterButton(GlobalData.halfWidth + 0.25 * GlobalData.halfWidth, GlobalData.halfHeight, 'rogue', 0, () => Game("rogue"));
         
-        // Crear botón para regresar al menú principal
-        createButton(this, 900, 550, 'Back', MainMenu);
+        createButton(this, GlobalData.halfWidth + 0.5 * GlobalData.halfWidth, GlobalData.halfHeight + 0.5 * GlobalData.halfHeight, 'Back', MainMenu);
     }
 
-    // Función para crear un botón con imagen (usando un frame del spritesheet)
     createCharacterButton(x, y, characterKey, frameIndex, callback) {
-        // Agregar la imagen del personaje usando un frame específico
-        const characterImage = this.add.sprite(x, y, characterKey, frameIndex);  // Usa un frame del spritesheet
-        characterImage.setOrigin(0.5);  // Centrar la imagen
-        characterImage.setScale(4);  // Ajustar el tamaño de la imagen
-        characterImage.setDepth(1);  // Asegura que la imagen esté por encima del fondo
+        const characterImage = this.add.sprite(x, y, characterKey, frameIndex);
+        characterImage.setOrigin(0.5);
+        characterImage.setScale(4);
+        characterImage.setDepth(1);
 
-        // Hacer la imagen interactiva como un botón
         characterImage.setInteractive()
             .on('pointerdown', callback)
-            .on('pointerover', () => characterImage.setScale(6))  // Aumentar imagen al pasar el ratón
-            .on('pointerout', () => characterImage.setScale(4));  // Volver al tamaño original
+            .on('pointerover', () => characterImage.setScale(6))
+            .on('pointerout', () => characterImage.setScale(4));
 
-        // Agregar texto encima de la imagen (opcional)
-        this.add.text(x, y + 80, '', {  // Desplazar el texto hacia abajo para que no se superponga
+        this.add.text(x, y + 80, '', {  
             fontFamily: 'Arial Black', fontSize: 20, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
