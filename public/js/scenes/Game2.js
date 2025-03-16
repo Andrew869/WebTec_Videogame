@@ -20,7 +20,8 @@ export default class Game2 extends Phaser.Scene {
     create() {
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 2;
-        GlobalData.mapSizeX = 1024 
+
+        GlobalData.mapSizeX = 1548 
         GlobalData.mapSizeY = 2304
 
         this.textoCronometro = this.add.text(10, 10, 'Tiempo: 0.00', { fontSize: '32px', fill: '#fff' });
@@ -36,21 +37,21 @@ export default class Game2 extends Phaser.Scene {
 
         this.physics.world.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY);
 
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_sky').setOrigin(0, 0).setScrollFactor(0, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer0').setOrigin(0, 0).setScrollFactor(0, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer1').setOrigin(0, 0).setScrollFactor(0, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer2').setOrigin(0, 0).setScrollFactor(0.1, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer3').setOrigin(0, 0).setScrollFactor(0.2, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer4').setOrigin(0, 0).setScrollFactor(0.3, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer5').setOrigin(0, 0).setScrollFactor(0.4, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer6').setOrigin(0, 0).setScrollFactor(0.5, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer7').setOrigin(0, 0).setScrollFactor(0.6, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer8').setOrigin(0, 0).setScrollFactor(0.7, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer9').setOrigin(0, 0).setScrollFactor(0.8, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer10').setOrigin(0, 0).setScrollFactor(0.9, 1).setScale(3);
-        this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_layer11').setOrigin(0, 0).setScrollFactor(1, 1).setScale(3);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_2_sky').setOrigin(0, 0).setScrollFactor(0, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer0').setOrigin(0, 0).setScrollFactor(0, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer1').setOrigin(0, 0).setScrollFactor(0, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer2').setOrigin(0, 0).setScrollFactor(0.1, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer3').setOrigin(0, 0).setScrollFactor(0.2, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer4').setOrigin(0, 0).setScrollFactor(0.3, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer5').setOrigin(0, 0).setScrollFactor(0.4, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer6').setOrigin(0, 0).setScrollFactor(0.5, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer7').setOrigin(0, 0).setScrollFactor(0.6, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer8').setOrigin(0, 0).setScrollFactor(0.7, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer9').setOrigin(0, 0).setScrollFactor(0.8, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer10').setOrigin(0, 0).setScrollFactor(0.9, 1).setScale(3);
+        this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer11').setOrigin(0, 0).setScrollFactor(1, 1).setScale(3);
 
-        GlobalData.ground = this.physics.add.staticBody(0, this.scale.height - 58, GlobalData.mapSizeX, 10);
+        GlobalData.ground = this.physics.add.staticBody(0, GlobalData.mapSizeY - 60, GlobalData.mapSizeX, 10);
 
         // this.physics.add.staticBody(0, 0, 100, GlobalData.mapSizeY);
         
@@ -81,7 +82,7 @@ export default class Game2 extends Phaser.Scene {
 
         socket.connect();
         console.log(GlobalData.charName);
-        socket.emit("LevelReady", {lvl: 2 ,charName: GlobalData.charName});
+        socket.emit("LevelReady", {lvl: 2, groundY: GlobalData.ground.y, charName: GlobalData.charName});
     }
 
     update() {

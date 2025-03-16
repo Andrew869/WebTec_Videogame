@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
         players[socket.id] = {
             lvl: data.lvl,
             x: 80,
-            y: 667 - 250,
+            y: data.groundY - 250,
             charName: data.charName,
             isReady: false
         };
