@@ -1,12 +1,17 @@
 import Preloader from './scenes/Preloader.js';
 import MainMenu from './scenes/MainMenu.js';
 import Game from './scenes/Game.js';
+<<<<<<< HEAD
+=======
+import Game2 from './scenes/Game2.js';
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
 import UI from './scenes/UI.js';
 import NameSelection from './scenes/NameSelection.js';
 import CharSelection from './scenes/CharSelection.js';
 import Help from './scenes/Help.js';
 import About from './scenes/About.js';
 import { socket } from './socket.js';
+<<<<<<< HEAD
 
 export const GlobalData = {
     player : null,
@@ -24,6 +29,13 @@ export const GlobalData = {
     speed : 160,
     jumpForce : 400
 };
+=======
+import { getDefaultGlobalData } from './utilities.js';
+import FinalScene from './scenes/FinalScene.js';
+import Records from './scenes/Records.js';
+
+export const GlobalData = getDefaultGlobalData();
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
 
 const config = {
     type: Phaser.AUTO,
@@ -45,6 +57,7 @@ const config = {
     },
     scene: [
         Preloader,
+<<<<<<< HEAD
         Game,
         MainMenu,
         UI,
@@ -52,6 +65,18 @@ const config = {
         CharSelection,
         Help,
         About
+=======
+        MainMenu,
+        NameSelection,
+        CharSelection,
+        Help,
+        About,
+        Game,
+        Game2,
+        UI,
+        FinalScene,
+        Records
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
     ]
 };
 

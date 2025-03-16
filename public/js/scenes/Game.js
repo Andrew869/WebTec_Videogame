@@ -1,11 +1,16 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
+<<<<<<< HEAD
 import { SendPos, translateY, CreatePlatform, CreateWall, movePlatform, generateLevel, collectCoin, collectPotion } from '../utilities.js';
+=======
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal } from '../utilities.js';
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
 
 export default class Game extends Phaser.Scene {
     constructor() {
         super({ key: "Game" });
+<<<<<<< HEAD
         this.ground;
         this.platforms;
         this.score = 0;
@@ -25,13 +30,25 @@ export default class Game extends Phaser.Scene {
 
         this.diffHeight = 720 - GlobalData.mapSizeY
         this.gameOver = false;
+=======
+
+        this.keyObjects;
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
     }
 
     preload() {
     }
 
     create() {
+<<<<<<< HEAD
         GlobalData.currScene = this;
+=======
+        GlobalData.currGameScene = this;
+        GlobalData.currLvl = 1;
+
+        GlobalData.mapSizeX = 1280 * 2;
+        GlobalData.mapSizeY = 793;
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
 
         switch (GlobalData.charName) {
             case "archer":
@@ -44,6 +61,7 @@ export default class Game extends Phaser.Scene {
 
         this.physics.world.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY);
 
+<<<<<<< HEAD
         this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'layer0').setOrigin(0, 0).setScrollFactor(0, 1);
         this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'layer1').setOrigin(0, 0).setScrollFactor(0, 1);
         this.add.tileSprite(0, this.diffHeight, GlobalData.mapSizeX, GlobalData.mapSizeY, 'layer2').setOrigin(0, 0).setScrollFactor(0.1, 1);
@@ -136,6 +154,32 @@ export default class Game extends Phaser.Scene {
         // this.physics.add.overlap(this.player, this.finalPortal, this.completeLevel, null, this);
 
         // this.physics.add.collider(this.player, this.platforms);
+=======
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer0').setOrigin(0, 0).setScrollFactor(0, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer1').setOrigin(0, 0).setScrollFactor(0, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer2').setOrigin(0, 0).setScrollFactor(0.1, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer3').setOrigin(0, 0).setScrollFactor(0.2, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer4').setOrigin(0, 0).setScrollFactor(0.3, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer5').setOrigin(0, 0).setScrollFactor(0.4, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer6').setOrigin(0, 0).setScrollFactor(0.5, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer7').setOrigin(0, 0).setScrollFactor(0.6, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer8').setOrigin(0, 0).setScrollFactor(0.7, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer9').setOrigin(0, 0).setScrollFactor(0.8, 1);
+        this.add.tileSprite(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY, 'lvl_1_layer10').setOrigin(0, 0).setScrollFactor(1, 1);
+        this.add.tileSprite(-120, 0, GlobalData.mapSizeX * 1.2, GlobalData.mapSizeY, 'lvl_1_layer11').setOrigin(0, 0).setScrollFactor(1.2, 1).setDepth(3);
+
+        GlobalData.ground = this.physics.add.staticBody(0, GlobalData.mapSizeY - 58, GlobalData.mapSizeX, 10);
+
+        CreateStartZone(this, 410, 0, 3, 20);
+        // CreateWall(this, 410, 0, 20 * 16);
+
+        CreatePlatform(this, 60, 64, 300);
+        CreatePlatform(this, 480, 80, 100);
+    
+    
+        CreatePortal(this, "", 80, 250, 8, true);
+        CreatePortal(this, "Game2", 500, 200, 8, false);
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",
@@ -144,7 +188,11 @@ export default class Game extends Phaser.Scene {
             right: "D",
             hability_1: "ONE",
             hability_2: "TWO",
+<<<<<<< HEAD
             hability_3: "THREE",
+=======
+            hability_3: "THREE"
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         }); // keyObjects.up, keyObjects.down, keyObjects.left, keyObjects.right
 
         // Música
@@ -152,6 +200,7 @@ export default class Game extends Phaser.Scene {
         GlobalData.backgroundMusic.play();
 
         socket.connect();
+<<<<<<< HEAD
         socket.emit("readyToPlay", {charName: GlobalData.charName});
     }
 
@@ -167,6 +216,20 @@ export default class Game extends Phaser.Scene {
               movePlatform(platform);
             });
           }
+=======
+        socket.emit("LevelReady", {lvl: 1, groundY: GlobalData.ground.y, charName: GlobalData.charName});
+    }
+
+    update() {
+        if (!GlobalData.player) {
+            return;
+        }
+
+        if (GlobalData.playerReady && !this.physics.world.overlap(GlobalData.player, GlobalData.start_line) && !GlobalData.levelStarted) {
+            GlobalData.playerReady = false;
+            socket.emit("playerReady", {isReady : false});
+        }
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
 
         const playerData = GlobalData.playerData;
         const vel = GlobalData.player.body.velocity;
@@ -191,10 +254,13 @@ export default class Game extends Phaser.Scene {
             SendPos();
         }
 
+<<<<<<< HEAD
         // if (Phaser.Input.Keyboard.JustUp(this.keyObjects.right) || Phaser.Input.Keyboard.JustUp(this.keyObjects.left)) {
         //     socket.emit("playerVelX", { playerVelX: 0});
         // }
 
+=======
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         if (playerData.isOnGround) {
             if ((this.keyObjects.up.isDown && !playerData.isAttacking)) {
                 // socket.emit("playerVelY", { playerVelY: -300 });
@@ -283,9 +349,12 @@ export default class Game extends Phaser.Scene {
                 }
             }
         }
+<<<<<<< HEAD
 
         // if (!this.gameOver && !this.isPaused) {
         //     this.movePlatform(this.movingPlatform, 500, 200, 300, 1.5);
         // }
+=======
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
     }
 }

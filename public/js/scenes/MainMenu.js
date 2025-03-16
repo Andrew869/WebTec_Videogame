@@ -7,10 +7,17 @@ export default class MainMenu extends Phaser.Scene {
     }
 
     create() {
+<<<<<<< HEAD
         if (!GlobalData.backgroundMusic || !GlobalData.backgroundMusic.isPlaying) {
             GlobalData.backgroundMusic = this.sound.add('bg_m_menu', { loop: true });
             GlobalData.backgroundMusic.play();
         }
+=======
+        // if (!GlobalData.backgroundMusic || !GlobalData.backgroundMusic.isPlaying) {
+            GlobalData.backgroundMusic = this.sound.add('bg_m_menu', { loop: true });
+            GlobalData.backgroundMusic.play();
+        // }
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         
         // Agregar la imagen de fondo (pergamino)
         const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');
@@ -26,8 +33,14 @@ export default class MainMenu extends Phaser.Scene {
         const Inicio = () => {
             this.scene.start('NameSelection');
         };
+<<<<<<< HEAD
         const Records=()=>{
 
+=======
+            
+        const Records=()=>{
+            this.scene.start('Records');
+>>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         }
 
         const Instrucciones = () => {
