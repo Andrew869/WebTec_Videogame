@@ -49,9 +49,9 @@ export default class Game extends Phaser.Scene {
         CreateStartZone(this, 410, 0, 3, 20);
         // CreateWall(this, 410, 0, 20 * 16);
 
-
         CreatePlatform(this, 60, 64, 300);
         CreatePlatform(this, 480, 80, 100);
+    
     
         CreatePortal(this, "", 80, 250, 8, true);
         CreatePortal(this, "Game2", 500, 200, 8, false);
@@ -106,15 +106,6 @@ export default class Game extends Phaser.Scene {
             socket.emit("playerVelX", { playerVelX: 0});
             SendPos();
         }
-
-        if (!this.levelCompleted && this.finalPortal && this.physics.world.overlap(GlobalData.player, this.finalPortal)) {
-            console.log("🎯 Jugador tocó el portal final. Guardando tiempo...");
-            this.completeLevel();
-        }
-        
-        // if (Phaser.Input.Keyboard.JustUp(this.keyObjects.right) || Phaser.Input.Keyboard.JustUp(this.keyObjects.left)) {
-        //     socket.emit("playerVelX", { playerVelX: 0});
-        // }
 
         if (playerData.isOnGround) {
             if ((this.keyObjects.up.isDown && !playerData.isAttacking)) {
@@ -205,52 +196,4 @@ export default class Game extends Phaser.Scene {
             }
         }
     }
-
-    // 🔹 FUNCIÓN PARA OBTENER EL TIEMPO ACTUAL
-getElapsedSeconds() {
-    return this.elapsedSeconds;
-}
-
-
-startTimer() {
-    // 🔹 TEMPORIZADOR QUE SE EJECUTA HASTA QUE `levelCompleted` SEA `true`
-    this.time.addEvent({
-        delay: 1000,
-        callback: () => {
-            if (!this.levelCompleted) {
-                this.elapsedSeconds++;
-                localStorage.setItem("currentTime", this.elapsedSeconds);  // 🔹 Guardar cada segundo
-                console.log(`⏳ Tiempo transcurrido: ${this.elapsedSeconds}s`);
-            }
-        },
-        callbackScope: this,
-        loop: true
-    });
-}
-
-completeLevel() {
-    console.log("✅ Jugador tocó el portal final. Guardando tiempo...");
-
-    if (this.levelCompleted) return;
-    this.levelCompleted = true;
-
-    // 🔹 FORZAR que `finalTime` sea el `currentTime`
-    let finalTime = localStorage.getItem("currentTime");
-
-    finalTime = finalTime ? parseInt(finalTime, 10) : 0;
-
-    console.log(`🟢 Tiempo FINAL calculado: ${finalTime} segundos`);
-
-    // 🔹 Guardar `finalTime` en `localStorage` por seguridad
-    localStorage.setItem("finalTime", finalTime);
-
-    // 🔹 Cambiar a `FinalScene` PASANDO el tiempo directamente
-    this.scene.start("Final", { finalTime });
-}
-
-
-
-
-
-
 }

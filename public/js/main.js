@@ -7,7 +7,6 @@ import NameSelection from './scenes/NameSelection.js';
 import CharSelection from './scenes/CharSelection.js';
 import Help from './scenes/Help.js';
 import About from './scenes/About.js';
-import EndGame from './scenes/EndGame.js';
 import { socket } from './socket.js';
 import { getDefaultGlobalData } from './utilities.js';
 import FinalScene from './scenes/FinalScene.js';
@@ -43,7 +42,6 @@ const config = {
         Game,
         Game2,
         UI,
-        EndGame,
         FinalScene,
         Records
     ]
