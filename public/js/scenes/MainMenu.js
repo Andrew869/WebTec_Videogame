@@ -26,8 +26,9 @@ export default class MainMenu extends Phaser.Scene {
         const Inicio = () => {
             this.scene.start('NameSelection');
         };
+            
         const Records=()=>{
-
+            this.scene.start('Records');
         }
 
         const Instrucciones = () => {
