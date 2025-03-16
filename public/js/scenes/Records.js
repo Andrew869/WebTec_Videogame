@@ -37,6 +37,7 @@ export default class Records extends Phaser.Scene {
 
         // 🔹 Botón para volver al menú principal
         const MainMenu = () => {
+            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
         createButton(this, 900, 550, 'Back', MainMenu);

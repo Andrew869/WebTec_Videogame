@@ -14,10 +14,12 @@ export default class NameSelection extends Phaser.Scene {
         
         
         const Personaje = () => {
+            this.sound.play('menuSelect');
             this.scene.start('CharSelection');
         }
         createButton(this, GlobalData.halfWidth, 230, 'Alias', Personaje);
         const MainMenu = () => {
+            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
         createButton(this, 900, 550, 'Back', MainMenu);

@@ -21,6 +21,7 @@ export default class About extends Phaser.Scene {
 
         // Botón para regresar al menú principal
         const MainMenu = () => {
+            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
         createButton(this, 900, 550, 'Back', MainMenu);

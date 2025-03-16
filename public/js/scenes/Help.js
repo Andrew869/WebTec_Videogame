@@ -24,6 +24,7 @@ export default class Help extends Phaser.Scene {
             align: 'center'
         }).setOrigin(0.5).setDepth(1);
         const MainMenu = () => {
+            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
         createButton(this, 900, 550, 'Back', MainMenu);

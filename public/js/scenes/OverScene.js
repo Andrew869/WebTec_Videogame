@@ -2,11 +2,11 @@ import { GlobalData } from '../main.js';
 
 export default class FinalScene extends Phaser.Scene {
     constructor() {
-        super({ key: "FinalScene" });
+        super({ key: "OverScene" });
     }
 
     create() {
-        this.sound.play('gameClear');
+        this.sound.play('gameOver');
         setTimeout(() => {
 
             let score = GlobalData.score;

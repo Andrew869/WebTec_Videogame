@@ -27,29 +27,6 @@ export default class Preloader extends Phaser.Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('../../assets/');
 
-<<<<<<< HEAD
-        this.load.image('layer0', 'images/backgrounds/level_1/Layer_0011_0.png');
-        this.load.image('layer1', 'images/backgrounds/level_1/Layer_0010_1.png');
-        this.load.image('layer2', 'images/backgrounds/level_1/Layer_0009_2.png');
-        this.load.image('layer3', 'images/backgrounds/level_1/Layer_0008_3.png');
-        this.load.image('layer4', 'images/backgrounds/level_1/Layer_0007_Lights.png');
-        this.load.image('layer5', 'images/backgrounds/level_1/Layer_0006_4.png');
-        this.load.image('layer6', 'images/backgrounds/level_1/Layer_0005_5.png');
-        this.load.image('layer7', 'images/backgrounds/level_1/Layer_0004_Lights.png');
-        this.load.image('layer8', 'images/backgrounds/level_1/Layer_0003_6.png');
-        this.load.image('layer9', 'images/backgrounds/level_1/Layer_0002_7.png');
-        this.load.image('layer10', 'images/backgrounds/level_1/Layer_0001_8.png');
-        this.load.image('layer11', 'images/backgrounds/level_1/Layer_0000_9.png');
-
-        this.load.spritesheet('rogue', 'images/characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
-        this.load.spritesheet("archer", "images/characters/archer.png", { frameWidth: 64, frameHeight: 64 });
-
-        this.load.spritesheet('portal','images/props/portal.png', { frameWidth: 32, frameHeight: 32 });
-
-        this.load.spritesheet('eye', 'images/mobs/eye/Flight.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('mushroom_idle', 'images/mobs/mushroom/Idle.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet('mushroom_run', 'images/mobs/mushroom/Run.png', { frameWidth: 32, frameHeight: 32 });
-=======
         this.load.image('lvl_1_layer0', 'images/backgrounds/level_1/Layer_0011_0.png');
         this.load.image('lvl_1_layer1', 'images/backgrounds/level_1/Layer_0010_1.png');
         this.load.image('lvl_1_layer2', 'images/backgrounds/level_1/Layer_0009_2.png');
@@ -81,7 +58,6 @@ export default class Preloader extends Phaser.Scene {
         this.load.spritesheet('rogue', 'images/characters/rogue.png', { frameWidth: 50, frameHeight: 37 });
         this.load.spritesheet("archer", "images/characters/archer.png", { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('portal','images/props/portal.png', {frameWidth: 32, frameHeight: 32});
->>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         
         this.load.spritesheet('items', 'images/props/items.png', {frameWidth: 16, frameHeight: 16});
 
@@ -91,21 +67,19 @@ export default class Preloader extends Phaser.Scene {
         
         this.load.audio('bg_m_menu', 'audio/music/menu.mp3');
         this.load.audio('bg_m_lvl_1', 'audio/music/level_1.mp3');
-<<<<<<< HEAD
-        this.load.audio('Fboost', 'audio/fx/boost.mp3');
-        this.load.audio('moneda', 'audio/fx/coin.mp3');
+        this.load.audio('bg_m_lvl_2', 'audio/music/level_2.mp3');
+        this.load.audio('gameClear', 'audio/fx/gameClear.mp3');
+        this.load.audio('gameOver', 'audio/fx/gameOver.mp3');
+        this.load.audio('menuSelect', 'audio/fx/botonSound.mp3');
+        this.load.audio('coin', 'audio/fx/coin.mp3');
+        this.load.audio('boost', 'audio/fx/boost.mp3');
         this.load.audio('bonus', 'audio/fx/bonus.mp3');
+        this.load.audio('damage', 'audio/fx/damage.mp3');
 
         this.load.image('pergamino', 'images/backgrounds/menu.png');
         this.load.image('platform', 'images/props/platform.png');
         this.load.image('wall', 'images/props/wall.png');
-=======
-        this.load.audio('bg_m_lvl_2', 'audio/music/level_2.mp3');
-        this.load.image('pergamino', 'images/backgrounds/menu.png');
-        this.load.image('platform', 'images/props/platform.png');
-        this.load.image('wall', 'images/props/wall.png');
         this.load.image('race_line', 'images/backgrounds/race_line.png');
->>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         
     }
 
@@ -115,9 +89,6 @@ export default class Preloader extends Phaser.Scene {
                 this.anims.create(anim);
             });
         });
-<<<<<<< HEAD
-  
-=======
 
         this.anims.create({
             key: 'portal_anim',
@@ -125,7 +96,6 @@ export default class Preloader extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
->>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
 

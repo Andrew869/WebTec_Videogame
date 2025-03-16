@@ -24,6 +24,7 @@ export default class CharSelection extends Phaser.Scene {
 
         // Función para ir al menú principal
         const MainMenu = () => {
+            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
 
@@ -31,13 +32,8 @@ export default class CharSelection extends Phaser.Scene {
         const Game = (charName) => {
             GlobalData.backgroundMusic.stop();
             GlobalData.charName = charName;
-<<<<<<< HEAD
-            this.scene.start('UI');
-            this.scene.start('Game');
-=======
             this.scene.start('Game');
             this.scene.start('UI');
->>>>>>> a33f8233a1f06346192c30f700bdf6ae88d7a9fb
         };
 
         // Crear botones con las imágenes de los personajes (tomando solo un frame específico del spritesheet)
