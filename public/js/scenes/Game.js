@@ -17,6 +17,11 @@ export default class Game extends Phaser.Scene {
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 1;
 
+        if (!GlobalData.playerData) {
+            GlobalData.playerData = {};
+        }
+        GlobalData.playerData.life = 3;
+
         GlobalData.mapSizeX = 1280 * 2;
         GlobalData.mapSizeY = 793;
 
@@ -69,7 +74,8 @@ export default class Game extends Phaser.Scene {
             right: "D",
             hability_1: "ONE",
             hability_2: "TWO",
-            hability_3: "THREE"
+            hability_3: "THREE",
+            damage: "K" //K es para hacerse daño y poder probar la vida
         }); // keyObjects.up, keyObjects.down, keyObjects.left, keyObjects.right
 
         // Música
@@ -84,6 +90,18 @@ export default class Game extends Phaser.Scene {
         if (!GlobalData.player) {
             return;
         }
+
+        // Lógica de TECLA 'K' (daño)
+        if (Phaser.Input.Keyboard.JustDown(this.keyObjects.damage)) {
+            this.sound.play('damage');
+            GlobalData.playerData.life-1;
+            GlobalData.currUIScene.updateHearts(GlobalData.playerData.life);
+            if (GlobalData.playerData.life <= 0) {
+                this.scene.start('OverScene');
+                return;
+            }
+        }
+
 
         if (GlobalData.playerReady && !this.physics.world.overlap(GlobalData.player, GlobalData.start_line) && !GlobalData.levelStarted) {
             GlobalData.playerReady = false;

@@ -26,7 +26,8 @@ export function getDefaultGlobalData() {
         greatWall: null,
         timers: {},
         score: 0,
-        timeElapsed: 0
+        timeElapsed: 0,
+        life: 3
     };
 }
 

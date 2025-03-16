@@ -18,6 +18,8 @@ export default class UI extends Phaser.Scene {
         this.chronoText;
 
         this.readyPlayersText;
+
+        this.hearts = [];
     }
 
     create() {
@@ -36,6 +38,14 @@ export default class UI extends Phaser.Scene {
 
         this.chronoText = this.add.text(GlobalData.width - 100, 10, "0.00", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
         this.readyPlayersText = this.add.text(10, 10, "ready: 0/1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+
+        for (let i = 0; i < 3; i++) {
+            let heart = this.add.image(50 + i * 40, 60, 'items', 45)
+                .setScale(3)
+                .setScrollFactor(0)  
+                .setDepth(9999);     
+            this.hearts.push(heart);
+        }
 
         // Botones del menú de pausa (mute, restart, exit)
         const screenWidth = this.sys.game.config.width;
@@ -87,6 +97,16 @@ export default class UI extends Phaser.Scene {
             .on('pointerdown', () => exitGame(this))
             .on('pointerover', () => this.exitBtn.setAlpha(0.8))
             .on('pointerout', () => this.exitBtn.setAlpha(1));
+    }
+
+    updateHearts(life) {
+        for (let i = 0; i < this.hearts.length; i++) {
+            if (i < life) {
+                this.hearts[i].setFrame(46);
+            } else {
+                this.hearts[i].setFrame(47);
+            }
+        }
     }
 
     update(time, delta) {
