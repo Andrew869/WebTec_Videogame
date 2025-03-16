@@ -188,7 +188,7 @@ export function CreateWall(scene, x, y, height){
 
 export function generateLevel(scene) {
     const levelWidth = GlobalData.mapSizeX;
-    let xPosition = 60;
+    let xPosition = 200;
 
     const MIN_PLATFORM_WIDTH = 100;
     const MAX_PLATFORM_WIDTH = 220;
@@ -258,7 +258,29 @@ export function generateLevel(scene) {
     }
 }
 
-export function collectCoin(player, coin) {
+export function collectBoot(player, boot) {
+    boot.disableBody(true, true);
+    player.scene.boots.remove(boot, true, true);   
+    player.scene.sound.play('Fboost');
+    GlobalData.playerData.currentJumpForce *= 1.5; 
+    player.scene.time.delayedCall(5000, () => {
+        GlobalData.playerData.currentJumpForce /= 1.5;
+    });
+}
+
+export function collectLightning(player, lightning) {
+    lightning.disableBody(true, true);
+    player.scene.lightning.remove(lightning, true, true);
+    player.scene.sound.play('Fboost'); 
+
+    GlobalData.playerData.currentSpeed *= 1.5;
+    player.scene.time.delayedCall(5000, () => {
+        GlobalData.playerData.currentSpeed /= 1.5;
+    });
+}
+
+
+/*export function collectCoin(player, coin) {
     console.log("¡Moneda recogida!");
     coin.disableBody(true, true);
     this.sound.play('moneda');
@@ -282,4 +304,4 @@ export function collectPotion(player, potion) {
             callbackScope: this
         });
     }
-}
+}*/
