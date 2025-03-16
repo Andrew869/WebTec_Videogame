@@ -8,10 +8,6 @@ export default class Game2 extends Phaser.Scene {
         super({ key: "Game2" });
 
         this.keyObjects;
-
-        this.diffHeight = 720 - 768
-
-        this.tiempoTranscurrido = 0;
     }
 
     preload() {
@@ -23,8 +19,6 @@ export default class Game2 extends Phaser.Scene {
 
         GlobalData.mapSizeX = 1548 
         GlobalData.mapSizeY = 2304
-
-        this.textoCronometro = this.add.text(10, 10, 'Tiempo: 0.00', { fontSize: '32px', fill: '#fff' });
 
         switch (GlobalData.charName) {
             case "archer":
@@ -52,8 +46,6 @@ export default class Game2 extends Phaser.Scene {
         this.add.tileSprite(0, GlobalData.mapSizeY - 768, GlobalData.mapSizeX, GlobalData.mapSizeY,'lvl_2_layer11').setOrigin(0, 0).setScrollFactor(1, 1).setScale(3);
 
         GlobalData.ground = this.physics.add.staticBody(0, GlobalData.mapSizeY - 60, GlobalData.mapSizeX, 10);
-
-        // this.physics.add.staticBody(0, 0, 100, GlobalData.mapSizeY);
         
         CreateStartZone(this, 410, 0, 3, 20);
         // CreateWall(this, 410, 0, 20 * 16);
@@ -64,7 +56,7 @@ export default class Game2 extends Phaser.Scene {
 
 
         CreatePortal(this, "", 80, 250, 8, true);
-        CreatePortal(this, "EndGame", 500, 200, 8, false);
+        CreatePortal(this, "FinalScene", 500, 200, 8, false);
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",

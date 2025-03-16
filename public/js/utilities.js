@@ -25,6 +25,7 @@ export function getDefaultGlobalData() {
         jumpForce: 400,
         greatWall: null,
         timers: {},
+        score: 0,
         timeElapsed: 0
     };
 }

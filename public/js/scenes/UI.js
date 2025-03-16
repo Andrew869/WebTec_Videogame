@@ -37,30 +37,6 @@ export default class UI extends Phaser.Scene {
         this.chronoText = this.add.text(GlobalData.width - 100, 10, "0.00", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
         this.readyPlayersText = this.add.text(10, 10, "ready: 0/1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
 
-        // this.timer = this.time.addEvent({
-        //     delay: 1000,
-        //     callback: () => {
-        //         this.reminingTime--;
-        //         this.timerText.setText(`${this.reminingTime}`);
-        
-        //         if (this.reminingTime <= 0) {
-        //             console.log('¡Tiempo terminado!');
-        //         }
-        //     },
-        //     callbackScope: this,
-        //     repeat: this.reminingTime - 1
-        // });
-
-        // // Crear un evento que se repite cada segundo
-        // this.time.addEvent({
-        //     delay: 1000, // Cada 1000 ms (1 segundo)
-        //     callback: () => {
-        //         this.timeElapsed++; // Incrementa el contador
-        //         this.timerText.setText('Tiempo: ' + this.timeElapsed); // Actualiza el texto
-        //     },
-        //     loop: true // Para que se repita infinitamente
-        // });
-
         // Botones del menú de pausa (mute, restart, exit)
         const screenWidth = this.sys.game.config.width;
         const screenHeight = this.sys.game.config.height;

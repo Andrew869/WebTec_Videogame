@@ -8,10 +8,6 @@ export default class Game extends Phaser.Scene {
         super({ key: "Game" });
 
         this.keyObjects;
-
-        // this.diffHeight = 720 - 793;
-
-        this.tiempoTranscurrido = 0;
     }
 
     preload() {
@@ -23,8 +19,6 @@ export default class Game extends Phaser.Scene {
 
         GlobalData.mapSizeX = 1280 * 2;
         GlobalData.mapSizeY = 793;
-
-        this.textoCronometro = this.add.text(10, 10, 'Tiempo: 0.00', { fontSize: '32px', fill: '#fff' });
 
         switch (GlobalData.charName) {
             case "archer":
@@ -52,16 +46,13 @@ export default class Game extends Phaser.Scene {
 
         GlobalData.ground = this.physics.add.staticBody(0, GlobalData.mapSizeY - 58, GlobalData.mapSizeX, 10);
 
-        // this.physics.add.staticBody(0, 0, 100, GlobalData.mapSizeY);
-        
         CreateStartZone(this, 410, 0, 3, 20);
         // CreateWall(this, 410, 0, 20 * 16);
 
 
         CreatePlatform(this, 60, 64, 300);
         CreatePlatform(this, 480, 80, 100);
-
-
+    
         CreatePortal(this, "", 80, 250, 8, true);
         CreatePortal(this, "Game2", 500, 200, 8, false);
 
@@ -72,7 +63,7 @@ export default class Game extends Phaser.Scene {
             right: "D",
             hability_1: "ONE",
             hability_2: "TWO",
-            hability_3: "THREE",
+            hability_3: "THREE"
         }); // keyObjects.up, keyObjects.down, keyObjects.left, keyObjects.right
 
         // Música
@@ -116,6 +107,11 @@ export default class Game extends Phaser.Scene {
             SendPos();
         }
 
+        if (!this.levelCompleted && this.finalPortal && this.physics.world.overlap(GlobalData.player, this.finalPortal)) {
+            console.log("🎯 Jugador tocó el portal final. Guardando tiempo...");
+            this.completeLevel();
+        }
+        
         // if (Phaser.Input.Keyboard.JustUp(this.keyObjects.right) || Phaser.Input.Keyboard.JustUp(this.keyObjects.left)) {
         //     socket.emit("playerVelX", { playerVelX: 0});
         // }
@@ -209,4 +205,52 @@ export default class Game extends Phaser.Scene {
             }
         }
     }
+
+    // 🔹 FUNCIÓN PARA OBTENER EL TIEMPO ACTUAL
+getElapsedSeconds() {
+    return this.elapsedSeconds;
+}
+
+
+startTimer() {
+    // 🔹 TEMPORIZADOR QUE SE EJECUTA HASTA QUE `levelCompleted` SEA `true`
+    this.time.addEvent({
+        delay: 1000,
+        callback: () => {
+            if (!this.levelCompleted) {
+                this.elapsedSeconds++;
+                localStorage.setItem("currentTime", this.elapsedSeconds);  // 🔹 Guardar cada segundo
+                console.log(`⏳ Tiempo transcurrido: ${this.elapsedSeconds}s`);
+            }
+        },
+        callbackScope: this,
+        loop: true
+    });
+}
+
+completeLevel() {
+    console.log("✅ Jugador tocó el portal final. Guardando tiempo...");
+
+    if (this.levelCompleted) return;
+    this.levelCompleted = true;
+
+    // 🔹 FORZAR que `finalTime` sea el `currentTime`
+    let finalTime = localStorage.getItem("currentTime");
+
+    finalTime = finalTime ? parseInt(finalTime, 10) : 0;
+
+    console.log(`🟢 Tiempo FINAL calculado: ${finalTime} segundos`);
+
+    // 🔹 Guardar `finalTime` en `localStorage` por seguridad
+    localStorage.setItem("finalTime", finalTime);
+
+    // 🔹 Cambiar a `FinalScene` PASANDO el tiempo directamente
+    this.scene.start("Final", { finalTime });
+}
+
+
+
+
+
+
 }
