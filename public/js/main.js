@@ -10,6 +10,10 @@ import About from './scenes/About.js';
 import EndGame from './scenes/EndGame.js';
 import { socket } from './socket.js';
 import { getDefaultGlobalData } from './utilities.js';
+import FinalScene from './scenes/FinalScene.js';
+import Records from './scenes/Records.js';
+
+
 
 export const GlobalData = getDefaultGlobalData();
 
@@ -41,7 +45,13 @@ const config = {
         Game,
         Game2,
         UI,
+<<<<<<< HEAD
         EndGame
+=======
+        FinalScene,
+        Records
+
+>>>>>>> b3a97e2 (los records en base a tiempo funcionando en el localstorage)
     ]
 };
 

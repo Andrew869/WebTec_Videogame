@@ -11,13 +11,81 @@ export default class Game extends Phaser.Scene {
 
         this.diffHeight = 720 - GlobalData.mapSizeY
 
+<<<<<<< HEAD
         this.tiempoTranscurrido = 0;
+=======
+        this.startTime = 0;  // Variable para almacenar el tiempo de inicio
+
+        this.levelCompleted = false; // 🔹 Evita completar el nivel varias veces
+
+        this.elapsedSeconds = 0;  // 🔹 Contador en segundos
+
+>>>>>>> b3a97e2 (los records en base a tiempo funcionando en el localstorage)
     }
 
     preload() {
     }
 
     create() {
+        console.log("🎮 Juego iniciado...");
+
+        // 🔹 INICIAR TEMPORIZADOR
+        this.startTimer();
+
+        // 🔹 CREAR EL PORTAL FINAL (CON DELAY PARA ASEGURAR GUARDADO)
+        this.time.delayedCall(500, () => {
+            this.finalPortal = this.physics.add.staticSprite(110, 200, 'portal').setOrigin(0.5, 1).setScale(4);
+            this.finalPortal.body.immovable = true;
+
+            console.log("✅ Portal final creado en:", this.finalPortal.x, this.finalPortal.y);
+
+            // 🔹 DETECTAR CUANDO EL JUGADOR LLEGA AL PORTAL
+            this.physics.add.overlap(GlobalData.player, this.finalPortal, this.completeLevel, null, this);
+        });
+
+        /*console.log("🎮 Juego iniciado...");
+
+        // 🔹 INICIAR EL TEMPORIZADOR
+        this.timerEvent = this.time.addEvent({
+            delay: 1000,  // 🔹 Suma cada 1 segundo
+            callback: () => {
+                this.elapsedSeconds++;
+                localStorage.setItem("currentTime", this.elapsedSeconds);  // 🔹 Guardar cada segundo
+                console.log(`⏳ Tiempo transcurrido: ${this.elapsedSeconds}s`);
+            },  
+            callbackScope: this,
+            loop: true  // 🔹 Se repite indefinidamente
+        });
+
+         // 🔹 ESPERAMOS UN PEQUEÑO RETRASO ANTES DE CREAR EL PORTAL
+         this.time.delayedCall(500, () => {
+            console.log("✅ Guardando tiempo antes de crear el portal...");
+            
+            // 🔹 GUARDAR TIEMPO FINAL EN `localStorage`
+            localStorage.setItem("finalTime", this.elapsedSeconds);
+            console.log(`🟢 Tiempo FINAL guardado correctamente: ${this.elapsedSeconds} segundos`);
+
+            // 🔹 CREAR EL PORTAL FINAL (CON DELAY PARA ASEGURAR GUARDADO)
+            this.finalPortal = this.physics.add.staticSprite(110, 200, 'portal').setOrigin(0.5, 1).setScale(4);
+            this.finalPortal.body.immovable = true;
+
+            // 🔹 DETECTAR CUANDO EL JUGADOR LLEGA AL PORTAL
+            this.physics.add.overlap(GlobalData.player, this.finalPortal, this.completeLevel, null, this);
+        }, [], this);*/
+       
+
+
+        /*this.timerEvent = this.time.addEvent({
+            delay: 1000,  // 🔹 Suma cada 1 segundo
+            callback: () => {
+                this.elapsedSeconds++;
+                localStorage.setItem("currentTime", this.elapsedSeconds);  // 🔹 Guardar cada segundo
+                console.log(`⏳ Tiempo transcurrido: ${this.elapsedSeconds}s`);
+            },
+            callbackScope: this,
+            loop: true  // 🔹 Se repite indefinidamente
+        });*/
+
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 1;
 
@@ -31,6 +99,10 @@ export default class Game extends Phaser.Scene {
                 GlobalData.currChar = characters.rogue;
                 break;
         }
+
+        
+        
+
 
         this.physics.world.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY);
 
@@ -49,18 +121,88 @@ export default class Game extends Phaser.Scene {
 
         GlobalData.ground = this.physics.add.staticBody(0, this.scale.height - 58, GlobalData.mapSizeX, 10);
 
-        // this.physics.add.staticBody(0, 0, 100, GlobalData.mapSizeY);
-        
+// 🔹 Verificar si this.startTime ya fue inicializado
+if (!this.startTime || this.startTime === 0) {
+    this.startTime = this.time.now;  // Guardar el tiempo de inicio del nivel
+    console.log("⏳ Temporizador iniciado correctamente:", this.startTime);
+}
+
+        // 🔹 Corregir el bucle for para imprimir correctamente el tiempo
+        for (let i = 0; i < 100; i++) {
+            console.log(`⏳ Temporizador iniciado [Iteración ${i + 1}]: ${this.startTime}`);
+        }
+
+
         CreateStartZone(this, 410, 0, 3, 20);
         // CreateWall(this, 410, 0, 20 * 16);
 
+<<<<<<< HEAD
 
         CreatePlatform(this, 60, 64, 300);
+=======
+        CreatePlatform(this, 60, 60, 300);
+>>>>>>> b3a97e2 (los records en base a tiempo funcionando en el localstorage)
         CreatePlatform(this, 480, 80, 100);
-
-
+    
         CreatePortal(this, "", 80, 250, 8, true);
+<<<<<<< HEAD
         CreatePortal(this, "Game2", 500, 200, 8, false);
+=======
+        CreatePortal(this, "Level2", 500, 200, 8, false);
+//        CreatePortal(this, "Final", 110, 200, 8, false);
+
+this.finalPortal = CreatePortal(this, "Final", 900, 200, 8, false);
+
+if (!this.finalPortal) {
+    console.error("❌ ERROR: CreatePortal() no devolvió un objeto válido. Creando portal manualmente.");
+    
+    // 🔹 Crear un portal manualmente si CreatePortal() falla
+    this.finalPortal = this.physics.add.staticSprite(900, 200, 'portal')
+        .setOrigin(0.5, 1)
+        .setScale(4)
+        .setDepth(2)
+        .refreshBody();
+}
+
+// 🔹 Asegurar que el portal no tenga gravedad y sea fijo
+this.finalPortal.body.immovable = true;
+console.log("✅ Portal final creado en:", this.finalPortal.x, this.finalPortal.y);
+
+
+
+
+        // this.initialPortal = this.physics.add.sprite(300, translateY(0), 'portal')
+        // .setOrigin(0.5, 1)
+        // .setSize(3, 15)
+        // .setOffset(18, 10)
+        // .setScale(4)
+        // .setDepth(2)
+        // .setImmovable(true)
+        // .refreshBody();
+
+        // this.finalPortal = this.physics.add.sprite(GlobalData.mapSizeX - 300, translateY(40), 'portal')
+        //     .setOrigin(0.5, 1)
+        //     .setScale(4)
+        //     .setDepth(2)
+        //     .refreshBody();
+        // this.finalPortal.body.setSize(50, 70);
+        // this.finalPortal.body.setOffset(20, 30);
+
+        // this.initialPortal.body.allowGravity = false;
+        // this.finalPortal.body.allowGravity = false;
+
+        // this.physics.add.collider(this.initialPortal, this.ground);
+        // this.physics.add.collider(this.finalPortal, this.ground);
+
+        
+
+        // this.initialPortal.anims.play('portal_anim', true);
+        // this.finalPortal.anims.play('portal_anim', true);
+
+        // this.physics.add.overlap(this.player, this.finalPortal, this.completeLevel, null, this);
+
+        // this.physics.add.collider(this.player, this.platforms);
+>>>>>>> b3a97e2 (los records en base a tiempo funcionando en el localstorage)
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",
@@ -69,7 +211,7 @@ export default class Game extends Phaser.Scene {
             right: "D",
             hability_1: "ONE",
             hability_2: "TWO",
-            hability_3: "THREE",
+            hability_3: "THREE"
         }); // keyObjects.up, keyObjects.down, keyObjects.left, keyObjects.right
 
         // Música
@@ -113,6 +255,11 @@ export default class Game extends Phaser.Scene {
             SendPos();
         }
 
+        if (!this.levelCompleted && this.finalPortal && this.physics.world.overlap(GlobalData.player, this.finalPortal)) {
+            console.log("🎯 Jugador tocó el portal final. Guardando tiempo...");
+            this.completeLevel();
+        }
+        
         // if (Phaser.Input.Keyboard.JustUp(this.keyObjects.right) || Phaser.Input.Keyboard.JustUp(this.keyObjects.left)) {
         //     socket.emit("playerVelX", { playerVelX: 0});
         // }
@@ -205,5 +352,61 @@ export default class Game extends Phaser.Scene {
                 }
             }
         }
+<<<<<<< HEAD
+=======
+
+        // if (!this.gameOver && !this.isPaused) {
+        //     this.movePlatform(this.movingPlatform, 500, 200, 300, 1.5);
+        // }
+    
+>>>>>>> b3a97e2 (los records en base a tiempo funcionando en el localstorage)
     }
+
+    // 🔹 FUNCIÓN PARA OBTENER EL TIEMPO ACTUAL
+getElapsedSeconds() {
+    return this.elapsedSeconds;
+}
+
+
+startTimer() {
+    // 🔹 TEMPORIZADOR QUE SE EJECUTA HASTA QUE `levelCompleted` SEA `true`
+    this.time.addEvent({
+        delay: 1000,
+        callback: () => {
+            if (!this.levelCompleted) {
+                this.elapsedSeconds++;
+                localStorage.setItem("currentTime", this.elapsedSeconds);  // 🔹 Guardar cada segundo
+                console.log(`⏳ Tiempo transcurrido: ${this.elapsedSeconds}s`);
+            }
+        },
+        callbackScope: this,
+        loop: true
+    });
+}
+
+completeLevel() {
+    console.log("✅ Jugador tocó el portal final. Guardando tiempo...");
+
+    if (this.levelCompleted) return;
+    this.levelCompleted = true;
+
+    // 🔹 FORZAR que `finalTime` sea el `currentTime`
+    let finalTime = localStorage.getItem("currentTime");
+
+    finalTime = finalTime ? parseInt(finalTime, 10) : 0;
+
+    console.log(`🟢 Tiempo FINAL calculado: ${finalTime} segundos`);
+
+    // 🔹 Guardar `finalTime` en `localStorage` por seguridad
+    localStorage.setItem("finalTime", finalTime);
+
+    // 🔹 Cambiar a `FinalScene` PASANDO el tiempo directamente
+    this.scene.start("Final", { finalTime });
+}
+
+
+
+
+
+
 }
