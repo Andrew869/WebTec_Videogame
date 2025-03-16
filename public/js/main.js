@@ -7,7 +7,7 @@ import NameSelection from './scenes/NameSelection.js';
 import CharSelection from './scenes/CharSelection.js';
 import Help from './scenes/Help.js';
 import About from './scenes/About.js';
-import { socket } from './socket.js';
+
 import { getDefaultGlobalData } from './utilities.js';
 import FinalScene from './scenes/FinalScene.js';
 import Records from './scenes/Records.js';

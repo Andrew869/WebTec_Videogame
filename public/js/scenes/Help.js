@@ -12,13 +12,13 @@ export default class Help extends Phaser.Scene {
         pergamino.setDepth(0); // Asegura que esté en la capa más baja
 
         // Agregar los textos sobre la imagen
-        this.add.text(512, 230, 'Instrucciones', {
+        this.add.text(GlobalData.halfWidth, GlobalData.halfHeight-190, 'Instrucciones', {
             fontFamily: 'Alagard', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5).setDepth(1);
 
-        this.add.text(500, 330, 'No muerasssssssssssssssssssssssssssssss', {
+        this.add.text(GlobalData.halfWidth, GlobalData.halfHeight, 'No muerasssssssssssssssssssssssssssssss', {
             fontFamily: 'Alagard', fontSize: 28, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -26,6 +26,6 @@ export default class Help extends Phaser.Scene {
         const MainMenu = () => {
             this.scene.start('MainMenu');
         };
-        createButton(this, 900, 550, 'Back', MainMenu);
+        createButton(this, GlobalData.halfWidth + 0.5 * GlobalData.halfWidth, GlobalData.halfHeight + 0.5 * GlobalData.halfHeight, 'Back', MainMenu);
     }
 }
