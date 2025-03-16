@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, translateY, CreatePlatform, CreateWall, movePlatform, generateLevel, collectCoin, collectPotion } from '../utilities.js';
+import { SendPos, translateY, CreatePlatform, CreateWall, movePlatform, generateLevel, collectCoin, collectPotion, collectBoot, collectLightning } from '../utilities.js';
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -60,6 +60,25 @@ export default class Game extends Phaser.Scene {
         GlobalData.ground = this.physics.add.staticBody(0, this.scale.height - 58, GlobalData.mapSizeX, 10);
 
         generateLevel(this);
+
+        this.boots = this.physics.add.staticGroup();
+        for (let i = 0; i < 3; i++) {
+        const bootX = Phaser.Math.Between(100, GlobalData.mapSizeX - 100);
+        const bootY = Phaser.Math.Between(100, GlobalData.mapSizeY - 100);
+        const boot = this.boots.create(bootX, bootY, 'items');
+        boot.setFrame(43);
+        }
+
+        this.lightnings = this.physics.add.staticGroup();
+        for (let i = 0; i < 3; i++) {
+        const lightningX = Phaser.Math.Between(100, GlobalData.mapSizeX - 100);
+        const lightningY = Phaser.Math.Between(100, GlobalData.mapSizeY - 100);
+        const lightning = this.lightnings.create(lightningX, lightningY, 'items');
+        lightning.setFrame(44);
+        }
+
+        this.physics.add.overlap(GlobalData.player, this.boots, collectBoot, null, this);
+        this.physics.add.overlap(GlobalData.player, this.lightnings, collectLightning, null, this);
 
         this.score = 0;
         this.scoreMultiplier = 1;
