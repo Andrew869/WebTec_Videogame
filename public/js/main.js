@@ -10,6 +10,7 @@ import About from './scenes/About.js';
 
 import { getDefaultGlobalData } from './utilities.js';
 import FinalScene from './scenes/FinalScene.js';
+import OverScene from './scenes/OverScene.js';
 import Records from './scenes/Records.js';
 
 export const GlobalData = getDefaultGlobalData();
@@ -114,6 +115,7 @@ const config = {
         Game,
         Game2,
         UI,
+        OverScene,
         FinalScene,
         Records
     ]

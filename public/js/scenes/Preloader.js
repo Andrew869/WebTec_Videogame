@@ -68,6 +68,14 @@ export default class Preloader extends Phaser.Scene {
         this.load.audio('bg_m_menu', 'audio/music/menu.mp3');
         this.load.audio('bg_m_lvl_1', 'audio/music/level_1.mp3');
         this.load.audio('bg_m_lvl_2', 'audio/music/level_2.mp3');
+        this.load.audio('gameClear', 'audio/sfx/gameClear.mp3');
+        this.load.audio('gameOver', 'audio/sfx/gameOver.mp3');
+        this.load.audio('menuSelect', 'audio/sfx/botonSound.mp3');
+        this.load.audio('coin', 'audio/sfx/coin.mp3');
+        this.load.audio('boost', 'audio/sfx/boost.mp3');
+        this.load.audio('bonus', 'audio/sfx/bonus.mp3');
+        this.load.audio('damage', 'audio/sfx/damage.mp3');
+
         this.load.image('pergamino', 'images/backgrounds/menu.png');
         this.load.image('platform', 'images/props/platform.png');
         this.load.image('wall', 'images/props/wall.png');

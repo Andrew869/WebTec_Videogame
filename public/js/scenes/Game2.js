@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, updateScore } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, generateAscendingLevel2, updateScore } from '../utilities.js';
 
 export default class Game2 extends Phaser.Scene {
     constructor() {
@@ -52,9 +52,15 @@ export default class Game2 extends Phaser.Scene {
         // CreateWall(this, 410, 0, 20 * 16);
 
 
-        CreatePlatform(this, 60, 60, 300);
-        CreatePlatform(this, 480, 80, 100);
+        //CreatePlatform(this, 60, 60, 300);
+        //CreatePlatform(this, 480, 80, 100);
 
+        generateAscendingLevel2(
+            this,
+            410 + 200,
+            GlobalData.ground.y - 100,
+            GlobalData.mapSizeX - 400 
+        );
 
         CreatePortal(this, "", 80, 250, 8, true);
         CreatePortal(this, "FinalScene", 500, 200, 8, false);

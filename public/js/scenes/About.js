@@ -42,6 +42,7 @@ export default class About extends Phaser.Scene {
 
         // Botón para regresar al menú principal, ajustado para estar ligeramente más abajo
         const MainMenu = () => {
+            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
         createButton(this, GlobalData.halfWidth + 0.5 * GlobalData.halfWidth, GlobalData.halfHeight + 0.7 * GlobalData.halfHeight, 'Back', MainMenu);
