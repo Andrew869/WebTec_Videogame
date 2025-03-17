@@ -8,7 +8,7 @@ export default class GameOver extends Phaser.Scene {
 
     create() {
         GlobalData.currGameScene = this;
-        this.sound.play('gameClear');
+        this.sound.play('gameOver');
         setTimeout(() => {
             // 🔹 Mostrar en pantalla el tiempo correctamente
             this.add.text(GlobalData.halfWidth, 150, "Game Over", {

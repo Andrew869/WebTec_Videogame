@@ -75,6 +75,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.audio('boost', 'audio/sfx/boost.mp3');
         this.load.audio('bonus', 'audio/sfx/bonus.mp3');
         this.load.audio('damage', 'audio/sfx/damage.mp3');
+        this.load.audio('coint', 'audio/sfx/heal.mp3');
 
         this.load.image('pergamino', 'images/backgrounds/menu.png');
         this.load.image('titulo', 'images/Title.png');

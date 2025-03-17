@@ -13,6 +13,7 @@ let players = {};
 let playersReady = 0;
 let gamestarted = false;
 let seed = generateSeed();
+let nextLvl = 0;
 
 // Setting static directory
 app.use(express.static('public'));
@@ -32,7 +33,7 @@ io.on("connection", (socket) => {
     console.log("New player connected:", socket.id);
 
     socket.on("LevelReady", (data) => {
-
+        nextLvl = data.lvl > nextLvl? data.lvl : nextLvl; // if a player has reach to a higher lvl, update nextlvl var
         players[socket.id] = {
             lvl: data.lvl,
             x: 80,
@@ -41,7 +42,7 @@ io.on("connection", (socket) => {
             charName: data.charName,
             isReady: false
         };
-        console.log(players[socket.id]);
+        // console.log(players[socket.id]);
 
         // Sending list of current players to client
         socket.emit("currentPlayers", {seed, players});
@@ -107,6 +108,7 @@ io.on("connection", (socket) => {
         delete players[socket.id];
         if(!Object.keys(players).length) {
             gamestarted = false;
+            nextLvl = 0;
         }
 
         // Notifing to online clients
@@ -123,7 +125,7 @@ server.listen(PORT, () => {
 function sendReadyPlayers (){
     playersReady = 0;
     Object.values(players).forEach(player => {
-        if(player.isReady) {
+        if(player.isReady && player.lvl === nextLvl) {
             playersReady++;
         }
     });

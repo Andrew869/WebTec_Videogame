@@ -9,6 +9,7 @@ export function getDefaultGlobalData() {
         start_line : null,
         playerName: "",
         player: null,
+        playerReady: false,
         playerData: null,
         players: {},
         playersData: {},
@@ -116,7 +117,7 @@ export function exitGame(sceneName) {
     // reseting global vars
     resetGlobalData();
     // disconnecting from server
-    socket.disconnect();
+    // socket.disconnect();
 }
 
 export function createFloatingPlatform(x, y) {
@@ -211,6 +212,7 @@ export function CreatePortal(scene, targetScene, x, y, size, flipX = false) {
 }
 
 export function warpPlayer(targetScene) {
+    if(targetScene === "FinalScene" || targetScene === "GameOver") socket.disconnect();
     partialReset();
     GlobalData.backgroundMusic.stop();
     GlobalData.currGameScene.scene.start(targetScene);
@@ -224,7 +226,7 @@ export function CreateStartZone(scene, x, y, tilesX, tilesY) {
     CreateWall(scene, x, y, height, true);
 
     const race_line =  scene.add.tileSprite(x, translateY(y), width, height, 'race_line').setOrigin(1);
-    race_line.alpha = 0.5;
+    race_line.alpha = 0.3;
     const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
     const trigger = {type: "start_line", object: object, callback: SetplayerReady}
     GlobalData.triggers.push(trigger);
@@ -243,8 +245,9 @@ export function SetPlayerDamage(amount) {
 
     if (now - GlobalData.lastDamageTime > GlobalData.damageCooldown) {
         GlobalData.playerData.currentHelth-=amount;
-        updatehearts();
         GlobalData.lastDamageTime = now;
+        updatehearts();
+        GlobalData.currGameScene.sound.play('damage');
 
         GlobalData.currGameScene.tweens.add({
             targets: GlobalData.player,
@@ -273,6 +276,7 @@ export function CreateTimer (scene, key ,x, y, time, fontSize) {
             if (reminingTime < 0) {
                 removeTimer(key);
                 removeGreatWall();
+                GlobalData.currUIScene.readyPlayersText.setText("");
             }
         },
         callbackScope: scene,
@@ -298,11 +302,12 @@ export function removeGreatWall() {
     GlobalData.gameStarted = true;
     GlobalData.levelStarted = true;
 
-    GlobalData.currGameScene.time.addEvent({
+    GlobalData.currGameScene.time.addEvent({ // evento to spawn a bonus item
         delay: 5000,
         callback: () => {
             if (!GlobalData.gameOver) {
-                createMultiplier(GlobalData.currGameScene, 2, GlobalData.player.x + 100 * Math.cos(Phaser.Math.FloatBetween(0, 2 * Math.PI)), GlobalData.player.y + 100 * Math.sin(Phaser.Math.FloatBetween(0, 2 * Math.PI)));
+                const angle = -(GlobalData.rng.between(0, 180) * Math.PI / 180);
+                createMultiplier(GlobalData.currGameScene, 5, 10000, GlobalData.player.x + 100 * Math.cos(angle), GlobalData.player.y + 100 * Math.sin(angle));
             }
         },
         callbackScope: GlobalData.currGameScene,
@@ -335,7 +340,8 @@ export function partialReset() {
 
 export function updateScore(points) {
     GlobalData.score += points * GlobalData.multiplier;
-    GlobalData.currUIScene.scoreText.setText(GlobalData.score.toString().padStart(5, '0'));
+    if(GlobalData.score >= 0) GlobalData.currUIScene.scoreText.setText(GlobalData.score.toString().padStart(5, '0'));
+    else GlobalData.currUIScene.scoreText.setText(GlobalData.score.toString());
 }
 
 export function getCurrentDate() {
@@ -349,7 +355,6 @@ export function getCurrentDate() {
 export function updatehearts() {
     const hearts = GlobalData.currUIScene.hearts;
     let life = GlobalData.playerData.currentHelth;
-    console.log(hearts);
 
     hearts.forEach(heart => {
         if (life >= 2) {
@@ -364,20 +369,42 @@ export function updatehearts() {
     });
 }
 
-export function createMultiplier(scene, multiplier, x, y) {
-    const item = scene.physics.add.image(x, y, 'items', 22);
+export function createMultiplier(scene, multiplier, time, x, y) {
+    const item = scene.physics.add.image(x, y, 'items', 22).setScale(2);
     scene.physics.add.collider(item, GlobalData.ground);
 
     GlobalData.colliders.forEach(collider => {
         scene.physics.add.collider(item, collider);
     });
 
-    scene.physics.add.overlap(GlobalData.player, item, () => {GlobalData.multiplier = 20}, null, GlobalData.currGameScene);
+    scene.physics.add.overlap(GlobalData.player, item, (player, object) => {
+        GlobalData.currGameScene.sound.play('bonus');
+        object.destroy();
+        GlobalData.multiplier = multiplier
+        GlobalData.currGameScene.time.addEvent({
+            delay: time,
+            callback: () => {
+                GlobalData.multiplier = 1;
+            },
+            callbackScope: GlobalData.currGameScene,
+            loop: false
+        });
+    }, 
+    null, GlobalData.currGameScene);
+
+    GlobalData.currGameScene.time.addEvent({ // evento to despawn the item
+        delay: 3000,
+        callback: () => {
+            item.destroy();
+        },
+        callbackScope: GlobalData.currGameScene,
+        loop: false
+    });
 }
 
 export function createCoins(scene, itemAmount, minX, minY, maxX, maxY, frame = 48) {
-    if(frame < 48) frame = 48;
-    else if(frame > 52) frame = 52;
+    // if(frame < 48) frame = 48;
+    // else if(frame > 52) frame = 52;
     let coinsGroup = scene.physics.add.group();
 
     for (let i = 0; i < itemAmount; i++) {
@@ -396,10 +423,14 @@ export function createCoins(scene, itemAmount, minX, minY, maxX, maxY, frame = 4
 }
 
 export function coinManager(player, coin){
-    coin.destroy();
     // Setting the amount of points earned depending of what frame is
     let points = coin.frame.name - 47;
     points = 2 * points -1;
+    
+    if(points > 0) GlobalData.currGameScene.sound.play('coin');
+    else GlobalData.currGameScene.sound.play('coint');
+    
+    coin.destroy();
     updateScore(points);
 }
 
@@ -410,11 +441,11 @@ export function coinManager(player, coin){
 export function generateItems() {
     const scene = GlobalData.currGameScene;
     if (GlobalData.currLvl === 1){
-        createCoins(scene, 25, 410, 0, GlobalData.mapSizeX - 200, 600, 0);
+        createCoins(scene, 25, 410, 0, GlobalData.mapSizeX - 200, 600, 48);
         createCoins(scene, 20, 410, 0, GlobalData.mapSizeX - 200, 600, 49);
         createCoins(scene, 15, 410, 0, GlobalData.mapSizeX - 200, 600, 50);
         createCoins(scene, 10, 410, 0, GlobalData.mapSizeX - 200, 600, 51);
         createCoins(scene, 5, 410, 0, GlobalData.mapSizeX - 200, 600, 52);
     }
-    else createCoins(scene, 30, 300, GlobalData.mapSizeY, 900, 400);
+    else createCoins(scene, 30, 300, GlobalData.mapSizeY, 900, 400, 40);
 }

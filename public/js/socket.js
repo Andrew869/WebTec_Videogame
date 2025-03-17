@@ -140,8 +140,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
                     GlobalData.colliders.forEach(collider => {
                         GlobalData.currGameScene.physics.add.collider(object, collider);
                     });
-                    GlobalData.currGameScene.physics.add.overlap(player, object, trigger.callback, null, GlobalData.currGameScene);
-                    console.log("somebody there?");
+                    GlobalData.currGameScene.physics.add.overlap(player, object, isItMine? trigger.callback : () => {}, null, GlobalData.currGameScene);
                 }
                 break;
         }
