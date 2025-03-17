@@ -12,6 +12,7 @@ const PORT = 3000;
 let players = {};
 let playersReady = 0;
 let gamestarted = false;
+let seed = generateSeed();
 
 // Setting static directory
 app.use(express.static('public'));
@@ -43,7 +44,7 @@ io.on("connection", (socket) => {
         console.log(players[socket.id]);
 
         // Sending list of current players to client
-        socket.emit("currentPlayers", players);
+        socket.emit("currentPlayers", {seed, players});
         // Sendig new player to other clients
         socket.broadcast.emit("removeTimer");
         socket.broadcast.emit("newPlayer", { id: socket.id, playerData: players[socket.id] });
@@ -52,6 +53,10 @@ io.on("connection", (socket) => {
     socket.on("UIReady", () => {
         sendReadyPlayers();
     });
+
+    // socket.on("sendSeed", () => {
+    //     socket.emit("settingSeed", seed);
+    // });
 
     socket.on("gamestarted", (data) => {
         gamestarted = data.started;
@@ -126,4 +131,13 @@ function sendReadyPlayers (){
     console.log(text);
     io.emit("redrawReadyPlayersText", {text: text});
 
+}
+
+function generateSeed(length = 16) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let seed = '';
+    for (let i = 0; i < length; i++) {
+        seed += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return seed;
 }

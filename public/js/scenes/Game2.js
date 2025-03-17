@@ -16,7 +16,6 @@ export default class Game2 extends Phaser.Scene {
     }
 
     create() {
-        updateScore(453);
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 2;
         this.namesText = {};

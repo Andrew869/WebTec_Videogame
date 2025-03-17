@@ -8,6 +8,7 @@ import About from './scenes/About.js';
 import Game from './scenes/Game.js';
 import Game2 from './scenes/Game2.js';
 import UI from './scenes/UI.js';
+import GameOver from './scenes/GameOver.js';
 import FinalScene from './scenes/FinalScene.js';
 
 import { getDefaultGlobalData } from './utilities.js';
@@ -114,6 +115,7 @@ const config = {
         Game,
         Game2,
         UI,
+        GameOver,
         FinalScene
     ]
 };

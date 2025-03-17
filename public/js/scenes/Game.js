@@ -10,6 +10,7 @@ export default class Game extends Phaser.Scene {
         this.keyObjects;
 
         this.namesText;
+        this.coins;
     }
 
     preload() {
@@ -49,7 +50,7 @@ export default class Game extends Phaser.Scene {
 
         GlobalData.ground = this.physics.add.staticBody(0, GlobalData.mapSizeY - 58, GlobalData.mapSizeX, 10);
 
-        CreateStartZone(this, 410, 0, 3, 20);
+        CreateStartZone(this, 400, 0, 3, 20);
         CreateDamageZone(this, 510, 0, 64, 300);
         // CreateWall(this, 410, 0, 20 * 16);
 
@@ -77,7 +78,7 @@ export default class Game extends Phaser.Scene {
         CreatePortal(this, "Game2", 2450, 80, 8, false);
 
         /*this.add.tileSprite(0, GlobalData.mapSizeY - 2, 'lava')
-            .setOrigin(0, 1)
+            .setOrigin(0, 1)createCoins
             .setDepth(2);
 
         this.add.tileSprite(1000, GlobalData.mapSizeY - 2, 300, 16, 'lava')

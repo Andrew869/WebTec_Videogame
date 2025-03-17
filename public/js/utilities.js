@@ -16,6 +16,7 @@ export function getDefaultGlobalData() {
         triggers: [],
         gameStarted: false,
         levelStarted: false,
+        gameOver: false,
         width: 1280,
         halfWidth: 1280 / 2,
         height: 720,
@@ -27,10 +28,13 @@ export function getDefaultGlobalData() {
         greatWall: null,
         timers: {},
         score: 0,
+        multiplier: 1,
         timeElapsed: 0,
         maxHealth: 8,
         damageCooldown: 1000,
-        lastDamageTime: 0
+        lastDamageTime: 0,
+        rng: null,
+        seed: "",
     };
 }
 
@@ -96,14 +100,15 @@ export function toggleMusic(scene) {
 }
 
 export function exitGame(sceneName) {
-    // Redirige al menu
-    // stoping scenes
-    GlobalData.backgroundMusic.stop();
-    GlobalData.currUIScene.isPaused = false;
     // GlobalData.currGameScene.physics.resume();
     // scene.anims.resumeAll();
     
-    GlobalData.currUIScene.scene.stop();
+    GlobalData.backgroundMusic.stop();
+    // stoping scenes
+    if(GlobalData.currUIScene){
+        GlobalData.currUIScene.scene.stop();
+        GlobalData.currUIScene.isPaused = false;
+    }
     
     // changing scene
     GlobalData.currGameScene.scene.start(sceneName);
@@ -248,6 +253,11 @@ export function SetPlayerDamage(amount) {
             repeat: 5,
             duration: 100
         });
+        if(GlobalData.playerData.currentHelth <= 0) {
+            GlobalData.gameOver = true;
+            console.log("Game over!");
+            warpPlayer("GameOver");
+        }
     }
 }
 
@@ -287,6 +297,17 @@ export function removeGreatWall() {
     GlobalData.greatWall.collider.destroy();
     GlobalData.gameStarted = true;
     GlobalData.levelStarted = true;
+
+    GlobalData.currGameScene.time.addEvent({
+        delay: 5000,
+        callback: () => {
+            if (!GlobalData.gameOver) {
+                createMultiplier(GlobalData.currGameScene, 2, GlobalData.player.x + 100 * Math.cos(Phaser.Math.FloatBetween(0, 2 * Math.PI)), GlobalData.player.y + 100 * Math.sin(Phaser.Math.FloatBetween(0, 2 * Math.PI)));
+            }
+        },
+        callbackScope: GlobalData.currGameScene,
+        loop: false
+    });
 }
 
 export function removePlayer(playerId) {
@@ -313,7 +334,7 @@ export function partialReset() {
 }
 
 export function updateScore(points) {
-    GlobalData.score += points;
+    GlobalData.score += points * GlobalData.multiplier;
     GlobalData.currUIScene.scoreText.setText(GlobalData.score.toString().padStart(5, '0'));
 }
 
@@ -341,4 +362,59 @@ export function updatehearts() {
             heart.setFrame(47);
         }
     });
+}
+
+export function createMultiplier(scene, multiplier, x, y) {
+    const item = scene.physics.add.image(x, y, 'items', 22);
+    scene.physics.add.collider(item, GlobalData.ground);
+
+    GlobalData.colliders.forEach(collider => {
+        scene.physics.add.collider(item, collider);
+    });
+
+    scene.physics.add.overlap(GlobalData.player, item, () => {GlobalData.multiplier = 20}, null, GlobalData.currGameScene);
+}
+
+export function createCoins(scene, itemAmount, minX, minY, maxX, maxY, frame = 48) {
+    if(frame < 48) frame = 48;
+    else if(frame > 52) frame = 52;
+    let coinsGroup = scene.physics.add.group();
+
+    for (let i = 0; i < itemAmount; i++) {
+        let x = GlobalData.rng.between(minX, maxX);
+        let y = GlobalData.rng.between(minY, maxY);
+
+        let coin = coinsGroup.create(x, translateY(y), 'items', frame);
+
+        coin.setScale(1);
+    }
+
+    // scene.physics.add.collider(coinsGroup, GlobalData.ground);
+
+    const trigger = {type: "items", object: coinsGroup, callback: coinManager }
+    GlobalData.triggers.push(trigger);
+}
+
+export function coinManager(player, coin){
+    coin.destroy();
+    // Setting the amount of points earned depending of what frame is
+    let points = coin.frame.name - 47;
+    points = 2 * points -1;
+    updateScore(points);
+}
+
+// export function removeItem(player, coin){
+//     coin.destroy();
+// }
+
+export function generateItems() {
+    const scene = GlobalData.currGameScene;
+    if (GlobalData.currLvl === 1){
+        createCoins(scene, 25, 410, 0, GlobalData.mapSizeX - 200, 600, 0);
+        createCoins(scene, 20, 410, 0, GlobalData.mapSizeX - 200, 600, 49);
+        createCoins(scene, 15, 410, 0, GlobalData.mapSizeX - 200, 600, 50);
+        createCoins(scene, 10, 410, 0, GlobalData.mapSizeX - 200, 600, 51);
+        createCoins(scene, 5, 410, 0, GlobalData.mapSizeX - 200, 600, 52);
+    }
+    else createCoins(scene, 30, 300, GlobalData.mapSizeY, 900, 400);
 }

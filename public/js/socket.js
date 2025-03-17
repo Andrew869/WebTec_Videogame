@@ -1,6 +1,6 @@
 import { game, GlobalData } from './main.js';
 import { characters } from './characters.js';
-import { exitGame, CreateTimer, removeTimer, removePlayer, updatehearts} from './utilities.js';
+import { exitGame, CreateTimer, removeTimer, removePlayer, updatehearts, generateItems} from './utilities.js';
 
 export const socket = io({ autoConnect: false });
 
@@ -8,7 +8,16 @@ socket.on('connect', () => {
     // console.log(socket.id); // an alphanumeric id...
 });
 
-socket.on("currentPlayers", (players) => {
+socket.on("currentPlayers", (data) => {
+    GlobalData.seed = data.seed;
+    console.log(GlobalData.seed);
+    if (!GlobalData.rng)
+        GlobalData.rng = new Phaser.Math.RandomDataGenerator([GlobalData.seed]);
+
+    generateItems();
+
+
+    const players = data.players;
     for (let playerId in players) {
         if(playerId === socket.id)
             createPlayer(playerId, players[playerId]);
@@ -63,8 +72,17 @@ socket.on("redrawReadyPlayersText", (data) => {
 });
 
 socket.on("returnToMenu", () => {
-    exitGame(GlobalData.currGameScene);
+    exitGame("MainMenu");
 });
+
+// socket.on("settingSeed", (data) => {
+//     GlobalData.seed = data;
+//     console.log(GlobalData.seed);
+//     if (!GlobalData.rng)
+//         GlobalData.rng = new Phaser.Math.RandomDataGenerator([GlobalData.seed]);
+
+//     generateItems();
+// });
 
 function createPlayer(playerId, playerData, isItMine = true) {
     const lvl = playerData.lvl;
@@ -113,7 +131,17 @@ function createPlayer(playerId, playerData, isItMine = true) {
                 break;
             case 'damage_Zone':
                 {
-                    GlobalData.currGameScene.physics.add.overlap(player, object, (player, object) => {trigger.callback(1)}, null, GlobalData.currGameScene);
+                    GlobalData.currGameScene.physics.add.overlap(player, object, (player, object) => {isItMine? trigger.callback(1) : () => {}}, null, GlobalData.currGameScene);
+                }
+                break;
+            case 'items':
+                {
+                    GlobalData.currGameScene.physics.add.collider(object, GlobalData.ground);
+                    GlobalData.colliders.forEach(collider => {
+                        GlobalData.currGameScene.physics.add.collider(object, collider);
+                    });
+                    GlobalData.currGameScene.physics.add.overlap(player, object, trigger.callback, null, GlobalData.currGameScene);
+                    console.log("somebody there?");
                 }
                 break;
         }
@@ -145,7 +173,6 @@ function createPlayer(playerId, playerData, isItMine = true) {
         padding: { x: 4, y: 2 }
     }).setOrigin(0.5);
     socket.emit("UIReady");
-    // console.log(GlobalData.playerName);
 }
 
 function updatePlayerVelX(playerId, playerVelX) {
