@@ -7,6 +7,7 @@ export function getDefaultGlobalData() {
         currLvl: 0,
         currUIScene: null,
         start_line : null,
+        playerName: "",
         player: null,
         playerData: null,
         players: {},
@@ -102,19 +103,21 @@ export function toggleMusic(scene) {
 //     this.scene.restart();
 // }
 
-export function exitGame(scene) {
+export function exitGame(sceneName) {
     // Redirige al menu
     // stoping scenes
     GlobalData.backgroundMusic.stop();
-    scene.isPaused = false;
+    GlobalData.currUIScene.isPaused = false;
     // GlobalData.currGameScene.physics.resume();
     // scene.anims.resumeAll();
-
-    scene.scene.stop(GlobalData.currGameScene);
+    
+    GlobalData.currUIScene.scene.stop();
+    
+    // changing scene
+    GlobalData.currGameScene.scene.start(sceneName);
+    
     // reseting global vars
     resetGlobalData();
-    // changing to main scene
-    scene.scene.start('MainMenu');
     // disconnecting from server
     socket.disconnect();
 }
@@ -326,12 +329,14 @@ export function removeGreatWall() {
 }
 
 export function removePlayer(playerId) {
-    console.log(playerId);
     const player = GlobalData.players[playerId];
     if (player) {
         player.destroy();
         delete GlobalData.players[playerId];
         delete GlobalData.playersData[playerId];
+        const nameText = GlobalData.currGameScene.namesText[playerId];
+        nameText.destroy();
+        delete GlobalData.currGameScene.namesText[playerId];
     }
 }
 
@@ -344,4 +349,18 @@ export function partialReset(){
     GlobalData.colliders = [];
     GlobalData.triggers = [];
     GlobalData.levelStarted = false;
+    // GlobalData.score = 0;
+}
+
+export function updateScore(points) {
+    GlobalData.score += points;
+    GlobalData.currUIScene.scoreText.setText(GlobalData.score.toString().padStart(5, '0'));
+}
+
+export function getCurrentDate() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}-${month}-${day}`;
 }

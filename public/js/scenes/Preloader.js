@@ -88,15 +88,6 @@ export default class Preloader extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-
-        const canvas = game.canvas;
-        canvas.addEventListener('focus', () => {
-            console.log('Canvas enfocado');
-        });
-
-        canvas.addEventListener('blur', () => {
-            console.log('Canvas perdió el foco');
-        });
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
 

@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game2 extends Phaser.Scene {
     constructor() {
@@ -14,6 +14,7 @@ export default class Game2 extends Phaser.Scene {
     }
 
     create() {
+        updateScore(453);
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 2;
 
@@ -73,7 +74,7 @@ export default class Game2 extends Phaser.Scene {
         GlobalData.backgroundMusic.play();
 
         socket.connect();
-        console.log(GlobalData.charName);
+        // console.log(GlobalData.charName);
         socket.emit("LevelReady", {lvl: 2, groundY: GlobalData.ground.y, charName: GlobalData.charName});
     }
 

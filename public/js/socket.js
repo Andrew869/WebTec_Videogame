@@ -67,6 +67,8 @@ socket.on("returnToMenu", () => {
 });
 
 function createPlayer(playerId, playerData, isItMine = true) {
+    const lvl = playerData.lvl;
+    const playerName = playerData.playerName;
     const charName = playerData.charName;
     const player = GlobalData.currGameScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
     player.setOrigin(0.5);
@@ -77,7 +79,6 @@ function createPlayer(playerId, playerData, isItMine = true) {
     // player.alpha = 0.5;
 
     const data = {
-
         playerReady: false,
         currentSpeed : GlobalData.speed,
         currentJumpForce : GlobalData.jumpForce,
@@ -124,11 +125,20 @@ function createPlayer(playerId, playerData, isItMine = true) {
         GlobalData.mainCamera.setZoom(2);
         GlobalData.mainCamera.startFollow(GlobalData.player);
         GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY);
+
+        GlobalData.currUIScene.lvlText.setText(`Level: ${lvl}`);
     }
     else {
         GlobalData.playersData[playerId] = data;
     }
+
+    GlobalData.currGameScene.namesText[playerId] = GlobalData.currGameScene.add.text(player.x, player.y - 40, playerName, {
+        fontFamily: 'Alagard', fontSize: '16px', fill: '#fff', stroke: '#000', strokeThickness: 4,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: { x: 4, y: 2 }
+    }).setOrigin(0.5);
     socket.emit("UIReady");
+    // console.log(GlobalData.playerName);
 }
 
 function updatePlayerVelX(playerId, playerVelX) {

@@ -1,13 +1,15 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game extends Phaser.Scene {
     constructor() {
         super({ key: "Game" });
 
         this.keyObjects;
+
+        this.namesText = {};
     }
 
     preload() {
@@ -71,7 +73,7 @@ export default class Game extends Phaser.Scene {
         GlobalData.backgroundMusic.play();
 
         socket.connect();
-        socket.emit("LevelReady", {lvl: 1, groundY: GlobalData.ground.y, charName: GlobalData.charName});
+        socket.emit("LevelReady", {lvl: 1, groundY: GlobalData.ground.y, playerName: GlobalData.playerName, charName: GlobalData.charName});
     }
 
     update() {
@@ -195,5 +197,10 @@ export default class Game extends Phaser.Scene {
                 }
             }
         }
+
+        Object.keys(this.namesText).forEach(playerId => {
+            this.namesText[playerId].setPosition(GlobalData.players[playerId].x, GlobalData.players[playerId].y - 40);
+        });
+
     }
 }

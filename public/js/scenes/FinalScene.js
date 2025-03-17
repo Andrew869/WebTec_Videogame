@@ -1,4 +1,5 @@
 import { GlobalData } from '../main.js';
+import { exitGame, getCurrentDate } from '../utilities.js';
 
 export default class FinalScene extends Phaser.Scene {
     constructor() {
@@ -6,46 +7,44 @@ export default class FinalScene extends Phaser.Scene {
     }
 
     create() {
+        GlobalData.currGameScene = this;
         setTimeout(() => {
 
+            let name = GlobalData.playerName;
             let score = GlobalData.score;
-            let currentTime = GlobalData.timeElapsed.toFixed(2)
-
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1; // Los meses empiezan desde 0
-            const day = date.getDate();
-            const dateText = `${year}-${month}-${day}`;
-
-            // 🔹 Obtener el nombre del jugador
-            let playerName = GlobalData.charName || "Jugador";
+            let time = GlobalData.timeElapsed.toFixed(2)
 
             // 🔹 Recuperar la lista de registros previos
             let storedRecords = JSON.parse(localStorage.getItem('gameRecords')) || [];
-            console.log(storedRecords);
-            
-            // 🔹 Agregar el nuevo tiempo con el nombre del jugador
-            storedRecords.push({ playerName: playerName, date: dateText, score: score, time: currentTime });
 
+            let hasRecord = false;
+
+            for (let i = 0; i < storedRecords.length; i++) {
+                const Record = storedRecords[i];
+                if (Record.name === name) {
+                    hasRecord = true;
+                    if (score > Record.score) Record.score = score;
+                    break;
+                }
+            }
+
+            if(!hasRecord) {
+                storedRecords.push({ name: name, date: getCurrentDate(), score: score, time: time });
+            }
+            
             // 🔹 Guardar la lista actualizada en `localStorage`
             localStorage.setItem("gameRecords", JSON.stringify(storedRecords));
 
-            // 🔹 Guardar el tiempo final para visualizarlo en la pantalla final
-            localStorage.setItem("finalTime", currentTime);
-
-            // console.log(`✅ Tiempo final guardado correctamente: ${currentTime} segundos`);
-            // console.log(`📊 Lista de tiempos actualizada:`, storedRecords);
-
             // 🔹 Mostrar en pantalla el tiempo correctamente
-            this.add.text(400, 150, "🏆 Final Score 🏆", {
+            this.add.text(GlobalData.halfWidth, 150, "🏆 Final Score 🏆", {
                 fontFamily: 'Arial',
                 fontSize: '40px',
                 color: '#ffffff',
                 stroke: '#000000',
                 strokeThickness: 6
-            }).setOrigin(0.5);
+            })
 
-            this.add.text(400, 250, `⏳ ${playerName} - Tiempo final: ${currentTime}s`, {
+            this.add.text(400, 250, `⏳ ${name} - Tiempo final: ${time}s`, {
                 fontFamily: 'Arial',
                 fontSize: '32px',
                 color: '#00ff00'
@@ -61,7 +60,7 @@ export default class FinalScene extends Phaser.Scene {
             }).setOrigin(0.5).setInteractive();
 
             leaderboardButton.on("pointerdown", () => {
-                this.scene.start("Records");
+                exitGame('Records')
             });
 
             // 🔹 Botón para volver al menú principal
@@ -74,7 +73,7 @@ export default class FinalScene extends Phaser.Scene {
             }).setOrigin(0.5).setInteractive();
 
             menuButton.on("pointerdown", () => {
-                this.scene.start("MainMenu");
+                exitGame('MainMenu')
             });
 
         }, 500);

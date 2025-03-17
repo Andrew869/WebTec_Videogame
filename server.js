@@ -36,9 +36,11 @@ io.on("connection", (socket) => {
             lvl: data.lvl,
             x: 80,
             y: data.groundY - 250,
+            playerName: data.playerName,
             charName: data.charName,
             isReady: false
         };
+        console.log(players[socket.id]);
 
         // Sending list of current players to client
         socket.emit("currentPlayers", players);

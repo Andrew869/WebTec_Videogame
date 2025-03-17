@@ -22,7 +22,24 @@ const game_container = document.getElementById('game_container');
 const slot_container = document.getElementById('slot_container');
 const phaserGame = document.getElementById('phaserGame');
 const btn = document.getElementById('fullscreen-btn');
-const games = [0, 91, 100, 1141, 170, 1135, 208, 283, 550, 1499, 1511, 12, 13, 14];
+const canvas = document.getElementById('canvas');
+const games = [
+    {id: 0, name: "PLatform", img: ""},
+    {id: 91, name: "Avoid The Germs", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/FE3EBJNt.png"},
+    {id: 100, name: "Bank Panic", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/is3Egba5.png"},
+    {id: 1141, name: "Snake", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/WHskqe5L.png"},
+    {id: 170, name: "Breakout", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/K4mxLdxg.png"},
+    {id: 1135, name: "firtgame", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/Uc7rYApH.png"},
+    {id: 208, name: "Card Memory", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/pE7EXJwR.png"},
+    {id: 283, name: "Coin Clicker", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/avnVoeo5.png"},
+    {id: 550, name: "Emoji Match", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/1P3uFYDb.png"},
+    {id: 1499, name: "Sliding Puzzle", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/cj2PPZLy.png"},
+    {id: 1511, name: "Snowmen Attack", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/wR1GGdCQ.png"},
+    {id: 12, name: "test_12", img: ""},
+    {id: 13, name: "test_13", img: ""},
+    {id: 14, name: "test_14", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/1kxRvhWV.png"}
+    // 0, 91, 100, 1141, 170, 1135, 208, 283, 550, 1499, 1511, 12, 13, 14
+];
 
 btn.addEventListener('click', () => {
     const elem = display_container;
@@ -36,13 +53,15 @@ btn.addEventListener('click', () => {
     }
 });
 
-games.forEach(id => {
+games.forEach(game => {
     const gameElement = document.createElement('div');
-    gameElement.id = `g_${id}`;
+    gameElement.id = `g_${game.id}`;
     gameElement.classList.add('game');
-    gameElement.setAttribute('gameid', id);
-    gameElement.textContent = `Game ${id}`;
+    gameElement.setAttribute('gameid', game.id);
+    gameElement.textContent = game.name;
     gameElement.draggable = true;
+    gameElement.style.background = `url('${game.img}')`;
+    gameElement.style.backgroundSize = 'contain';
 
     gameElement.addEventListener('dragstart', drag);
     gameElement.addEventListener('dragend', dragEnd);
@@ -123,8 +142,10 @@ function drop(ev) {
     const element = document.getElementById(data);
     const parent = ev.currentTarget;
 
-    if (parent.firstElementChild.tagName === "SPAN")
-        parent.firstElementChild.remove();
+    if (parent.firstElementChild.tagName === "CANVAS")
+        parent.removeChild(canvas);
+    // parent.firstElementChild.remove();
+
 
     element.classList.remove("selected");
     if (parent !== element && parent.classList.contains("empty")) {
@@ -145,7 +166,7 @@ function drop(ev) {
         phaserGame.src = `https://phaserexamples.com/examples-play-frame/phaser/${id}/main.js`;
         phaserGame.style.display = 'block';
         game_container.style.display = "none";
-        if(game){
+        if (game) {
             game.destroy(true);
             console.log(game);
         }
@@ -158,3 +179,39 @@ function drop(ev) {
 }
 
 // export const game = new Phaser.Game(config);
+
+const ctx = canvas.getContext('2d');
+
+ctx.fillStyle = '#fff';
+ctx.font = '24px system-ui';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+
+ctx.fillText('Drag & drop a cartridge here', canvas.width / 2, canvas.height / 4);
+
+function drawArrow() {
+    const startX = canvas.width / 2;
+    const startY = canvas.height / 2 - 30;
+    const endX = canvas.width / 2;
+    const endY = canvas.height / 2 + 30;
+
+    // Dibujar la línea de la flecha
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 4;  // Aumentar el grosor de la línea
+    ctx.stroke();
+
+    // Dibujar la punta de la flecha más ancha
+    const arrowWidth = 20;  // Ancho de la punta de la flecha
+    ctx.beginPath();
+    ctx.moveTo(endX - arrowWidth / 2, endY - 10); // Flecha izquierda
+    ctx.lineTo(endX + arrowWidth / 2, endY - 10); // Flecha derecha
+    ctx.lineTo(endX, endY); // Flecha hacia abajo
+    ctx.closePath();
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+}
+
+drawArrow();

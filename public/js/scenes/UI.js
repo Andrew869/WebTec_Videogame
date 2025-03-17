@@ -1,6 +1,6 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
-import { pauseGame, continueGame, toggleMusic, exitGame } from '../utilities.js';
+import { pauseGame, continueGame, toggleMusic, exitGame, getCurrentDate } from '../utilities.js';
 
 export default class UI extends Phaser.Scene {
     constructor() {
@@ -15,9 +15,12 @@ export default class UI extends Phaser.Scene {
         this.exitBtn;
         this.isMusicMuted = false;
 
-        this.chronoText;
-
         this.readyPlayersText;
+        this.chronoText;
+        this.scoreText;
+        this.lvlText;
+        this.dateText;
+
     }
 
     create() {
@@ -34,8 +37,12 @@ export default class UI extends Phaser.Scene {
             }
         });
 
-        this.chronoText = this.add.text(GlobalData.width - 100, 10, "0.00", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+        this.chronoText = this.add.text(GlobalData.width - 105, 10, "000.00", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+        this.scoreText = this.add.text(GlobalData.width - 10, 40, "00000", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(1, 0);
         this.readyPlayersText = this.add.text(10, 10, "ready: 0/1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+        this.lvlText = this.add.text(10, GlobalData.height - 40, "Level: 0", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+        this.dateText = this.add.text(GlobalData.width - 10, GlobalData.height - 40, getCurrentDate(), {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(1, 0);
+        
 
         // Botones del menú de pausa (mute, restart, exit)
         const screenWidth = this.sys.game.config.width;
@@ -84,7 +91,7 @@ export default class UI extends Phaser.Scene {
             .setDepth(1000)
             .setScale(5)
             .setVisible(false)
-            .on('pointerdown', () => exitGame(this))
+            .on('pointerdown', () => exitGame('MainMenu'))
             .on('pointerover', () => this.exitBtn.setAlpha(0.8))
             .on('pointerout', () => this.exitBtn.setAlpha(1));
     }
@@ -92,7 +99,7 @@ export default class UI extends Phaser.Scene {
     update(time, delta) {
         if(GlobalData.levelStarted){
             GlobalData.timeElapsed += delta / 1000;
-            this.chronoText.setText(GlobalData.timeElapsed.toFixed(2));
+            this.chronoText.setText(GlobalData.timeElapsed.toFixed(2).padStart(6, '0'));
         }
     }
 }
