@@ -14,8 +14,7 @@ export default class MainMenu extends Phaser.Scene {
         
         // Agregar la imagen de fondo (pergamino)
         const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');
-        const titulo= this.add.image(GlobalData.halfWidth, GlobalData.halfHeight,'titulo');
-        pergamino.setDepth(0);
+        const titulo= this.add.image(GlobalData.halfWidth, GlobalData.halfHeight - 100,'titulo');
 
         const startGame = () => {
             GlobalData.backgroundMusic.stop();
@@ -46,9 +45,9 @@ export default class MainMenu extends Phaser.Scene {
 
         // Crear los cuatro botones con estilo igual a los créditos
         //this.createButton(512, 230, 'Jugar', startGame);
-        createButton(this, GlobalData.halfWidth, 230, 'Play', Inicio);
-        createButton(this, GlobalData.halfWidth, 330, 'Records', Records);
-        createButton(this, GlobalData.halfWidth, 430, 'Help', Instrucciones);
-        createButton(this, GlobalData.halfWidth, 530, 'About', verCreditos);
+        createButton(this, GlobalData.halfWidth, 250, 'Play', Inicio);
+        createButton(this, GlobalData.halfWidth, 350, 'Records', Records);
+        createButton(this, GlobalData.halfWidth, 450, 'Help', Instrucciones);
+        createButton(this, GlobalData.halfWidth, 550, 'About', verCreditos);
     }
 }

@@ -40,15 +40,15 @@ export default class UI extends Phaser.Scene {
 
         this.chronoText = this.add.text(GlobalData.width - 105, 10, "000.00", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
         this.scoreText = this.add.text(GlobalData.width - 10, 40, "00000", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(1, 0);
-        this.readyPlayersText = this.add.text(10, 10, "ready: 0/1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+        this.readyPlayersText = this.add.text(10, 60, "Ready: 0/1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
         this.lvlText = this.add.text(10, GlobalData.height - 40, "Level: 0", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
         this.dateText = this.add.text(GlobalData.width - 10, GlobalData.height - 40, getCurrentDate(), {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(1, 0);
         
 
         this.hearts = [];
         for (let i = 0; i < GlobalData.maxHealth / 2; i++) {
-            let heart = this.add.image(40 + i * 45, 75, 'items', 47)
-                .setScale(3); 
+            let heart = this.add.image(34 + i * 45, 34, 'items', 47)
+                .setScale(3);
             this.hearts.push(heart);
         }
 

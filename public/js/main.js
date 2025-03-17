@@ -24,7 +24,7 @@ const phaserGame = document.getElementById('phaserGame');
 const btn = document.getElementById('fullscreen-btn');
 const canvas = document.getElementById('canvas');
 const games = [
-    {id: 0, name: "PLatform", img: ""},
+    {id: 0, name: "Rogue's Greed Race", img: "./assets/images/Title.png"},
     {id: 91, name: "Avoid The Germs", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/FE3EBJNt.png"},
     {id: 100, name: "Bank Panic", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/is3Egba5.png"},
     {id: 1141, name: "Snake", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/WHskqe5L.png"},
@@ -61,7 +61,7 @@ games.forEach(game => {
     gameElement.textContent = game.name;
     gameElement.draggable = true;
     gameElement.style.background = `url('${game.img}')`;
-    gameElement.style.backgroundSize = 'contain';
+    gameElement.style.backgroundSize = 'cover';
 
     gameElement.addEventListener('dragstart', drag);
     gameElement.addEventListener('dragend', dragEnd);
