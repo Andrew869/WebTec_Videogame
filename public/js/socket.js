@@ -1,6 +1,6 @@
 import { game, GlobalData } from './main.js';
 import { characters } from './characters.js';
-import { exitGame, CreateTimer, removeTimer, removePlayer} from './utilities.js';
+import { exitGame, CreateTimer, removeTimer, removePlayer, updatehearts} from './utilities.js';
 
 export const socket = io({ autoConnect: false });
 
@@ -80,13 +80,14 @@ function createPlayer(playerId, playerData, isItMine = true) {
 
     const data = {
         playerReady: false,
-        currentSpeed : GlobalData.speed,
-        currentJumpForce : GlobalData.jumpForce,
-        isAttacking : false,
-        isLanding : false,
-        isJumping : false,
-        isOnGround : false,
-        prevOnGround : true
+        currentHelth: GlobalData.maxHealth,
+        currentSpeed: GlobalData.speed,
+        currentJumpForce: GlobalData.jumpForce,
+        isAttacking: false,
+        isLanding: false,
+        isJumping: false,
+        isOnGround: false,
+        prevOnGround: true
     }
 
     GlobalData.currGameScene.physics.add.collider(player, GlobalData.ground);
@@ -110,6 +111,11 @@ function createPlayer(playerId, playerData, isItMine = true) {
                     GlobalData.start_line = object;
                 }
                 break;
+            case 'damage_Zone':
+                {
+                    GlobalData.currGameScene.physics.add.overlap(player, object, (player, object) => {trigger.callback(1)}, null, GlobalData.currGameScene);
+                }
+                break;
         }
     });
 
@@ -119,6 +125,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
         player.setDepth(2);
         GlobalData.player = player;
         GlobalData.playerData = data;
+        updatehearts();
 
         // GlobalData.playerStastes = playerStastes;
         GlobalData.mainCamera = GlobalData.currGameScene.cameras.main;

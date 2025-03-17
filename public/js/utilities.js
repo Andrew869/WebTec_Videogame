@@ -6,8 +6,7 @@ export function getDefaultGlobalData() {
         currGameScene: null,
         currLvl: 0,
         currUIScene: null,
-        start_line: null,
-        startWall: null, // Agregamos variable para la pared de la línea de salida
+        start_line : null,
         playerName: "",
         player: null,
         playerData: null,
@@ -28,7 +27,10 @@ export function getDefaultGlobalData() {
         greatWall: null,
         timers: {},
         score: 0,
-        timeElapsed: 0
+        timeElapsed: 0,
+        maxHealth: 8,
+        damageCooldown: 1000,
+        lastDamageTime: 0
     };
 }
 
@@ -55,16 +57,26 @@ export function SendPos() {
 
 // botones pause continue
 export function pauseGame(scene) {
+    // if (this.gameOver) return;
+
     scene.isPaused = true;
+    // GlobalData.currGameScene.physics.pause();
+    // scene.anims.pauseAll();
+
     scene.muteBtn.setVisible(!scene.isMusicMuted);
     scene.unmuteBtn.setVisible(scene.isMusicMuted);
+    // scene.restartBtn.setVisible(true);
     scene.exitBtn.setVisible(true);
 }
 
 export function continueGame(scene) {
     scene.isPaused = false;
+    // GlobalData.currGameScene.physics.resume();
+    // scene.anims.resumeAll();
+
     scene.muteBtn.setVisible(false);
     scene.unmuteBtn.setVisible(false);
+    // scene.restartBtn.setVisible(false);
     scene.exitBtn.setVisible(false);
 }
 
@@ -84,11 +96,21 @@ export function toggleMusic(scene) {
 }
 
 export function exitGame(sceneName) {
+    // Redirige al menu
+    // stoping scenes
     GlobalData.backgroundMusic.stop();
     GlobalData.currUIScene.isPaused = false;
+    // GlobalData.currGameScene.physics.resume();
+    // scene.anims.resumeAll();
+    
     GlobalData.currUIScene.scene.stop();
+    
+    // changing scene
     GlobalData.currGameScene.scene.start(sceneName);
+    
+    // reseting global vars
     resetGlobalData();
+    // disconnecting from server
     socket.disconnect();
 }
 
@@ -117,15 +139,6 @@ export function collectBonus(player, bonus) {
     bonus.disableBody(true, true);
     this.activateMultiplier();
 }
-
-// Función comentada para crear zonas de daño (para futura implementación de la vida)
-// export function CreateDamageZone(scene, x, y, width, height, key) {
-//     // Ejemplo de implementación para zona de daño:
-//     // const damageZone = scene.add.zone(x, y, width, height);
-//     // scene.physics.add.existing(damageZone, true);
-//     // damageZone.key = key;
-//     // return damageZone;
-// }
 
 export function updateScoreText() {
     let text = `Player: ${this.score}`;
@@ -158,34 +171,19 @@ export function CreatePlatform(scene, x, y, width) {
     GlobalData.colliders.push(collider);
 }
 
-//
-// Modificamos CreateStartZone para que cree la pared de inicio de forma separada
-//
-export function CreateStartZone(scene, x, y, tilesX, tilesY) {
-    const width = tilesX * 16;
-    const height = tilesY * 16;
-    
-    CreatePlatform(scene, 0, height + 16, x + 16);
-    // Creamos la pared de la línea de salida y la almacenamos en GlobalData.startWall
-    const wallSprite = scene.add.tileSprite(x, translateY(y), 16, height, 'wall').setOrigin(0, 1);
-    const wallCollider = scene.physics.add.staticBody(x, translateY(y) - height, 16, height);
-    GlobalData.startWall = { sprite: wallSprite, collider: wallCollider };
-    GlobalData.colliders.push(wallCollider);
-
-    // Creamos la race_line (línea visual de inicio) y la almacenamos en GlobalData.start_line
-    const race_lineSprite = scene.add.tileSprite(x, translateY(y), width, height, 'race_line').setOrigin(1);
-    race_lineSprite.alpha = 0.5;
-    const race_lineCollider = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
-    GlobalData.start_line = { race_line: race_lineSprite, collider: race_lineCollider };
-    const trigger = { type: "start_line", object: race_lineCollider, callback: SetplayerReady };
-    GlobalData.triggers.push(trigger);
-}
-
-export function CreateWall(scene, x, y, height) {
+export function CreateWall(scene, x, y, height, isGate = false) {
     const sprite = scene.add.tileSprite(x, translateY(y), 16, height, 'wall').setOrigin(0, 1);
     const collider = scene.physics.add.staticBody(x, translateY(y) - height, 16, height);
-    GlobalData.greatWall = { sprite, collider };
     GlobalData.colliders.push(collider);
+    if (isGate) {
+        GlobalData.greatWall = {sprite, collider};
+    }
+}
+
+export function CreateDamageZone(scene, x, y, width, height) {
+    const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
+    const trigger = {type: "damage_Zone", object: object, callback: SetPlayerDamage}
+    GlobalData.triggers.push(trigger);
 }
 
 export function CreatePortal(scene, targetScene, x, y, size, flipX = false) {
@@ -213,7 +211,21 @@ export function warpPlayer(targetScene) {
     GlobalData.currGameScene.scene.start(targetScene);
 }
 
-export function SetplayerReady() {
+export function CreateStartZone(scene, x, y, tilesX, tilesY) {
+    const width = tilesX * 16;
+    const height = tilesY * 16;
+    
+    CreatePlatform(scene, 0, height + 16, x + 16);
+    CreateWall(scene, x, y, height, true);
+
+    const race_line =  scene.add.tileSprite(x, translateY(y), width, height, 'race_line').setOrigin(1);
+    race_line.alpha = 0.5;
+    const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
+    const trigger = {type: "start_line", object: object, callback: SetplayerReady}
+    GlobalData.triggers.push(trigger);
+}
+
+export function SetplayerReady(){
     if (!GlobalData.playerReady && !GlobalData.levelStarted) {
         console.log(GlobalData.player.name, "is ready!");
         GlobalData.playerReady = true;
@@ -221,7 +233,25 @@ export function SetplayerReady() {
     }
 }
 
-export function CreateTimer(scene, key, x, y, time, fontSize) {
+export function SetPlayerDamage(amount) {
+    let now = GlobalData.currGameScene.time.now;
+
+    if (now - GlobalData.lastDamageTime > GlobalData.damageCooldown) {
+        GlobalData.playerData.currentHelth-=amount;
+        updatehearts();
+        GlobalData.lastDamageTime = now;
+
+        GlobalData.currGameScene.tweens.add({
+            targets: GlobalData.player,
+            alpha: 0.5,
+            yoyo: true,
+            repeat: 5,
+            duration: 100
+        });
+    }
+}
+
+export function CreateTimer (scene, key ,x, y, time, fontSize) {
     let reminingTime = time - 1;
 
     const timerText = scene.add.text(x, y, `${reminingTime}`, { fontFamily: 'Alagard', fontSize: `${fontSize}px`, fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
@@ -250,22 +280,11 @@ export function removeTimer(key) {
     }
 }
 
-//
-// Actualizamos removeGreatWall para eliminar la pared y línea de salida creadas en CreateStartZone
-//
 export function removeGreatWall() {
-    socket.emit("gamestarted", { started: true });
+    socket.emit("gamestarted", {started: true});
     console.log("open the gates!");
-    if (GlobalData.startWall) {
-        if (GlobalData.startWall.sprite) GlobalData.startWall.sprite.destroy();
-        if (GlobalData.startWall.collider) GlobalData.startWall.collider.destroy();
-        GlobalData.startWall = null;
-    }
-    if (GlobalData.start_line) {
-        if (GlobalData.start_line.race_line) GlobalData.start_line.race_line.destroy();
-        if (GlobalData.start_line.collider) GlobalData.start_line.collider.destroy();
-        GlobalData.start_line = null;
-    }
+    GlobalData.greatWall.sprite.destroy();
+    GlobalData.greatWall.collider.destroy();
     GlobalData.gameStarted = true;
     GlobalData.levelStarted = true;
 }
@@ -284,7 +303,6 @@ export function removePlayer(playerId) {
 
 export function partialReset() {
     GlobalData.start_line = null;
-    GlobalData.startWall = null;
     GlobalData.player = null;
     GlobalData.playerData = null;
     GlobalData.players = {};
@@ -305,4 +323,22 @@ export function getCurrentDate() {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     return `${year}-${month}-${day}`;
+}
+
+export function updatehearts() {
+    const hearts = GlobalData.currUIScene.hearts;
+    let life = GlobalData.playerData.currentHelth;
+    console.log(hearts);
+
+    hearts.forEach(heart => {
+        if (life >= 2) {
+            heart.setFrame(45);
+            life -= 2;
+        } else if (life === 1) {
+            heart.setFrame(46);
+            life -= 1;
+        } else {
+            heart.setFrame(47);
+        }
+    });
 }

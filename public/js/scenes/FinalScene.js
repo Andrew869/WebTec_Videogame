@@ -8,6 +8,7 @@ export default class FinalScene extends Phaser.Scene {
 
     create() {
         GlobalData.currGameScene = this;
+        this.sound.play('gameClear');
         setTimeout(() => {
 
             let name = GlobalData.playerName;
@@ -60,7 +61,8 @@ export default class FinalScene extends Phaser.Scene {
             }).setOrigin(0.5).setInteractive();
 
             leaderboardButton.on("pointerdown", () => {
-                exitGame('Records')
+                this.sound.play('menuSelect');
+                exitGame('Records');
             });
 
             // 🔹 Botón para volver al menú principal
@@ -73,7 +75,8 @@ export default class FinalScene extends Phaser.Scene {
             }).setOrigin(0.5).setInteractive();
 
             menuButton.on("pointerdown", () => {
-                exitGame('MainMenu')
+                this.sound.play('menuSelect');
+                exitGame('MainMenu');
             });
 
         }, 500);

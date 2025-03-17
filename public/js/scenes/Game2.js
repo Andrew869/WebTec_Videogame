@@ -8,6 +8,8 @@ export default class Game2 extends Phaser.Scene {
         super({ key: "Game2" });
 
         this.keyObjects;
+
+        this.namesText;
     }
 
     preload() {
@@ -17,7 +19,7 @@ export default class Game2 extends Phaser.Scene {
         updateScore(453);
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 2;
-
+        this.namesText = {};
         GlobalData.mapSizeX = 1548 
         GlobalData.mapSizeY = 2304
 
@@ -73,7 +75,6 @@ export default class Game2 extends Phaser.Scene {
         CreateWall(this, 1000, 1550, 80);
         CreatePlatform(this, 1200, 1700, 120);
 
-
         CreatePortal(this, "", 80, 250, 8, true);
         CreatePortal(this, "FinalScene", GlobalData.mapSizeX/2, 1580, false);
 
@@ -93,7 +94,7 @@ export default class Game2 extends Phaser.Scene {
 
         socket.connect();
         // console.log(GlobalData.charName);
-        socket.emit("LevelReady", {lvl: 2, groundY: GlobalData.ground.y, charName: GlobalData.charName});
+        socket.emit("LevelReady", {lvl: 2, groundY: GlobalData.ground.y, playerName: GlobalData.playerName,charName: GlobalData.charName});
     }
 
     update() {
@@ -221,5 +222,9 @@ export default class Game2 extends Phaser.Scene {
                 }
             }
         }
+
+        Object.keys(this.namesText).forEach(playerId => {
+            this.namesText[playerId].setPosition(GlobalData.players[playerId].x, GlobalData.players[playerId].y - 40);
+        });
     }
 }
