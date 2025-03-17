@@ -61,7 +61,7 @@ export default class FinalScene extends Phaser.Scene {
             }).setOrigin(0.5).setInteractive();
 
             leaderboardButton.on("pointerdown", () => {
-                exitGame('Records')
+                exitGame('Records');
                 this.sound.play('menuSelect');
                 this.scene.start("Records");
             });
@@ -76,7 +76,7 @@ export default class FinalScene extends Phaser.Scene {
             }).setOrigin(0.5).setInteractive();
 
             menuButton.on("pointerdown", () => {
-                exitGame('MainMenu')
+                exitGame('MainMenu');
                 this.sound.play('menuSelect');
                 this.scene.start("MainMenu");
             });

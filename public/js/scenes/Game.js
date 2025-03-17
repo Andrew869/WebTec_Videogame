@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, generateRandomLevel1, updateScore } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreateDamageZone, CreatePortal, generateRandomLevel1, updateScore } from '../utilities.js';
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -9,7 +9,7 @@ export default class Game extends Phaser.Scene {
 
         this.keyObjects;
 
-        this.namesText = {};
+        this.namesText;
     }
 
     preload() {
@@ -18,7 +18,7 @@ export default class Game extends Phaser.Scene {
     create() {
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 1;
-
+        this.namesText = {};
         // if (!GlobalData.playerData) {
         //     GlobalData.playerData = {};
         // }
@@ -54,17 +54,18 @@ export default class Game extends Phaser.Scene {
         GlobalData.ground = this.physics.add.staticBody(0, GlobalData.mapSizeY - 58, GlobalData.mapSizeX, 10);
 
         CreateStartZone(this, 410, 0, 3, 20);
+        CreateDamageZone(this, 510, 0, 64, 300);
         // CreateWall(this, 410, 0, 20 * 16);
 
         //CreatePlatform(this, 60, 64, 300);
         //CreatePlatform(this, 480, 80, 100);
     
-        generateRandomLevel1(
-            this, 
-            410 + 300,
-            100, 
-            GlobalData.mapSizeX - 500 
-        );
+        // generateRandomLevel1(
+        //     this, 
+        //     410 + 300,
+        //     100, 
+        //     GlobalData.mapSizeX - 500 
+        // );
     
         CreatePortal(this, "", 80, 250, 8, true);
         CreatePortal(this, "Game2", 2500, 200, 8, false);
@@ -94,15 +95,15 @@ export default class Game extends Phaser.Scene {
         }
 
         // Lógica de TECLA 'K' (daño)
-        if (Phaser.Input.Keyboard.JustDown(this.keyObjects.damage)) {
-            this.sound.play('damage');
-            GlobalData.playerData.life-1;
-            GlobalData.currUIScene.updateHearts(GlobalData.playerData.life);
-            if (GlobalData.playerData.life <= 0) {
-                this.scene.start('OverScene');
-                return;
-            }
-        }
+        // if (Phaser.Input.Keyboard.JustDown(this.keyObjects.damage)) {
+        //     this.sound.play('damage');
+        //     GlobalData.playerData.life-1;
+        //     GlobalData.currUIScene.updateHearts(GlobalData.playerData.life);
+        //     if (GlobalData.playerData.life <= 0) {
+        //         this.scene.start('OverScene');
+        //         return;
+        //     }
+        // }
 
 
         if (GlobalData.playerReady && !this.physics.world.overlap(GlobalData.player, GlobalData.start_line) && !GlobalData.levelStarted) {
@@ -225,6 +226,5 @@ export default class Game extends Phaser.Scene {
         Object.keys(this.namesText).forEach(playerId => {
             this.namesText[playerId].setPosition(GlobalData.players[playerId].x, GlobalData.players[playerId].y - 40);
         });
-
     }
 }

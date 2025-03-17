@@ -28,7 +28,9 @@ export function getDefaultGlobalData() {
         timers: {},
         score: 0,
         timeElapsed: 0,
-        currHealth: 3
+        maxHealth: 8,
+        damageCooldown: 1000,
+        lastDamageTime: 0
     };
 }
 
@@ -238,7 +240,7 @@ export function CreateWall(scene, x, y, height, isGate = false) {
 
 export function CreateDamageZone(scene, x, y, width, height) {
     const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
-    const trigger = {type: "damage_Zone", object: object, callback: SetDamage}
+    const trigger = {type: "damage_Zone", object: object, callback: SetPlayerDamage}
     GlobalData.triggers.push(trigger);
 }
 
@@ -363,8 +365,22 @@ export function SetplayerReady(){
     }
 }
 
-export function SetDamage() {
-    GlobalData.currHealth;
+export function SetPlayerDamage(amount) {
+    let now = GlobalData.currGameScene.time.now;
+
+    if (now - GlobalData.lastDamageTime > GlobalData.damageCooldown) {
+        GlobalData.playerData.currentHelth-=amount;
+        updatehearts();
+        GlobalData.lastDamageTime = now;
+
+        GlobalData.currGameScene.tweens.add({
+            targets: GlobalData.player,
+            alpha: 0.5,
+            yoyo: true,
+            repeat: 5,
+            duration: 100
+        });
+    }
 }
 
 export function CreateTimer (scene, key ,x, y, time, fontSize) {
@@ -440,4 +456,21 @@ export function getCurrentDate() {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     return `${year}-${month}-${day}`;
+}
+
+export function updatehearts() {
+    const hearts = GlobalData.currUIScene.hearts;
+    let life = GlobalData.playerData.currentHelth;
+
+    hearts.forEach(heart => {
+        if (life >= 2) {
+            heart.setFrame(45);
+            life -= 2;
+        } else if (life === 1) {
+            heart.setFrame(46);
+            life -= 1;
+        } else {
+            heart.setFrame(47);
+        }
+    });
 }

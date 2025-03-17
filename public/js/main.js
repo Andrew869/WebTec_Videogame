@@ -30,7 +30,7 @@ const games = [
     {id: 100, name: "Bank Panic", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/is3Egba5.png"},
     {id: 1141, name: "Snake", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/WHskqe5L.png"},
     {id: 170, name: "Breakout", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/K4mxLdxg.png"},
-    {id: 1135, name: "firtgame", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/Uc7rYApH.png"},
+    {id: 1135, name: "firstgame", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/Uc7rYApH.png"},
     {id: 208, name: "Card Memory", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/pE7EXJwR.png"},
     {id: 283, name: "Coin Clicker", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/avnVoeo5.png"},
     {id: 550, name: "Emoji Match", img: "https://phaserfiles.sfo3.digitaloceanspaces.com/phaser/v3.85.0/shots/1P3uFYDb.png"},

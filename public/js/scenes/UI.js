@@ -45,13 +45,14 @@ export default class UI extends Phaser.Scene {
         this.dateText = this.add.text(GlobalData.width - 10, GlobalData.height - 40, getCurrentDate(), {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(1, 0);
         
 
-        for (let i = 0; i < 3; i++) {
-            let heart = this.add.image(50 + i * 40, 60, 'items', 45)
+        for (let i = 0; i < GlobalData.maxHealth / 2; i++) {
+            let heart = this.add.image(40 + i * 45, 75, 'items', 47)
                 .setScale(3)
-                .setScrollFactor(0)  
-                .setDepth(9999);     
+                .setScrollFactor(0);    
             this.hearts.push(heart);
         }
+
+        // this.hearts[2].setFrame(46);
 
         // Botones del menú de pausa (mute, restart, exit)
         const screenWidth = this.sys.game.config.width;
