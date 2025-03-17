@@ -21,7 +21,6 @@ export default class CharSelection extends Phaser.Scene {
         }).setOrigin(0.5).setDepth(1);
 
         const MainMenu = () => {
-            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
 

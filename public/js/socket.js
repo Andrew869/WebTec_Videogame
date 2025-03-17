@@ -71,7 +71,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
     const playerName = playerData.playerName;
     const charName = playerData.charName;
     const player = GlobalData.currGameScene.physics.add.sprite(playerData.x, playerData.y, playerData.charName);
-    player.setOrigin(2);
+    player.setOrigin(0.5);
     player.setName(playerId); // Asigna el id al sprite para identificarlo
     player.setSize(characters[charName].size.width, characters[charName].size.height);
     player.setOffset(characters[charName].offset.x, characters[charName].offset.y);
@@ -122,7 +122,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
 
         // GlobalData.playerStastes = playerStastes;
         GlobalData.mainCamera = GlobalData.currGameScene.cameras.main;
-        GlobalData.mainCamera.setZoom(0.5);
+        GlobalData.mainCamera.setZoom(2);
         GlobalData.mainCamera.startFollow(GlobalData.player);
         GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY);
 

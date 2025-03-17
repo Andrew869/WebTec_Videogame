@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, generateRandomLevel1, updateScore } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -18,11 +18,6 @@ export default class Game extends Phaser.Scene {
     create() {
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 1;
-
-        // if (!GlobalData.playerData) {
-        //     GlobalData.playerData = {};
-        // }
-        // GlobalData.playerData.life = 3;
 
         GlobalData.mapSizeX = 1280 * 2;
         GlobalData.mapSizeY = 793;
@@ -59,15 +54,45 @@ export default class Game extends Phaser.Scene {
         //CreatePlatform(this, 60, 64, 300);
         //CreatePlatform(this, 480, 80, 100);
     
-        generateRandomLevel1(
-            this, 
-            410 + 300,
-            100, 
-            GlobalData.mapSizeX - 500 
-        );
+        CreatePlatform(this, 500, 100, 200);
+        CreatePlatform(this, 800, 80, 150);
+        CreatePlatform(this, 1000, 120, 100);
+
+        CreateWall(this, 1300, 0, 100);
+        CreatePlatform(this, 1450, 60, 200);
+        CreatePlatform(this, 1630, 120, 100);
+        CreatePlatform(this, 1800, 200, 100);
+        CreatePlatform(this, 2000, 150, 100);
+        CreatePlatform(this, 2200, 100, 100);
+
+        CreatePlatform(this, 2600, 150, 150);
+        CreateWall(this, 2800, 100, 120);
+        CreatePlatform(this, 3000, 200, 200);
+
+        CreateWall(this, 2400, -50, 200);     
     
         CreatePortal(this, "", 80, 250, 8, true);
-        CreatePortal(this, "Game2", 2500, 200, 8, false);
+        CreatePortal(this, "Game2", 2450, 80, 8, false);
+
+        /*this.add.tileSprite(0, GlobalData.mapSizeY - 2, 'lava')
+            .setOrigin(0, 1)
+            .setDepth(2);
+
+        this.add.tileSprite(1000, GlobalData.mapSizeY - 2, 300, 16, 'lava')
+        .setOrigin(0, 1)
+        .setDepth(2);*/
+
+        /*this.add.tileSprite(500, translateY(100), 200, 16, 'spike')
+        .setOrigin(0, 1)
+        .setDepth(2);
+
+        this.add.tileSprite(800, translateY(80), 150, 16, 'spike')
+        .setOrigin(0, 1)
+        .setDepth(2);
+
+        this.add.tileSprite(1000, translateY(120), 100, 16, 'spike')
+        .setOrigin(0, 1)
+        .setDepth(2);*/
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",
@@ -76,8 +101,7 @@ export default class Game extends Phaser.Scene {
             right: "D",
             hability_1: "ONE",
             hability_2: "TWO",
-            hability_3: "THREE",
-            damage: "K" //K es para hacerse daño y poder probar la vida
+            hability_3: "THREE"
         }); // keyObjects.up, keyObjects.down, keyObjects.left, keyObjects.right
 
         // Música
@@ -92,18 +116,6 @@ export default class Game extends Phaser.Scene {
         if (!GlobalData.player) {
             return;
         }
-
-        // Lógica de TECLA 'K' (daño)
-        if (Phaser.Input.Keyboard.JustDown(this.keyObjects.damage)) {
-            this.sound.play('damage');
-            GlobalData.playerData.life-1;
-            GlobalData.currUIScene.updateHearts(GlobalData.playerData.life);
-            if (GlobalData.playerData.life <= 0) {
-                this.scene.start('OverScene');
-                return;
-            }
-        }
-
 
         if (GlobalData.playerReady && !this.physics.world.overlap(GlobalData.player, GlobalData.start_line) && !GlobalData.levelStarted) {
             GlobalData.playerReady = false;

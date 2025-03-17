@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, generateAscendingLevel2, updateScore } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game2 extends Phaser.Scene {
     constructor() {
@@ -52,18 +52,30 @@ export default class Game2 extends Phaser.Scene {
         // CreateWall(this, 410, 0, 20 * 16);
 
 
-        //CreatePlatform(this, 60, 60, 300);
-        //CreatePlatform(this, 480, 80, 100);
+        CreatePlatform(this, 600, 60, 100);
+        CreatePlatform(this, 480, 100, 100);
 
-        generateAscendingLevel2(
-            this,
-            410 + 200,
-            GlobalData.ground.y - 100,
-            GlobalData.mapSizeX - 400 
-        );
+        CreatePlatform(this, 500, 800, 150);
+        CreateWall(this, 620, 800, 80);
+        CreatePlatform(this, 200, 950, 100);
+
+        CreatePlatform(this, 500, 100, 120);
+        CreatePlatform(this, 300, 1150, 120);
+        CreatePlatform(this, 500, 1250, 120);
+
+        CreatePlatform(this, GlobalData.mapSizeX/2, 1600, 200);
+
+        CreatePlatform(this, 300, 200, 150);
+        CreatePlatform(this, 500, 350, 100);
+        CreatePlatform(this, 200, 500, 120);
+
+        CreatePlatform(this, 800, 1600, 150);
+        CreateWall(this, 1000, 1550, 80);
+        CreatePlatform(this, 1200, 1700, 120);
+
 
         CreatePortal(this, "", 80, 250, 8, true);
-        CreatePortal(this, "FinalScene", 500, 200, 8, false);
+        CreatePortal(this, "FinalScene", GlobalData.mapSizeX/2, 1580, false);
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",
