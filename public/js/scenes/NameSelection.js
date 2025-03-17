@@ -86,6 +86,7 @@ export default class NameSelection extends Phaser.Scene {
                 }
                 game.input.keyboard.enabled = true;
                 GlobalData.playerName = inputElement.value.trim();
+                this.sound.play('menuSelect');
                 this.scene.start('CharSelection'); // Si el nombre es válido, pasar a la siguiente escena
             }
         };
@@ -98,6 +99,7 @@ export default class NameSelection extends Phaser.Scene {
             if (inputElement) {
                 container.removeChild(inputElement); // Remover el campo de texto del DOM
             }
+            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
         createButton(this, GlobalData.halfWidth + 0.5 * GlobalData.halfWidth, GlobalData.halfHeight + 0.5 * GlobalData.halfHeight, 'Back', MainMenu);

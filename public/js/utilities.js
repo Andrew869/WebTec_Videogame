@@ -27,7 +27,8 @@ export function getDefaultGlobalData() {
         greatWall: null,
         timers: {},
         score: 0,
-        timeElapsed: 0
+        timeElapsed: 0,
+        currHealth: 3
     };
 }
 
@@ -226,11 +227,83 @@ export function CreatePlatform(scene, x, y, width) {
     GlobalData.colliders.push(collider);
 }
 
-export function CreateWall(scene, x, y, height) {
+export function CreateWall(scene, x, y, height, isGate = false) {
     const sprite = scene.add.tileSprite(x, translateY(y), 16, height, 'wall').setOrigin(0, 1);
     const collider = scene.physics.add.staticBody(x, translateY(y) - height, 16, height);
-    GlobalData.greatWall = {sprite, collider};
     GlobalData.colliders.push(collider);
+    if (isGate) {
+        GlobalData.greatWall = {sprite, collider};
+    }
+}
+
+export function CreateDamageZone(scene, x, y, width, height) {
+    const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
+    const trigger = {type: "damage_Zone", object: object, callback: SetDamage}
+    GlobalData.triggers.push(trigger);
+}
+
+export function generateRandomLevel1(scene, startX, startY, mapSize) {
+    const JUMP_HEIGHT = 400; 
+    const JUMP_DISTANCE = 500; 
+    const PLATFORM_SPACING = 300; 
+    const WALL_PROBABILITY = 0.3; 
+    
+    let currentX = startX;
+    let currentY = startY;
+    
+    while(currentX < mapSize) {
+        if(Math.random() < WALL_PROBABILITY && currentX > 500) {
+            const wallHeight = Phaser.Math.Between(100, 250);
+            CreateWall(scene, currentX, currentY, wallHeight);
+            
+            if(wallHeight > JUMP_HEIGHT/2) {
+                CreatePlatform(scene, currentX - 80, currentY - wallHeight + 50, 60);
+                CreatePlatform(scene, currentX + 40, currentY - wallHeight + 100, 60);
+            }
+            currentX += 150;
+        } else {
+            const platformWidth = Phaser.Math.Between(80, 200);
+            CreatePlatform(scene, currentX, currentY, platformWidth);
+            
+            const nextX = currentX + platformWidth + Phaser.Math.Between(PLATFORM_SPACING - 100, PLATFORM_SPACING + 100);
+            if(nextX - currentX > JUMP_DISTANCE) {
+                const intermediateX = currentX + (nextX - currentX)/2;
+                CreatePlatform(scene, intermediateX - 50, currentY - 150, 100);
+            }
+            
+            currentX = nextX;
+        }
+        
+        currentY += Phaser.Math.Between(-50, 50);
+        currentY = Phaser.Math.Clamp(currentY, startY - 200, startY + 200);
+    }
+}
+
+export function generateAscendingLevel2(scene, startX, startY, mapSize) {
+    const JUMP_HEIGHT = 400;
+    const ASCENT_STEP = 250; 
+    const PLATFORM_SPACING = 350;
+    
+    let currentX = startX;
+    let currentY = startY;
+    let level = 0;
+    
+    while(level < 8 && currentY > 200) { 
+        const platformWidth = Phaser.Math.Between(120, 200);
+        CreatePlatform(scene, currentX, currentY, platformWidth);
+        
+        CreatePlatform(scene, currentX + platformWidth - 100, currentY - ASCENT_STEP + 50, 80);
+        CreatePlatform(scene, currentX + platformWidth + 200, currentY - ASCENT_STEP, 120);
+        
+        currentX += platformWidth + PLATFORM_SPACING;
+        currentY -= ASCENT_STEP;
+        level++;
+        
+        if(currentX > mapSize * 0.7) {
+            currentX = startX;
+            currentY -= ASCENT_STEP * 0.8;
+        }
+    }
 }
 
 export function CreatePortal(scene, targetScene, x, y, size, flipX = false) {
@@ -273,7 +346,7 @@ export function CreateStartZone(scene, x, y, tilesX, tilesY) {
     const height = tilesY * 16;
     
     CreatePlatform(scene, 0, height + 16, x + 16);
-    CreateWall(scene, x, y, height);
+    CreateWall(scene, x, y, height, true);
 
     const race_line =  scene.add.tileSprite(x, translateY(y), width, height, 'race_line').setOrigin(1);
     race_line.alpha = 0.5;
@@ -288,6 +361,10 @@ export function SetplayerReady(){
         GlobalData.playerReady = true;
         socket.emit("playerReady", {isReady : true});
     }
+}
+
+export function SetDamage() {
+    GlobalData.currHealth;
 }
 
 export function CreateTimer (scene, key ,x, y, time, fontSize) {

@@ -122,7 +122,7 @@ function createPlayer(playerId, playerData, isItMine = true) {
 
         // GlobalData.playerStastes = playerStastes;
         GlobalData.mainCamera = GlobalData.currGameScene.cameras.main;
-        GlobalData.mainCamera.setZoom(2);
+        GlobalData.mainCamera.setZoom(0.5);
         GlobalData.mainCamera.startFollow(GlobalData.player);
         GlobalData.mainCamera.setBounds(0, 0, GlobalData.mapSizeX, GlobalData.mapSizeY);
 
