@@ -1,13 +1,15 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, generateAscendingLevel2 } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreateDamageZone2,CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game2 extends Phaser.Scene {
     constructor() {
         super({ key: "Game2" });
 
         this.keyObjects;
+
+        this.namesText;
     }
 
     preload() {
@@ -16,7 +18,7 @@ export default class Game2 extends Phaser.Scene {
     create() {
         GlobalData.currGameScene = this;
         GlobalData.currLvl = 2;
-
+        this.namesText = {};
         GlobalData.mapSizeX = 1548 
         GlobalData.mapSizeY = 2304
 
@@ -50,19 +52,52 @@ export default class Game2 extends Phaser.Scene {
         CreateStartZone(this, 410, 0, 3, 20);
         // CreateWall(this, 410, 0, 20 * 16);
 
+        CreateDamageZone2(this, 510, 0, 64, 20);
+        //CreateDamageZone(this, 600, 0, 200, 50);  
+        CreateDamageZone2(this, 1000, 0, 150, 20); 
+        CreateDamageZone2(this, 1600, 0, 300, 20);
+        CreateDamageZone2(this, 2200, 0, 100, 20);
 
-        //CreatePlatform(this, 60, 60, 300);
-        //CreatePlatform(this, 480, 80, 100);
+        CreatePlatform(this, 600, 60, 100);
+        CreatePlatform(this, 480, 250, 100);
 
-        generateAscendingLevel2(
-            this,
-            410 + 200,
-            GlobalData.ground.y - 100,
-            GlobalData.mapSizeX - 400 
-        );
+        CreatePlatform(this, 500, 800, 150);
+        CreateWall(this, 620, 850, 80);
+        CreateWall(this, 620, 950, 80);
+        CreatePlatform(this, 720, 820, 100);
+        //CreatePlatform(this, 200, 950, 100);
+
+        CreatePlatform(this, 500, 100, 120);
+        //CreatePlatform(this, 300, 1150, 120);
+        //CreatePlatform(this, 500, 1250, 120);
+
+        CreatePlatform(this, 650, 1600, 200);
+
+        CreatePlatform(this, 600, 200, 150);
+        //CreatePlatform(this, 500, 350, 100);
+        //CreatePlatform(this, 200, 500, 120);
+
+        //CreatePlatform(this, 800, 1600, 150);
+        //CreateWall(this, 950, 1550, 80);
+        CreatePlatform(this, 610, 1550, 50);
+        CreateWall(this,650, 1550, 80);
+        CreateWall(this, 500, 1400, 80);
+        CreatePlatform(this, 500, 1400, 50);
+        CreatePlatform(this, 400, 1350, 200); 
+        CreatePlatform(this, 650, 1300, 200);
+        CreatePlatform(this, 300, 1250, 200);
+        CreatePlatform(this, 500, 1200, 200);
+        CreatePlatform(this, 400, 1100, 200);
+        CreatePlatform(this, 700, 1000, 200);
+        CreatePlatform(this, 900, 900, 200);
+        CreatePlatform(this, 700, 700, 200);
+        CreatePlatform(this, 500, 600, 200);
+        CreatePlatform(this, 300, 500, 200);
+        CreatePlatform(this, 500, 400, 200);
 
         CreatePortal(this, "", 80, 250, 8, true);
-        CreatePortal(this, "FinalScene", 500, 200, 8, false);
+        CreatePortal(this, "FinalScene", GlobalData.mapSizeX/2, 1750, 8, false);
+        //CreatePortal(this, "FinalScene", 500, 300, false);
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",
@@ -79,8 +114,8 @@ export default class Game2 extends Phaser.Scene {
         GlobalData.backgroundMusic.play();
 
         socket.connect();
-        console.log(GlobalData.charName);
-        socket.emit("LevelReady", {lvl: 2, groundY: GlobalData.ground.y, charName: GlobalData.charName});
+        // console.log(GlobalData.charName);
+        socket.emit("LevelReady", {lvl: 2, groundY: GlobalData.ground.y, playerName: GlobalData.playerName,charName: GlobalData.charName});
     }
 
     update() {
@@ -208,5 +243,9 @@ export default class Game2 extends Phaser.Scene {
                 }
             }
         }
+
+        Object.keys(this.namesText).forEach(playerId => {
+            this.namesText[playerId].setPosition(GlobalData.players[playerId].x, GlobalData.players[playerId].y - 40);
+        });
     }
 }

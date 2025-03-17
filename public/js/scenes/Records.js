@@ -18,7 +18,7 @@ export default class Records extends Phaser.Scene {
 	
         // 🔹 Recuperar y ordenar tiempos de menor a mayor
         let storedRecords = JSON.parse(localStorage.getItem('gameRecords')) || [];
-        storedRecords.sort((a, b) => a.time - b.time);  // Menor a mayor (el más rápido primero)
+        storedRecords.sort((a, b) => b.score - a.score);  // Menor a mayor (el más rápido primero)
 
         // 🔹 Guardar el top 10 en localStorage
         storedRecords = storedRecords.slice(0, 7);
@@ -26,14 +26,21 @@ export default class Records extends Phaser.Scene {
 
         console.log(`📊 Leaderboard ordenado:`, storedRecords);
 
+        const leaderboardText = this.add.text(400, 250, "", {
+            fontFamily: 'Alagard', fontSize: 28, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'left',
+            wordWrap: { width: 600 }
+        })
+
+        let recordsText = "";
+
         // 🔹 Mostrar los mejores tiempos en pantalla
         for (let i = 0; i < storedRecords.length; i++) {
-            this.add.text(512, 250 + i * 50, `${i + 1}. ${storedRecords[i].name}: ⏳ ${storedRecords[i].time}s`, {
-                fontFamily: 'Alagard', fontSize: 28, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 8,
-                align: 'center'
-            }).setOrigin(0.5).setDepth(1);
+            recordsText += `${i + 1}. ${storedRecords[i].name.padStart(8, '_')}: ✯ ${storedRecords[i].score} ⏳ ${storedRecords[i].time}s  📅  ${storedRecords[i].date} \n`;
         }
+
+        leaderboardText.setText(recordsText);
 
         // 🔹 Botón para volver al menú principal
         const MainMenu = () => {

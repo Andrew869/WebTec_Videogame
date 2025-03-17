@@ -1,4 +1,6 @@
 import { GlobalData } from '../main.js';
+import { exitGame, getCurrentDate, createButton } from '../utilities.js';
+import Records from './Records.js';
 
 export default class FinalScene extends Phaser.Scene {
     constructor() {
@@ -6,80 +8,70 @@ export default class FinalScene extends Phaser.Scene {
     }
 
     create() {
+        GlobalData.currGameScene = this;
         this.sound.play('gameClear');
+        
         setTimeout(() => {
-
+            let name = GlobalData.playerName;
             let score = GlobalData.score;
-            let currentTime = GlobalData.timeElapsed.toFixed(2)
-
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1; // Los meses empiezan desde 0
-            const day = date.getDate();
-            const dateText = `${year}-${month}-${day}`;
-
-            // 🔹 Obtener el nombre del jugador
-            let playerName = GlobalData.charName || "Jugador";
+            let time = GlobalData.timeElapsed.toFixed(2);
 
             // 🔹 Recuperar la lista de registros previos
             let storedRecords = JSON.parse(localStorage.getItem('gameRecords')) || [];
-            console.log(storedRecords);
-            
-            // 🔹 Agregar el nuevo tiempo con el nombre del jugador
-            storedRecords.push({ playerName: playerName, date: dateText, score: score, time: currentTime });
+            let hasRecord = false;
+
+            for (let i = 0; i < storedRecords.length; i++) {
+                const Record = storedRecords[i];
+                if (Record.name === name) {
+                    hasRecord = true;
+                    if (score > Record.score) Record.score = score;
+                    break;
+                }
+            }
+
+            if (!hasRecord) {
+                storedRecords.push({ name: name, date: getCurrentDate(), score: score, time: time });
+            }
 
             // 🔹 Guardar la lista actualizada en `localStorage`
             localStorage.setItem("gameRecords", JSON.stringify(storedRecords));
 
-            // 🔹 Guardar el tiempo final para visualizarlo en la pantalla final
-            localStorage.setItem("finalTime", currentTime);
+            // 🔹 Agregar la imagen del pergamino de fondo
+            const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');
+            pergamino.setDepth(0); // Asegura que esté en la capa más baja
 
-            // console.log(`✅ Tiempo final guardado correctamente: ${currentTime} segundos`);
-            // console.log(`📊 Lista de tiempos actualizada:`, storedRecords);
+            // 🔹 Agregar el texto de "Congratulations", bajado más
+            this.add.text(GlobalData.halfWidth, 170, "¡¡¡¡¡¡ Congratulations !!!!!!", {
+                fontFamily: 'Alagard', fontSize: 38, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 8, align: 'center'
+            }).setOrigin(0.5).setDepth(1);
 
-            // 🔹 Mostrar en pantalla el tiempo correctamente
-            this.add.text(400, 150, "🏆 Final Score 🏆", {
-                fontFamily: 'Arial',
-                fontSize: '40px',
-                color: '#ffffff',
-                stroke: '#000000',
-                strokeThickness: 6
-            }).setOrigin(0.5);
+            // 🔹 Agregar el texto de "Final Score" bajado más
+            this.add.text(GlobalData.halfWidth, 250, "🏆 Final Score 🏆", {
+                fontFamily: 'Alagard', fontSize: 38, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 8, align: 'center'
+            }).setOrigin(0.5).setDepth(1);
 
-            this.add.text(400, 250, `⏳ ${playerName} - Tiempo final: ${currentTime}s`, {
-                fontFamily: 'Arial',
-                fontSize: '32px',
-                color: '#00ff00'
-            }).setOrigin(0.5);
+            // 🔹 Agregar el texto del tiempo, bajado más
+            this.add.text(GlobalData.halfWidth, GlobalData.halfHeight + 10, `⏳ ${name} - Tiempo final: ${time}s`, {
+                fontFamily: 'Alagard', fontSize: 28, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 8, align: 'center'
+            }).setOrigin(0.5).setDepth(1);
 
             // 🔹 Botón para ver el leaderboard (Records)
-            let leaderboardButton = this.add.text(400, 350, "📊 Ver Leaderboard", {
-                fontFamily: 'Arial',
-                fontSize: '28px',
-                color: '#0000ff',
-                backgroundColor: '#ffffff',
-                padding: { x: 10, y: 5 }
-            }).setOrigin(0.5).setInteractive();
-
-            leaderboardButton.on("pointerdown", () => {
+            const leaderboardButton = () => {
                 this.sound.play('menuSelect');
-                this.scene.start("Records");
-            });
+                exitGame('Records');
+            };
+            createButton(this, GlobalData.halfWidth, GlobalData.halfHeight + 90, '📊 Ver Leaderboard', leaderboardButton);
 
             // 🔹 Botón para volver al menú principal
-            let menuButton = this.add.text(400, 450, "Back 2 Menu", {
-                fontFamily: 'Arial',
-                fontSize: '28px',
-                color: '#ff0000',
-                backgroundColor: '#000000',
-                padding: { x: 10, y: 5 }
-            }).setOrigin(0.5).setInteractive();
-
-            menuButton.on("pointerdown", () => {
+            const MainMenu = () => {
                 this.sound.play('menuSelect');
-                this.scene.start("MainMenu");
-            });
+                exitGame('MainMenu');
+            };
 
+            createButton(this, GlobalData.halfWidth, GlobalData.halfHeight + 190, 'Back 2 Menu', MainMenu);
         }, 500);
     }
 }

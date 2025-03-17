@@ -10,7 +10,20 @@
     <script src="/phaser/phaser.js"></script>
 </head>
 <body>
-    <div id="game-container"></div>
+    <!-- <button id="start-game">Iniciar Juego</button> -->
+    <div id="console">
+        <div id="display_container">
+            <iframe id="phaserGame" style="display: none;" src=""></iframe>
+            <div id="game_container" style="display: none;"></div>
+            <button id="fullscreen-btn">fullscreen</button>
+        </div>
+        <div id="slot_container" class="empty">
+            <!-- <span>Drop a Game here</span> -->
+            <canvas id="canvas" width="310" height="240"></canvas>
+        </div>
+    </div>
+    <div id="games_container">
+    </div>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>

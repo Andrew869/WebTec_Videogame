@@ -14,6 +14,7 @@ export default class MainMenu extends Phaser.Scene {
         
         // Agregar la imagen de fondo (pergamino)
         const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');
+        const titulo= this.add.image(GlobalData.halfWidth, GlobalData.halfHeight,'titulo');
         pergamino.setDepth(0);
 
         const startGame = () => {
