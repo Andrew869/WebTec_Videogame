@@ -14,24 +14,25 @@ export default class About extends Phaser.Scene {
 
         // Agregar los textos con imágenes específicas a la izquierda o derecha
         // Nombres e imágenes ligeramente más arriba
-        this.addTextWithImage(GlobalData.halfWidth - 0.4 * GlobalData.halfWidth, GlobalData.halfHeight - 0.4 * GlobalData.halfHeight, 
-            GlobalData.halfWidth + 0.3 * GlobalData.halfWidth, GlobalData.halfHeight - 0.4 * GlobalData.halfHeight, 
-            'Andrew', 'left', 'imageVale', 0.3);   // 'Vale' con imagen a la izquierda
+        const imageSize = 0.2 * Math.min(GlobalData.halfWidth, GlobalData.halfHeight);
+        this.addTextWithImage(GlobalData.halfWidth - 0.4 * GlobalData.halfWidth, GlobalData.halfHeight - 0.6 * GlobalData.halfHeight, 
+            GlobalData.halfWidth + 0.3 * GlobalData.halfWidth, GlobalData.halfHeight - 0.6 * GlobalData.halfHeight, 
+            'Andres', 'left', 'Hector', 0.1);   // 'Vale' con imagen a la izquierda
 
-        this.addTextWithImage(GlobalData.halfWidth + 0.4 * GlobalData.halfWidth, GlobalData.halfHeight - 0.2 * GlobalData.halfHeight, 
-            GlobalData.halfWidth - 0.3 * GlobalData.halfWidth, GlobalData.halfHeight - 0.2 * GlobalData.halfHeight, 
-            'Omar 123456', 'right', 'imageVale', 0.3); // 'Hector' con imagen a la derecha
+        this.addTextWithImage(GlobalData.halfWidth + 0.4 * GlobalData.halfWidth, GlobalData.halfHeight - 0.3 * GlobalData.halfHeight, 
+            GlobalData.halfWidth - 0.3 * GlobalData.halfWidth, GlobalData.halfHeight - 0.3 * GlobalData.halfHeight, 
+            'Omar', 'right', 'Omar', 1.2); // 'Hector' con imagen a la derecha
 
         this.addTextWithImage(GlobalData.halfWidth - 0.3 * GlobalData.halfWidth, GlobalData.halfHeight + 0.05 * GlobalData.halfHeight, 
             GlobalData.halfWidth + 0.3 * GlobalData.halfWidth, GlobalData.halfHeight + 0.05 * GlobalData.halfHeight, 
-            'Pablo 654321', 'left', 'imageVale', 0.3);    // 'Omar' con imagen a la izquierda
+            'Carlos', 'left', 'Juan', 0.1);    // 'Omar' con imagen a la izquierda
 
-        this.addTextWithImage(GlobalData.halfWidth + 0.4 * GlobalData.halfWidth, GlobalData.halfHeight + 0.25 * GlobalData.halfHeight, 
-            GlobalData.halfWidth - 0.3 * GlobalData.halfWidth, GlobalData.halfHeight + 0.25 * GlobalData.halfHeight, 
-            'Vale 876678', 'right', 'imageVale', 0.3);  // 'Pablo' con imagen a la derecha
+        this.addTextWithImage(GlobalData.halfWidth + 0.4 * GlobalData.halfWidth, GlobalData.halfHeight + .4 * GlobalData.halfHeight, 
+            GlobalData.halfWidth - 0.3 * GlobalData.halfWidth, GlobalData.halfHeight + 0.4 * GlobalData.halfHeight, 
+            'Santiago', 'right', 'Vale', 0.13);  // 'Pablo' con imagen a la derecha
 
         
-            const bottomText = this.add.text(GlobalData.halfWidth, GlobalData.halfHeight + 0.9 * GlobalData.halfHeight, 'Tecnologías Web    15/03/2025', {
+            const bottomText = this.add.text(GlobalData.halfWidth, GlobalData.halfHeight + 0.9 * GlobalData.halfHeight, 'Tecnologías Web    17/03/2025', {
                 fontFamily: 'Arial Black',
                 fontSize: 28,
                 color: '#9b3c00',
@@ -42,7 +43,6 @@ export default class About extends Phaser.Scene {
 
         // Botón para regresar al menú principal, ajustado para estar ligeramente más abajo
         const MainMenu = () => {
-            this.sound.play('menuSelect');
             this.scene.start('MainMenu');
         };
         createButton(this, GlobalData.halfWidth + 0.5 * GlobalData.halfWidth, GlobalData.halfHeight + 0.7 * GlobalData.halfHeight, 'Back', MainMenu);

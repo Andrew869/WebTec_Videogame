@@ -31,8 +31,8 @@ export function getDefaultGlobalData() {
         score: 0,
         multiplier: 1,
         timeElapsed: 0,
-        maxHealth: 8,
-        damageCooldown: 1000,
+        maxHealth: 6,
+        damageCooldown: 500,
         lastDamageTime: 0,
         rng: null,
         seed: "",
@@ -117,7 +117,7 @@ export function exitGame(sceneName) {
     // reseting global vars
     resetGlobalData();
     // disconnecting from server
-    // socket.disconnect();
+    socket.disconnect();
 }
 
 export function createFloatingPlatform(x, y) {
@@ -303,7 +303,7 @@ export function removeGreatWall() {
     GlobalData.levelStarted = true;
 
     GlobalData.currGameScene.time.addEvent({ // event to spawn a bonus item
-        delay: 5000,
+        delay: GlobalData.rng.between(5000, 15000),
         callback: () => {
             if (!GlobalData.gameOver) {
                 const angle = -(GlobalData.rng.between(0, 180) * Math.PI / 180);

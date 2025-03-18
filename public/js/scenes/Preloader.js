@@ -84,6 +84,11 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('spike', 'images/props/spikes.png');
         this.load.image('wall', 'images/props/wall.png');
         this.load.image('race_line', 'images/backgrounds/race_line.png');
+
+        this.load.image('Hector', 'images/Hector.jpg');
+        this.load.image('Omar', 'images/yoProf.jpg');
+        this.load.image('Juan', 'images/Juan.jpg');
+        this.load.image('Vale', 'images/Santiago.jpg');
         
     }
 

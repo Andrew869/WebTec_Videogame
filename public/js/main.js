@@ -64,6 +64,7 @@ games.forEach(game => {
     gameElement.draggable = true;
     gameElement.style.background = `url('${game.img}')`;
     gameElement.style.backgroundSize = 'cover';
+    gameElement.style.backgroundPosition = 'center';
 
     gameElement.addEventListener('dragstart', drag);
     gameElement.addEventListener('dragend', dragEnd);
