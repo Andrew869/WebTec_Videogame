@@ -60,7 +60,7 @@ socket.on("playerDisconnected", (playerId) => {
 
 socket.on("startTimer", () => {
     console.log("start timer");
-    CreateTimer(GlobalData.currUIScene, "start_timer",GlobalData.halfWidth, GlobalData.halfHeight, 5, 100);
+    CreateTimer(GlobalData.currUIScene, "start_timer",GlobalData.halfWidth, GlobalData.halfHeight, 5, 128);
 });
 
 socket.on("removeTimer", () => {

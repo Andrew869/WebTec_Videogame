@@ -46,9 +46,11 @@ btn.addEventListener('click', () => {
 
     if (!document.fullscreenElement) {
         elem.requestFullscreen();
+        btn.style.opacity = 0.5;
         // display_container.classList.add('fullscreen');
     } else {
         document.exitFullscreen();
+        btn.style.opacity = 1;
         // display_container.classList.remove('fullscreen');
     }
 });

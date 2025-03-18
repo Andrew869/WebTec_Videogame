@@ -20,12 +20,18 @@ export default class UI extends Phaser.Scene {
         this.scoreText;
         this.lvlText;
         this.dateText;
+        this.multiplierText;
+
+        this.countdownText;
+        this.startTime;
+        this.item;
 
         this.hearts = [];
     }
 
     create() {
         GlobalData.currUIScene = this;
+        this.startTime = 0;
 
         // Configura la tecla ESC
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -43,7 +49,7 @@ export default class UI extends Phaser.Scene {
         this.readyPlayersText = this.add.text(10, 60, "Ready: 0/1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
         this.lvlText = this.add.text(10, GlobalData.height - 40, "Level: 0", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
         this.dateText = this.add.text(GlobalData.width - 10, GlobalData.height - 40, getCurrentDate(), {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(1, 0);
-        
+        this.multiplierText = this.add.text(GlobalData.width - 10, 70, "x1", {fontFamily: 'Alagard', fontSize: '32px', fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(1, 0);
 
         this.hearts = [];
         for (let i = 0; i < GlobalData.maxHealth / 2; i++) {
@@ -108,6 +114,11 @@ export default class UI extends Phaser.Scene {
         if(GlobalData.levelStarted){
             GlobalData.timeElapsed += delta / 1000;
             this.chronoText.setText(GlobalData.timeElapsed.toFixed(2).padStart(6, '0'));
+
+            if(this.countdownText) {
+                this.countdownText.setText((3 - (GlobalData.timeElapsed - this.startTime)).toFixed(2));
+                this.countdownText.setPosition(this.item.x, this.item.y - 40);
+            }
         }
     }
 }

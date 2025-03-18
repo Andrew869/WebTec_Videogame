@@ -267,7 +267,7 @@ export function SetPlayerDamage(amount) {
 export function CreateTimer (scene, key ,x, y, time, fontSize) {
     let reminingTime = time - 1;
 
-    const timerText = scene.add.text(x, y, `${reminingTime}`, { fontFamily: 'Alagard', fontSize: `${fontSize}px`, fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' });
+    const timerText = scene.add.text(x, y, `${reminingTime}`, { fontFamily: 'Alagard', fontSize: `${fontSize}px`, fill: '#fff', stroke: '#000', strokeThickness: 8, align: 'center' }).setOrigin(0.5);
     const timerEvent = scene.time.addEvent({
         delay: 1000,
         callback: () => {
@@ -302,7 +302,7 @@ export function removeGreatWall() {
     GlobalData.gameStarted = true;
     GlobalData.levelStarted = true;
 
-    GlobalData.currGameScene.time.addEvent({ // evento to spawn a bonus item
+    GlobalData.currGameScene.time.addEvent({ // event to spawn a bonus item
         delay: 5000,
         callback: () => {
             if (!GlobalData.gameOver) {
@@ -370,21 +370,38 @@ export function updatehearts() {
 }
 
 export function createMultiplier(scene, multiplier, time, x, y) {
-    const item = scene.physics.add.image(x, y, 'items', 22).setScale(2);
+    const item = scene.physics.add.image(x, y, 'items', 22).setScale(3);
+    GlobalData.currUIScene.item = item;
     scene.physics.add.collider(item, GlobalData.ground);
 
     GlobalData.colliders.forEach(collider => {
         scene.physics.add.collider(item, collider);
     });
 
+    GlobalData.currUIScene.startTime = GlobalData.timeElapsed;
+    
+    GlobalData.currUIScene.countdownText = GlobalData.currGameScene.add.text(item.x, item.y, "00", {
+        fontFamily: 'Alagard', fontSize: '16px', fill: '#DC3545', stroke: '#000', strokeThickness: 4,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: { x: 4, y: 2 }
+    }).setOrigin(0.5);
+
     scene.physics.add.overlap(GlobalData.player, item, (player, object) => {
         GlobalData.currGameScene.sound.play('bonus');
         object.destroy();
+        GlobalData.currUIScene.countdownText.destroy();
+        GlobalData.currUIScene.startTime = 0
+        delete GlobalData.currUIScene.countdownText;
+
         GlobalData.multiplier = multiplier
+        GlobalData.currUIScene.multiplierText.setText(`x${GlobalData.multiplier}`);
+        GlobalData.currUIScene.multiplierText.setColor('#28A745');
         GlobalData.currGameScene.time.addEvent({
             delay: time,
             callback: () => {
                 GlobalData.multiplier = 1;
+                GlobalData.currUIScene.multiplierText.setText(`x${GlobalData.multiplier}`);
+                GlobalData.currUIScene.multiplierText.setColor('#fff');
             },
             callbackScope: GlobalData.currGameScene,
             loop: false
@@ -392,10 +409,15 @@ export function createMultiplier(scene, multiplier, time, x, y) {
     }, 
     null, GlobalData.currGameScene);
 
-    GlobalData.currGameScene.time.addEvent({ // evento to despawn the item
+    GlobalData.currGameScene.time.addEvent({ // event to despawn the item
         delay: 3000,
         callback: () => {
             item.destroy();
+            if (GlobalData.currUIScene.countdownText){
+                GlobalData.currUIScene.countdownText.destroy();
+                GlobalData.currUIScene.startTime = 0
+                delete GlobalData.currUIScene.countdownText;
+            }
         },
         callbackScope: GlobalData.currGameScene,
         loop: false
