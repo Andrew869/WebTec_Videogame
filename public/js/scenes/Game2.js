@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreateDamageZone2,CreatePortal, updateScore } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreateDamageZoneSpikes2,CreateDamageZoneSpikes1,CreateDamageZone2,CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game2 extends Phaser.Scene {
     constructor() {
@@ -53,7 +53,7 @@ export default class Game2 extends Phaser.Scene {
         // CreateWall(this, 410, 0, 20 * 16);
 
         CreateDamageZone2(this, 510, 0, 64, 20);
-        //CreateDamageZone(this, 600, 0, 200, 50);  
+        CreateDamageZone2(this, 1500, 0, 200, 20);  
         CreateDamageZone2(this, 1000, 0, 150, 20); 
         CreateDamageZone2(this, 1600, 0, 300, 20);
         CreateDamageZone2(this, 2200, 0, 100, 20);

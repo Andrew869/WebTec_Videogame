@@ -81,7 +81,8 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('platform', 'images/props/platform.png');
         this.load.image('lava', 'images/props/lava.png');
         this.load.image('acid', 'images/props/acid.png');
-        this.load.image('spike', 'images/props/spikes.png');
+        this.load.image('spike1', 'images/props/spikes1.png');
+        this.load.image('spike2', 'images/props/spikes2.png');
         this.load.image('wall', 'images/props/wall.png');
         this.load.image('race_line', 'images/backgrounds/race_line.png');
         

@@ -203,6 +203,19 @@ export function CreateDamageZone2(scene, x, y, width, height) {
     GlobalData.triggers.push(trigger);
 }
 
+export function CreateDamageZoneSpikes1(scene, x, y, width, height) {
+    const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
+    const trigger = {
+        type: "damage_Zone",
+        object: object,
+        callback: SetPlayerDamage
+    };
+    scene.add.tileSprite(x - width, translateY(y), width, height, 'spike')
+        .setOrigin(0, 1)
+        .setDepth(2);
+    GlobalData.triggers.push(trigger);
+}
+
 export function CreatePortal(scene, targetScene, x, y, size, flipX = false) {
     const portal = scene.physics.add.sprite(x, translateY(y), 'portal')
         .setOrigin(0.5)
