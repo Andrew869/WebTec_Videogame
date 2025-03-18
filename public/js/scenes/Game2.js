@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreatePortal, updateScore } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreateDamageZone2,CreateDamageZoneSpikes,CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game2 extends Phaser.Scene {
     constructor() {
@@ -52,30 +52,62 @@ export default class Game2 extends Phaser.Scene {
         CreateStartZone(this, 410, 0, 3, 20);
         // CreateWall(this, 410, 0, 20 * 16);
 
+        CreateDamageZone2(this, 510, 0, 64, 20);
+        CreateDamageZone2(this, 1500, 0, 400, 20);  
+        CreateDamageZone2(this, 1100, 0, 200, 20); 
+        CreateDamageZone2(this, 1600, 0, 400, 20);
+        CreateDamageZone2(this, 2200, 0, 200, 20);
+
+        CreateDamageZoneSpikes(this, 0, 0, 80, 16);
+        CreateDamageZoneSpikes(this, 500, 1350, 80, 16);// pinchos 4
+        CreateDamageZoneSpikes(this, 750, 1600, 80, 16);// pinchos5
+        CreateDamageZoneSpikes(this, 350, 330, 900, 16);// pinchos arriba
+        CreateDamageZoneSpikes(this, 590, 800, 80, 16);// pinchos 3
+        CreateDamageZoneSpikes(this, 380, 500, 80, 16);// pinchos 2
+        CreateDamageZoneSpikes(this, 750, 200, 100, 16);// pinchos 1
 
         CreatePlatform(this, 600, 60, 100);
-        CreatePlatform(this, 480, 100, 100);
+        CreatePlatform(this, 480, 250, 100);
 
         CreatePlatform(this, 500, 800, 150);
-        CreateWall(this, 620, 800, 80);
-        CreatePlatform(this, 200, 950, 100);
+        CreateWall(this, 620, 850, 80);
+        CreateWall(this, 620, 950, 80);
+        CreatePlatform(this, 720, 820, 100);
+        //CreatePlatform(this, 200, 950, 100);
 
         CreatePlatform(this, 500, 100, 120);
-        CreatePlatform(this, 300, 1150, 120);
-        CreatePlatform(this, 500, 1250, 120);
+        //CreatePlatform(this, 300, 1150, 120);
+        //CreatePlatform(this, 500, 1250, 120);
 
-        CreatePlatform(this, GlobalData.mapSizeX/2, 1600, 200);
+        CreatePlatform(this, 650, 1600, 200);
 
-        CreatePlatform(this, 300, 200, 150);
-        CreatePlatform(this, 500, 350, 100);
-        CreatePlatform(this, 200, 500, 120);
+        CreatePlatform(this, 600, 200, 150);
+        //CreatePlatform(this, 500, 350, 100);
+        //CreatePlatform(this, 200, 500, 120);
 
-        CreatePlatform(this, 800, 1600, 150);
-        CreateWall(this, 1000, 1550, 80);
-        CreatePlatform(this, 1200, 1700, 120);
+        //CreatePlatform(this, 800, 1600, 150);
+        //CreateWall(this, 950, 1550, 80);
+        CreatePlatform(this, 610, 1550, 50);
+
+        CreateWall(this,650, 1550, 80);
+        CreateWall(this, 500, 1400, 80);
+
+        CreatePlatform(this, 500, 1400, 50);
+        CreatePlatform(this, 400, 1350, 200); 
+        CreatePlatform(this, 650, 1300, 200);
+        CreatePlatform(this, 300, 1250, 200);
+        CreatePlatform(this, 500, 1200, 200);
+        CreatePlatform(this, 400, 1100, 200);
+        CreatePlatform(this, 700, 1000, 200);
+        CreatePlatform(this, 900, 900, 200);
+        CreatePlatform(this, 700, 700, 200);
+        CreatePlatform(this, 500, 600, 200);
+        CreatePlatform(this, 300, 500, 200);
+        CreatePlatform(this, 500, 400, 200);
 
         CreatePortal(this, "", 80, 250, 8, true);
-        CreatePortal(this, "FinalScene", GlobalData.mapSizeX/2, 1580, false);
+        CreatePortal(this, "FinalScene", GlobalData.mapSizeX/2, 1750, 8, false);
+        //CreatePortal(this, "FinalScene", 500, 300, false);
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",

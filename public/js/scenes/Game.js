@@ -1,7 +1,7 @@
 import { GlobalData } from '../main.js';
 import { socket } from '../socket.js';
 import { characters } from '../characters.js';
-import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreateDamageZone, CreatePortal, updateScore } from '../utilities.js';
+import { SendPos, CreateStartZone, CreatePlatform, CreateWall, CreateDamageZoneSpikes,CreateDamageZone1, CreatePortal, updateScore } from '../utilities.js';
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -51,7 +51,17 @@ export default class Game extends Phaser.Scene {
         GlobalData.ground = this.physics.add.staticBody(0, GlobalData.mapSizeY - 58, GlobalData.mapSizeX, 10);
 
         CreateStartZone(this, 400, 0, 3, 20);
-        CreateDamageZone(this, 510, 0, 64, 300);
+        CreateDamageZone1(this, 510, 0, 64, 20);
+        //CreateDamageZone(this, 600, 0, 200, 20);  
+        CreateDamageZone1(this, 1000, 0, 150, 20); 
+        CreateDamageZone1(this, 1600, 0, 300, 20);
+        CreateDamageZone1(this, 2200, 0, 100, 20);
+
+        CreateDamageZoneSpikes(this, 700, 100, 100, 16);
+        CreateDamageZoneSpikes(this, 1280, 0, 60, 16);
+        CreateDamageZoneSpikes(this, 1550, 60, 50, 16);
+        CreateDamageZoneSpikes(this, 2000, 0, 100, 20);
+
         // CreateWall(this, 410, 0, 20 * 16);
 
         //CreatePlatform(this, 60, 64, 300);
@@ -76,26 +86,6 @@ export default class Game extends Phaser.Scene {
     
         CreatePortal(this, "", 80, 250, 8, true);
         CreatePortal(this, "Game2", 2450, 80, 8, false);
-
-        /*this.add.tileSprite(0, GlobalData.mapSizeY - 2, 'lava')
-            .setOrigin(0, 1)createCoins
-            .setDepth(2);
-
-        this.add.tileSprite(1000, GlobalData.mapSizeY - 2, 300, 16, 'lava')
-        .setOrigin(0, 1)
-        .setDepth(2);*/
-
-        /*this.add.tileSprite(500, translateY(100), 200, 16, 'spike')
-        .setOrigin(0, 1)
-        .setDepth(2);
-
-        this.add.tileSprite(800, translateY(80), 150, 16, 'spike')
-        .setOrigin(0, 1)
-        .setDepth(2);
-
-        this.add.tileSprite(1000, translateY(120), 100, 16, 'spike')
-        .setOrigin(0, 1)
-        .setDepth(2);*/
 
         this.keyObjects = this.input.keyboard.addKeys({
             up: "SPACE",

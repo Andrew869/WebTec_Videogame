@@ -186,9 +186,34 @@ export function CreateWall(scene, x, y, height, isGate = false) {
     }
 }
 
-export function CreateDamageZone(scene, x, y, width, height) {
+export function CreateDamageZone1(scene, x, y, width, height) {
     const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
     const trigger = {type: "damage_Zone", object: object, callback: SetPlayerDamage}
+    scene.add.tileSprite(x - width, translateY(y), width, height, 'lava')
+        .setOrigin(0, 0)
+        .setDepth(2);
+    GlobalData.triggers.push(trigger);
+}
+
+export function CreateDamageZone2(scene, x, y, width, height) {
+    const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
+    const trigger = {type: "damage_Zone", object: object, callback: SetPlayerDamage}
+    scene.add.tileSprite(x - width, translateY(y), width, height, 'acid')
+        .setOrigin(0, 0)
+        .setDepth(2);
+    GlobalData.triggers.push(trigger);
+}
+
+export function CreateDamageZoneSpikes(scene, x, y, width, height) {
+    const object = scene.physics.add.staticBody(x - width, translateY(y) - height, width, height);
+    const trigger = {
+        type: "damage_Zone",
+        object: object,
+        callback: SetPlayerDamage
+    };
+    scene.add.tileSprite(x - width, translateY(y), width, height, 'spike1')
+        .setOrigin(0, 1)
+        .setDepth(2);
     GlobalData.triggers.push(trigger);
 }
 
@@ -469,5 +494,5 @@ export function generateItems() {
         createCoins(scene, 10, 410, 0, GlobalData.mapSizeX - 200, 600, 51);
         createCoins(scene, 5, 410, 0, GlobalData.mapSizeX - 200, 600, 52);
     }
-    else createCoins(scene, 30, 300, GlobalData.mapSizeY, 900, 400, 40);
+    else createCoins(scene, 30, 300, GlobalData.mapSizeY, 900, 400);
 }

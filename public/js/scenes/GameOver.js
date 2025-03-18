@@ -1,5 +1,5 @@
 import { GlobalData } from '../main.js';
-import { exitGame } from '../utilities.js';
+import { exitGame, createButton } from '../utilities.js';
 
 export default class GameOver extends Phaser.Scene {
     constructor() {
@@ -9,36 +9,26 @@ export default class GameOver extends Phaser.Scene {
     create() {
         GlobalData.currGameScene = this;
         this.sound.play('gameOver');
+        
         setTimeout(() => {
-            // 🔹 Mostrar en pantalla el tiempo correctamente
-            this.add.text(GlobalData.halfWidth, 150, "Game Over", {
-                fontFamily: 'Arial',
-                fontSize: '40px',
-                color: '#ffffff',
-                stroke: '#000000',
-                strokeThickness: 6
-            }).setOrigin(0.5);
+            // Agregar el pergamino de fondo
+            const pergamino = this.add.image(GlobalData.halfWidth, GlobalData.halfHeight, 'pergamino');
+            pergamino.setDepth(0); // Asegura que esté en la capa más baja
 
-            // this.add.text(400, 250, `⏳ ${name} - Tiempo final: ${time}s`, {
-            //     fontFamily: 'Arial',
-            //     fontSize: '32px',
-            //     color: '#00ff00'
-            // }).setOrigin(0.5);
+            // Agregar el texto de "Game Over" más grande, centrado y con espacio adicional
+            this.add.text(GlobalData.halfWidth, GlobalData.halfHeight - 100, "Game Over", {
+                fontFamily: 'Alagard', fontSize: 80, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 8, align: 'center'
+            }).setOrigin(0.5).setDepth(1);
 
-            // 🔹 Botón para volver al menú principal
-            let menuButton = this.add.text(GlobalData.halfWidth, 450, "Back 2 Menu", {
-                fontFamily: 'Arial',
-                fontSize: '28px',
-                color: '#ff0000',
-                backgroundColor: '#000000',
-                padding: { x: 10, y: 5 }
-            }).setOrigin(0.5).setInteractive();
-
-            menuButton.on("pointerdown", () => {
+            // Botón para volver al menú principal (solo texto sin fondo)
+            const MainMenu = () => {
                 this.sound.play('menuSelect');
                 exitGame('MainMenu');
-            });
+            };
 
+            // Colocar el botón justo debajo con un espacio más grande entre el texto y el botón
+            createButton(this, GlobalData.halfWidth, GlobalData.halfHeight + 50, 'Back 2 Menu', MainMenu);
         }, 500);
     }
 }

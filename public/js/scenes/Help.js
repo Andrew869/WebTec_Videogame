@@ -52,7 +52,6 @@ export default class Help extends Phaser.Scene {
             this.scene.start('MainMenu');
         };
 
-
         createButton(this, GlobalData.halfWidth + 0.5 * GlobalData.halfWidth, GlobalData.halfHeight + 0.55 * GlobalData.halfHeight, 'Back', MainMenu);
     }
 
